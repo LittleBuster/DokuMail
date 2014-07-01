@@ -1,6 +1,8 @@
-from Crypto.Cipher import AES
 import zlib
 import os
+import platform
+from ctypes import cdll
+from Crypto.Cipher import AES
 
 
 class AES_KEY():
@@ -29,32 +31,27 @@ def AES256_cert_read( fname ):
 
 	return a_key
 
-def compress_file(filename, filename2):
-	f = open(filename, "rb")
-	f2 = open(filename2, "wb")
+def AES256_encode_file(filename, outfile, certFile):
+	lib = None
 
-	data = f.read(4096)
+	a_key = AES256_cert_read(certFile)
 
-	while data != b'':
-		f2.write(zlib.compress(data, 9))
-		data = f.read(4096)
+	if platform.system() == "Linux":
+		lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcrypt.so")]))
+	else:
+		lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcrypt.dll")]))
+	lib.do_crypt(filename.encode("utf-8"), outfile.encode("utf-8"), a_key.key, a_key.key4)
 
-	f.close()
-	f2.close()
+def AES256_decode_file(filename, outfile, certFile):
+	lib = None
 
-def decompress_file(filename, filename2):
-	f = open(filename, "rb")
-	f2 = open(filename2, "wb")
+	a_key = AES256_cert_read(certFile)
 
-	data = f.read(4096)
-	
-	while data != b'':
-		f2.write( zlib.decompress(data) )
-		data = f.read(4096)
-
-	f.close()
-	f2.close()
-
+	if platform.system() == "Linux":
+		lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcrypt.so")]))
+	else:
+		lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcrypt.dll")]))
+	lib.do_decrypt(filename.encode("utf-8"), outfile.encode("utf-8"), a_key.key, a_key.key4)
 
 def AES256_encode_msg( message, certFile ):
 	a_key = AES256_cert_read(certFile)
@@ -77,4 +74,3 @@ def AES256_decode_msg( message, certFile ):
         obj = AES.new(a_key.key, AES.MODE_CBC, a_key.key4)
         data = zlib.decompress(message)
         return obj.decrypt(data).decode("utf-8").split("|")[0]
-

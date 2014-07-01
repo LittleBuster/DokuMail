@@ -3,12 +3,10 @@
 #define BUFSIZE 1024
  
 
-int do_crypt(char *infile, char *outfile)
+int do_crypt(char *infile, char *outfile, unsigned char key[32], unsigned char iv[8])
 {
 	int outlen, inlen;
 	FILE *in, *out;
-	unsigned char key[32] = "12345678901234567890123456789012"; /* 256- битный ключ */
-	unsigned char iv[8] = "12345678"; /* вектор инициализации */
 	unsigned char inbuf[BUFSIZE], outbuf[BUFSIZE];
 	
 	in = fopen(infile, "rb");
@@ -22,14 +20,16 @@ int do_crypt(char *infile, char *outfile)
 
 	for(;;) {
 		inlen = fread(inbuf, 1, BUFSIZE, in);
-		if(inlen <= 0) break;
+		if(inlen <= 0) 
+			break;
 
-		if(!EVP_EncryptUpdate(&ctx, outbuf, &outlen, inbuf, inlen)) return 0;
+		if(!EVP_EncryptUpdate(&ctx, outbuf, &outlen, inbuf, inlen))
+			return 0;
 
 		fwrite(outbuf, 1, outlen, out);
-
 	}
-	if(!EVP_EncryptFinal(&ctx, outbuf, &outlen)) return 0;
+	if(!EVP_EncryptFinal(&ctx, outbuf, &outlen)) 
+		return 0;
 
 	fwrite(outbuf, 1, outlen, out);
 	EVP_CIPHER_CTX_cleanup(&ctx);
@@ -39,12 +39,10 @@ int do_crypt(char *infile, char *outfile)
 	return 1;
 } 
 
-int do_decrypt(char *infile, char *outfile)
+int do_decrypt(char *infile, char *outfile, unsigned char key[32], unsigned char iv[8])
 {
 	int outlen, inlen;
 	FILE *in, *out;
-	unsigned char key[32] = "12345678901234567890123456789012"; /* 256- битный ключ */
-	unsigned char iv[8] = "12345678"; /* вектор инициализации */
 	unsigned char inbuf[BUFSIZE], outbuf[BUFSIZE];
 	
 	in = fopen(infile, "rb");
@@ -75,5 +73,5 @@ int do_decrypt(char *infile, char *outfile)
 	return 1;
 }
 
-extern int do_crypt(char *infile, char *outfile);
-extern int do_decrypt(char *infile, char *outfile);
+extern int do_crypt(char *infile, char *outfile, unsigned char key[32], unsigned char iv[8]);
+extern int do_decrypt(char *infile, char *outfile, unsigned char key[32], unsigned char iv[8]);
