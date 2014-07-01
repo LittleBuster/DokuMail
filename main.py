@@ -1,6 +1,7 @@
 import os
 import sys
-import hashlib
+from send import *
+from compress import *
 from crypt import *
 from PyQt5 import QtCore
 from PyQt5 import QtGui
@@ -34,6 +35,10 @@ class MainWindow(QtWidgets.QDialog):
 		self.lwUsers.itemClicked.connect(self.lwusers_item_clicked)
 		self.pbClearMsg.clicked.connect(self.on_clear_msg_clicked)
 		self.pbSendFiles.clicked.connect(self.on_sendfiles_clicked)
+		self.pbAddFile.clicked.connect(self.on_add_file)
+		self.pbClearFiles.clicked.connect(self.on_clear_files)
+
+		self.send_files = SendFiles()
 
 	def on_clear_msg_clicked(self):
 		self.teMsg.clear()
@@ -80,74 +85,45 @@ class MainWindow(QtWidgets.QDialog):
 		except:
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!', QtWidgets.QMessageBox.Yes)
 
-	def send_msg(self, msg, all, usr):
-		answ = str("")
-		toUser = str("")
-		toUsers = None
-
-		if msg == str(""):
-			QtWidgets.QMessageBox.warning(self, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
-			return
-
-		if (usr == str("") and (not all)):
-			QtWidgets.QMessageBox.warning(self, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
-			return
-
-		h = hashlib.sha512()
-		h.update(self.passwd.encode('utf-8'))
-		h_passwd = h.hexdigest().upper()
-
-		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
-			return
-
-		if not all:
-			toUser = mdb.get_user_by_alias( usr )
-		else:
-			toUsers = mdb.get_user_list(self.user)
-		mdb.close()
-
-		client = TcpClient()
-		if not client.connect(self.TCPServer, self.TCPPort, self.user, h_passwd):
-			QtWidgets.QMessageBox.critical(self, "Ошибка", "Ошибка соединения с сервером!", QtWidgets.QMessageBox.Yes)
-			return
-
-		if not all:
-			answ = client.send_message(toUser + "*", msg)
-		else:
-			toUsersStr = str("")
-			for usr in toUsers:
-				toUsersStr = toUsersStr + usr + "*"
-
-			answ = client.send_message(toUsersStr, msg)
-		client.close()
-
-		if answ == "[FAIL]":
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка передачи сообщения!', QtWidgets.QMessageBox.Yes)
-			client.close()
-			return
-
-		if answ == "[FAIL-ACCESS]":
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'У Вас нет прав на отправку всем пользователям!', QtWidgets.QMessageBox.Yes)
-			client.close()
-			return
-
-		if answ == "[SEND-MSG-OK]":
-			if not all:
-				QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено!', QtWidgets.QMessageBox.Yes)
-			else:
-				QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено всем пользователям!', QtWidgets.QMessageBox.Yes)
-
 	def on_send_msg(self):
-		self.send_msg(self.teMsg.document().toPlainText(), False, self.lbAlias.text())
+		send_msg(self, self.teMsg.document().toPlainText(), False, self.passwd, self.lbAlias.text())
 
 	def on_sendall_msg(self):
-		self.send_msg(self.teMsg.document().toPlainText(), True, None)
+		send_msg(self, self.teMsg.document().toPlainText(), True, self.passwd, None)
 
 	def on_sendfiles_clicked(self):
-		compress_file("test.jpg", "test.z")
-		decompress_file("test.z", "test2.jpg")
- 
+		flist = list()
+		for i in range(items):
+				flist.append(self.lwFiles.item(i).text())
+
+		send_files.send(flist)
+
 	def minimize_app(self):
 		self.hide()
+
+	def on_clear_files(self):
+		self.lwFiles.clear()
+
+	def on_add_file(self):
+		filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'C:/')
+
+		""" 
+		Checking on exist file in lists
+		"""
+		items = self.lwFiles.count()
+
+		if items > 0:
+			for i in range(items):
+				fname = self.lwFiles.item(i).text()
+				if fname == filename[0]:
+					QtWidgets.QMessageBox.warning(self, 'Error', 'Этот файл уже добавлен в очередь передачи', QtWidgets.QMessageBox.Yes)
+					return
+
+		""" 
+		If file don't exists then add in list
+		"""
+		if not filename[0] == "":
+			item = QtWidgets.QListWidgetItem()
+			item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
+			item.setText(filename[0])
+			self.lwFiles.insertItem(0, item)
