@@ -80,57 +80,49 @@ class MainWindow(QtWidgets.QDialog):
 		except:
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!', QtWidgets.QMessageBox.Yes)
 
-	def on_send_msg(self):
-		print(self.TCPServer, self.TCPPort)
-		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+	def send_msg(self, msg, all, usr):
+		answ = str("")
+		toUser = str("")
+		toUsers = None
+
+		if msg == str(""):
+			QtWidgets.QMessageBox.warning(self, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
 			return
-		to_user = mdb.get_user_by_alias( self.lbAlias.text() )
-		mdb.close()
+
+		if (usr == str("") and (not all)):
+			QtWidgets.QMessageBox.warning(self, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
+			return
 
 		h = hashlib.sha512()
 		h.update(self.passwd.encode('utf-8'))
 		h_passwd = h.hexdigest().upper()
 
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+
+		if not all:
+			toUser = mdb.get_user_by_alias( usr )
+		else:
+			toUsers = mdb.get_user_list(self.user)
+		mdb.close()
+
 		client = TcpClient()
 		if not client.connect(self.TCPServer, self.TCPPort, self.user, h_passwd):
 			QtWidgets.QMessageBox.critical(self, "Ошибка", "Ошибка соединения с сервером!", QtWidgets.QMessageBox.Yes)
 			return
-		answ = client.send_message(to_user + "*", self.teMsg.document().toPlainText())
-		
-		if answ == "[FAIL]":
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка передачи сообщения!', QtWidgets.QMessageBox.Yes)
-			client.close()
-			return
 
-		if answ == "[SEND-MSG-OK]":
-			QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено!', QtWidgets.QMessageBox.Yes)
+		if not all:
+			answ = client.send_message(toUser + "*", msg)
+		else:
+			toUsersStr = str("")
+			for usr in toUsers:
+				toUsersStr = toUsersStr + usr + "*"
+
+			answ = client.send_message(toUsersStr, msg)
 		client.close()
 
-	def on_sendall_msg(self):
-		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
-			return
-		
-		toUsers = mdb.get_user_list(self.user)
-		mdb.close()
-		toUsersStr = str("")
-		
-		for usr in toUsers:
-			toUsersStr = toUsersStr + usr + "*"
-
-		h = hashlib.sha512()
-		h.update(self.passwd.encode('utf-8'))
-		h_passwd = h.hexdigest().upper()
-
-		client = TcpClient()
-		if not client.connect(self.TCPServer, self.TCPPort, self.user, h_passwd):
-			QtWidgets.QMessageBox.critical(self, "Ошибка", "Ошибка соединения с сервером!", QtWidgets.QMessageBox.Yes)
-			return
-		answ = client.send_message(toUsersStr, self.teMsg.document().toPlainText())
-		
 		if answ == "[FAIL]":
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка передачи сообщения!', QtWidgets.QMessageBox.Yes)
 			client.close()
@@ -142,8 +134,16 @@ class MainWindow(QtWidgets.QDialog):
 			return
 
 		if answ == "[SEND-MSG-OK]":
-			QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено всем пользователям!', QtWidgets.QMessageBox.Yes)
-		client.close()
+			if not all:
+				QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено!', QtWidgets.QMessageBox.Yes)
+			else:
+				QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено всем пользователям!', QtWidgets.QMessageBox.Yes)
+
+	def on_send_msg(self):
+		self.send_msg(self.teMsg.document().toPlainText(), False, self.lbAlias.text())
+
+	def on_sendall_msg(self):
+		self.send_msg(self.teMsg.document().toPlainText(), True, None)
 
 	def on_sendfiles_clicked(self):
 		compress_file("test.jpg", "test.z")
