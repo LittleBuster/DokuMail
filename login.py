@@ -32,7 +32,7 @@ class LoginWindow(QtWidgets.QDialog):
 			self.save_passwd()
 
 		mdb = MariaDB()
-		if not mdb.connect(self._mw.MDBServer, self._mw.MDBUser, self._mw.MDBPasswd, "USDE"):
+		if not mdb.connect(self._mw.MDBServer, self._mw.MDBUser, self._mw.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
 			return
 		state = mdb.check_login(self.edLogin.text(), self.edPasswd.text())

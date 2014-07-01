@@ -32,9 +32,9 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>0</x>
      <y>-20</y>
-     <width>461</width>
+     <width>601</width>
      <height>121</height>
     </rect>
    </property>
@@ -44,7 +44,7 @@
     </font>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:72pt; color:#00ffc8;&quot;&gt;USDE&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:72pt; color:#00ffc8;&quot;&gt;DokuMail&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -129,6 +129,16 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>Вход</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>images/login.png</normaloff>images/login.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
   <widget class="QLineEdit" name="edLogin">
@@ -251,6 +261,16 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>Отмена</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>images/exit.png</normaloff>images/exit.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
  </widget>

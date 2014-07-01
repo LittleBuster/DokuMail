@@ -29,6 +29,33 @@ def AES256_cert_read( fname ):
 
 	return a_key
 
+def compress_file(filename, filename2):
+	f = open(filename, "rb")
+	f2 = open(filename2, "wb")
+
+	data = f.read(4096)
+
+	while data != b'':
+		f2.write(zlib.compress(data, 9))
+		data = f.read(4096)
+
+	f.close()
+	f2.close()
+
+def decompress_file(filename, filename2):
+	f = open(filename, "rb")
+	f2 = open(filename2, "wb")
+
+	data = f.read(4096)
+	
+	while data != b'':
+		f2.write( zlib.decompress(data) )
+		data = f.read(4096)
+
+	f.close()
+	f2.close()
+
+
 def AES256_encode_msg( message, certFile ):
 	a_key = AES256_cert_read(certFile)
 

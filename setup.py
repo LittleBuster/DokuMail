@@ -7,5 +7,5 @@ if sys.platform == 'win32':
 
 setup(name = 'spamandeggs',
       version = '0.0.1',
-      executables = [Executable('usde.pyw', base=base)],
+      executables = [Executable('doku.pyw', base=base)],
       options = {'build_exe': {'includes': ['sip']}})

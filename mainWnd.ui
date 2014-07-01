@@ -87,7 +87,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>DokuMail</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -337,6 +337,16 @@ QPushButton:pressed {
     <property name="text">
      <string>Новости</string>
     </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/news.ico</normaloff>images/news.ico</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
    </widget>
    <widget class="QPushButton" name="pbLogin_2">
     <property name="geometry">
@@ -375,6 +385,16 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>О программе</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/elena8d89.png</normaloff>images/elena8d89.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="pbNews_2">
@@ -415,6 +435,16 @@ QPushButton:pressed {
     <property name="text">
      <string>Сообщения</string>
     </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/Email.png</normaloff>images/Email.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
    </widget>
    <widget class="QPushButton" name="pbNews_3">
     <property name="geometry">
@@ -453,6 +483,16 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>Файлы</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/filenew.png</normaloff>images/filenew.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="pbNews_4">
@@ -493,6 +533,16 @@ QPushButton:pressed {
     <property name="text">
      <string>Заявки</string>
     </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/filenew_8842.ico</normaloff>images/filenew_8842.ico</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
    </widget>
    <widget class="QPushButton" name="pbNews_5">
     <property name="geometry">
@@ -531,6 +581,16 @@ QPushButton:pressed {
     </property>
     <property name="text">
      <string>Настройки</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/settings.ico</normaloff>images/settings.ico</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
     </property>
    </widget>
   </widget>
@@ -753,35 +813,13 @@ border-width: 0px;
      <string>Директор</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>80</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QWidget {
-background-color: rgba(255, 255, 255, 0);
-border-width: 0px;
-};</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>images/elena8d89.png</pixmap>
-    </property>
-   </widget>
    <widget class="QListWidget" name="lwUsers">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>30</y>
       <width>201</width>
-      <height>205</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="font">
@@ -807,6 +845,43 @@ border-width: 0px;
       <width>32</width>
       <height>32</height>
      </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>26</x>
+      <y>6</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00e9ff;&quot;&gt;Список пользователей&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>246</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>images/user.ico</pixmap>
     </property>
    </widget>
   </widget>
@@ -1075,7 +1150,7 @@ border-width: 0px;
      </palette>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QToolBox" name="toolBox">
@@ -1273,8 +1348,8 @@ border-width: 0px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1299,8 +1374,8 @@ border-width: 0px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>381</width>
+         <height>204</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1325,8 +1400,8 @@ border-width: 0px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>100</width>
+         <height>30</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1373,6 +1448,16 @@ QPushButton:pressed {
       </property>
       <property name="text">
        <string>Отправить</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>images/cloud.png</normaloff>images/cloud.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
      <widget class="QLabel" name="label_4">
@@ -1463,6 +1548,16 @@ QPushButton:pressed {
       <property name="text">
        <string>Очистить</string>
       </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>images/recycle.png</normaloff>images/recycle.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
      </widget>
      <widget class="QPushButton" name="pbSendAllMsg">
       <property name="geometry">
@@ -1501,6 +1596,67 @@ QPushButton:pressed {
       </property>
       <property name="text">
        <string>Отправить всем</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>images/users.ico</normaloff>images/users.ico</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_6">
+     <widget class="QPushButton" name="pbSendFiles">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>290</y>
+        <width>200</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
+	color:rgb(255, 255, 255);
+	border-width: 1px;
+     border-style: solid;
+     border-radius: 7px;
+	min-width: 80px;
+}
+
+QPushButton:hover {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
+}
+
+QPushButton:pressed {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
+}</string>
+      </property>
+      <property name="text">
+       <string>Отправить</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>images/cloud.png</normaloff>images/cloud.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
       </property>
      </widget>
     </widget>
@@ -1741,22 +1897,62 @@ QPushButton:pressed {
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>10</y>
-     <width>591</width>
-     <height>41</height>
+     <x>240</x>
+     <y>0</y>
+     <width>221</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Times New Roman</family>
-     <pointsize>26</pointsize>
+     <pointsize>36</pointsize>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00ffd8;&quot;&gt;Система Обмена Данными&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00ffd8;&quot;&gt;DokuMail&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>-3</y>
+     <width>64</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>images/conv.ico</pixmap>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>5</y>
+     <width>501</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#00e9ff;&quot;&gt;Быстрая и защищённая внутрикорпоративная почта &lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#00e9ff;&quot;&gt;для малых, средних организаций и учебных учреждений&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
  </widget>

@@ -31,15 +31,15 @@ class TcpClient():
 	def send_message(self, toUsers, message):
 		try:
 			self.sock.send( AES256_encode_msg( "MSG-SEND$" + toUsers, "retrieve.crt") )
-			self.sock.recv(6)
+			answ = AES256_decode_msg( self.sock.recv(1024), "retrieve.crt" )
+			if answ == "[FAIL-ACCESS]":
+				return answ
+
 			self.sock.send( AES256_encode_msg( message, "transf.crt" ) )
 			answ = AES256_decode_msg( self.sock.recv(1024), "retrieve.crt")
-			if answ == "[SEND-MSG-OK]":
-				return True
-			else:
-				return False
+			return answ
 		except:
-			return False		
+			return "[FAIL]"		
 
 	def send_files(self, flist):
 		for sfile in flist:

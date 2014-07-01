@@ -15,12 +15,12 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 		shAction.triggered.connect(self.show_main)
 
 		shAction2 = menu.addAction("О программе")
-		shAction.setIcon(QtGui.QIcon("images/elena8d89.png"))
-		shAction.triggered.connect(self.show_about)
+		shAction2.setIcon(QtGui.QIcon("images/elena8d89.png"))
+		shAction2.triggered.connect(self.show_about)
 
 		shAction3 = menu.addAction("Выход")
-		shAction.setIcon(QtGui.QIcon("images/exit.png"))
-		shAction.triggered.connect(self.close_app)
+		shAction3.setIcon(QtGui.QIcon("images/exit.png"))
+		shAction3.triggered.connect(self.close_app)
 
 		self.setContextMenu(menu)
 		self.show()

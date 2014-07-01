@@ -37,6 +37,16 @@ class MariaDB(QtCore.QObject):
 		for row in cur:
 			return row[0]
 
+	def get_user_list(self, curUser):
+		usrlist = list()
+		cur = self.conn.cursor()
+		cur.execute("SELECT name FROM users")
+
+		for row in cur:
+			if row[0] != curUser:
+				usrlist.append(row[0])
+		return usrlist
+
 	def get_alias_list(self):
 		usrlist = list()
 

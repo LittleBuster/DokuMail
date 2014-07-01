@@ -1,6 +1,7 @@
 import os
 import sys
 import hashlib
+from crypt import *
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import uic
@@ -8,6 +9,7 @@ from PyQt5 import QtWidgets
 from tray import SystemTrayIcon
 from mariadb import MariaDB
 from tcpclient import TcpClient
+
 
 class MainWindow(QtWidgets.QDialog):
 	def __init__(self, parent=None):
@@ -24,14 +26,24 @@ class MainWindow(QtWidgets.QDialog):
 		self.passwd = str("")
 
 		self.pbMinimize.clicked.connect(self.minimize_app)
-		tr = SystemTrayIcon(self)
-		tr.show()
+		self.tr = SystemTrayIcon(self)
+		self.tr.show()
 		
 		self.pbSendMsg.clicked.connect(self.on_send_msg)
+		self.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
+		self.lwUsers.itemClicked.connect(self.lwusers_item_clicked)
+		self.pbClearMsg.clicked.connect(self.on_clear_msg_clicked)
+		self.pbSendFiles.clicked.connect(self.on_sendfiles_clicked)
+
+	def on_clear_msg_clicked(self):
+		self.teMsg.clear()
+
+	def lwusers_item_clicked(self, item):
+		self.lbAlias.setText( str(item.text()) )
 
 	def init_app(self):
 		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "USDE"):
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
 			return
 		aliases = mdb.get_alias_list()
@@ -71,7 +83,7 @@ class MainWindow(QtWidgets.QDialog):
 	def on_send_msg(self):
 		print(self.TCPServer, self.TCPPort)
 		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "USDE"):
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
 			return
 		to_user = mdb.get_user_by_alias( self.lbAlias.text() )
@@ -83,13 +95,59 @@ class MainWindow(QtWidgets.QDialog):
 
 		client = TcpClient()
 		if not client.connect(self.TCPServer, self.TCPPort, self.user, h_passwd):
-			QtWidgets.QMessageBox.critical(self, "ERR", "ERR TCP CONNECTION", QtWidgets.QMessageBox.Yes)
+			QtWidgets.QMessageBox.critical(self, "Ошибка", "Ошибка соединения с сервером!", QtWidgets.QMessageBox.Yes)
 			return
-		if not client.send_message(to_user + "*", self.teMsg.document().toPlainText()):
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка передачи сообщения', QtWidgets.QMessageBox.Yes)
-		else:
+		answ = client.send_message(to_user + "*", self.teMsg.document().toPlainText())
+		
+		if answ == "[FAIL]":
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка передачи сообщения!', QtWidgets.QMessageBox.Yes)
+			client.close()
+			return
+
+		if answ == "[SEND-MSG-OK]":
 			QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено!', QtWidgets.QMessageBox.Yes)
 		client.close()
 
+	def on_sendall_msg(self):
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		
+		toUsers = mdb.get_user_list(self.user)
+		mdb.close()
+		toUsersStr = str("")
+		
+		for usr in toUsers:
+			toUsersStr = toUsersStr + usr + "*"
+
+		h = hashlib.sha512()
+		h.update(self.passwd.encode('utf-8'))
+		h_passwd = h.hexdigest().upper()
+
+		client = TcpClient()
+		if not client.connect(self.TCPServer, self.TCPPort, self.user, h_passwd):
+			QtWidgets.QMessageBox.critical(self, "Ошибка", "Ошибка соединения с сервером!", QtWidgets.QMessageBox.Yes)
+			return
+		answ = client.send_message(toUsersStr, self.teMsg.document().toPlainText())
+		
+		if answ == "[FAIL]":
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка передачи сообщения!', QtWidgets.QMessageBox.Yes)
+			client.close()
+			return
+
+		if answ == "[FAIL-ACCESS]":
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'У Вас нет прав на отправку всем пользователям!', QtWidgets.QMessageBox.Yes)
+			client.close()
+			return
+
+		if answ == "[SEND-MSG-OK]":
+			QtWidgets.QMessageBox.information(self, 'Complete', 'Сообщение отправлено всем пользователям!', QtWidgets.QMessageBox.Yes)
+		client.close()
+
+	def on_sendfiles_clicked(self):
+		compress_file("test.jpg", "test.z")
+		decompress_file("test.z", "test2.jpg")
+ 
 	def minimize_app(self):
 		self.hide()
