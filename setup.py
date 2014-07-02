@@ -7,5 +7,5 @@ if sys.platform == 'win32':
 
 setup(name = 'DokuMail',
       version = '0.0.1',
-      executables = [Executable('doku.pyw', base=base)],
+      executables = [Executable('doku.py', base=base)],
       options = {'build_exe': {'includes': ['sip']}})
