@@ -14,7 +14,7 @@ from PyQt5 import QtWidgets
 from tray import SystemTrayIcon
 from mariadb import MariaDB
 from tcpclient import TcpClient
-
+import mainWnd
 
 class pObj(object):
 	"""
@@ -26,7 +26,8 @@ class pObj(object):
 class MainWindow(QtWidgets.QDialog):
 	def __init__(self, parent=None):
 		super(MainWindow, self).__init__()
-		uic.loadUi("mainWnd.ui", self)
+		self.ui = mainWnd.Ui_Form()
+		self.ui.setupUi(self)
 
 		self.MDBServer = str("")
 		self.MDBUser = str("")
@@ -37,25 +38,29 @@ class MainWindow(QtWidgets.QDialog):
 		self.user = str("")
 		self.passwd = str("")
 
-		self.pbMinimize.clicked.connect(self.minimize_app)
+		self.ui.pbMinimize.clicked.connect(self.minimize_app)
 		self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
 		self.tr.show()
-		
-		self.pbSendMsg.clicked.connect(self.on_send_msg)
-		self.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
-		self.lwUsers.itemClicked.connect(self.lwusers_item_clicked)
-		self.pbClearMsg.clicked.connect(self.on_clear_msg_clicked)
-		self.pbSendFiles.clicked.connect(self.on_sendfiles_clicked)
-		self.pbAddFile.clicked.connect(self.on_add_file)
-		self.pbClearFiles.clicked.connect(self.on_clear_files)
-		self.pbDeleteFile.clicked.connect(self.on_delete_file)
 
-		self.pbNews.clicked.connect(self.on_news_clicked)
-		self.pbMessages.clicked.connect(self.on_messages_clicked)		
-		self.pbFiles.clicked.connect(self.on_files_clicked)				
-		self.pbTasks.clicked.connect(self.on_tasks_clicked)
-		self.pbSettings.clicked.connect(self.on_settings_clicked)
-		self.pbAbout.clicked.connect(self.on_about_clicked)
+		self.ui.cbTaskType.addItem("Microsoft Office")
+		self.ui.cbTaskType.addItem("Интернет")
+		self.ui.cbTaskType.addItem("Принтер")
+		
+		self.ui.pbSendMsg.clicked.connect(self.on_send_msg)
+		self.ui.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
+		self.ui.lwUsers.itemClicked.connect(self.lwusers_item_clicked)
+		self.ui.pbClearMsg.clicked.connect(self.on_clear_msg_clicked)
+		self.ui.pbSendFiles.clicked.connect(self.on_sendfiles_clicked)
+		self.ui.pbAddFile.clicked.connect(self.on_add_file)
+		self.ui.pbClearFiles.clicked.connect(self.on_clear_files)
+		self.ui.pbDeleteFile.clicked.connect(self.on_delete_file)
+
+		self.ui.pbNews.clicked.connect(self.on_news_clicked)
+		self.ui.pbMessages.clicked.connect(self.on_messages_clicked)		
+		self.ui.pbFiles.clicked.connect(self.on_files_clicked)				
+		self.ui.pbTasks.clicked.connect(self.on_tasks_clicked)
+		self.ui.pbSettings.clicked.connect(self.on_settings_clicked)
+		self.ui.pbAbout.clicked.connect(self.on_about_clicked)
 
 		"""
 		ti1 = QtWidgets.QTableWidgetItem("lolita")
@@ -90,16 +95,16 @@ class MainWindow(QtWidgets.QDialog):
 		QtWidgets.QMessageBox.information(self, 'About', 'Created by Denisov Foundation (c) 2014', QtWidgets.QMessageBox.Yes)
 
 	def on_messages_clicked(self):
-		self.stackedWidget.setCurrentIndex(1)
+		self.ui.stackedWidget.setCurrentIndex(1)
 
 	def on_files_clicked(self):
-		self.stackedWidget.setCurrentIndex(2)
+		self.ui.stackedWidget.setCurrentIndex(2)
 
 	def on_clear_msg_clicked(self):
-		self.teMsg.clear()
+		self.ui.teMsg.clear()
 
 	def lwusers_item_clicked(self, item):
-		self.lbAlias.setText( str(item.text()) )
+		self.ui.lbAlias.setText( str(item.text()) )
 
 	def init_app(self):
 		mdb = MariaDB()
@@ -114,7 +119,7 @@ class MainWindow(QtWidgets.QDialog):
 			item = QtWidgets.QListWidgetItem()
 			item.setIcon(QtGui.QIcon("images/cmp.ico"))
 			item.setText(alias)
-			self.lwUsers.insertItem(i, item)
+			self.ui.lwUsers.insertItem(i, item)
 			i = i+1
 
 	def save_config(self):
@@ -148,36 +153,36 @@ class MainWindow(QtWidgets.QDialog):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!', QtWidgets.QMessageBox.Yes)
 
 	def on_send_msg(self):
-		send_msg(self, self.teMsg.document().toPlainText(), False, self.passwd, self.lbAlias.text())
+		send_msg(self, self.ui.teMsg.document().toPlainText(), False, self.passwd, self.ui.lbAlias.text())
 
 	def on_sendall_msg(self):
-		send_msg(self, self.teMsg.document().toPlainText(), True, self.passwd, None)
+		send_msg(self, self.ui.teMsg.document().toPlainText(), True, self.passwd, None)
 
 	def on_sendfiles_clicked(self):
 		flist = list()
-		items = self.lwFiles.count()
+		items = self.ui.lwFiles.count()
 
 		if items == 0:
 			QtWidgets.QMessageBox.warning(self, 'Error', 'Добавьте файлы для передачи', QtWidgets.QMessageBox.Yes)
 			return
 
 		for i in range(items):
-				flist.append(self.lwFiles.item(i).text())
+				flist.append(self.ui.lwFiles.item(i).text())
 
-		self.send_files.send(self, flist, self.lbAlias.text())
+		self.send_files.send(self, flist, self.ui.lbAlias.text())
 
 	def minimize_app(self):
 		self.hide()
 
 	def on_clear_files(self):
-		self.lwFiles.clear()
+		self.ui.lwFiles.clear()
 
 	def on_add_file(self):
 		newfn = str("")
 		filenames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open file', 'C:/')
 		fl = str(filenames[0]).split("[")[1].split("]")[0].split(",")
 
-		items = self.lwFiles.count()
+		items = self.ui.lwFiles.count()
 		for f in fl:
 			try:
 				newfn = f.split("'")[1].split("'")[0]
@@ -186,7 +191,7 @@ class MainWindow(QtWidgets.QDialog):
 
 			flag = False
 			for i in range(items):
-					fname = self.lwFiles.item(i).text()
+					fname = self.ui.lwFiles.item(i).text()
 					if fname == newfn:
 						QtWidgets.QMessageBox.warning(self, 'Error', 'Файл "' + newfn + '" уже добавлен в очередь передачи', QtWidgets.QMessageBox.Yes)
 						flag = True
@@ -196,4 +201,4 @@ class MainWindow(QtWidgets.QDialog):
 				item = QtWidgets.QListWidgetItem()
 				item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
 				item.setText(newfn)
-				self.lwFiles.insertItem(0, item)
+				self.ui.lwFiles.insertItem(0, item)

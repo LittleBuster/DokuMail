@@ -147,28 +147,28 @@ class SendFiles(QtCore.QObject):
 		self.uploadWnd = UploadWindow()
 
 	def on_connection_start(self):
-		self.uploadWnd.pB.setValue(0)
+		self.uploadWnd.ui.pB.setValue(0)
 		self.uploadWnd.show()
-		self.uploadWnd.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Соединение...</span></p></body></html>")
-		self.uploadWnd.lbFile.setText("")
+		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Соединение...</span></p></body></html>")
+		self.uploadWnd.ui.lbFile.setText("")
 
 	def on_compress_start(self, filename):
-		self.uploadWnd.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Сжатие:</span></p></body></html>")
-		self.uploadWnd.lbFile.setText("<html><head/><body><p><span style=' color:#ffffff;'>" + filename + "</span></p></body></html>")
-		self.uploadWnd.pB.setValue(0)
+		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Сжатие:</span></p></body></html>")
+		self.uploadWnd.ui.lbFile.setText("<html><head/><body><p><span style=' color:#ffffff;'>" + filename + "</span></p></body></html>")
+		self.uploadWnd.ui.pB.setValue(0)
 
 	def on_crypt_start(self, filename):
-		self.uploadWnd.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Шифрование:</span></p></body></html>")
-		self.uploadWnd.pB.setValue(33)
+		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Шифрование:</span></p></body></html>")
+		self.uploadWnd.ui.pB.setValue(33)
 
 	def on_send_start(self, filename):
-		self.uploadWnd.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Отправка:</span></p></body></html>")
-		self.uploadWnd.pB.setValue(66)
+		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Отправка:</span></p></body></html>")
+		self.uploadWnd.ui.pB.setValue(66)
 
 	def on_send_complete(self):
-		self.uploadWnd.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Готово.</span></p></body></html>")
-		self.uploadWnd.lbFile.setText("")
-		self.uploadWnd.pB.setValue(100)
+		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Готово.</span></p></body></html>")
+		self.uploadWnd.ui.lbFile.setText("")
+		self.uploadWnd.ui.pB.setValue(100)
 		QtWidgets.QMessageBox.information(self._wnd, "Complete", "Файлы отправлены!", QtWidgets.QMessageBox.Yes)
 		self.uploadWnd.hide()
 

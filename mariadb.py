@@ -3,10 +3,9 @@
 
 import hashlib
 import pymysql
-from PyQt5 import QtCore
 
 
-class MariaDB(QtCore.QObject):
+class MariaDB():
 	conn = None
 
 	def __init__(self):

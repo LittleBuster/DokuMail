@@ -3,6 +3,7 @@
 
 import os
 import json
+import loginWnd
 from mariadb import MariaDB
 from PyQt5 import QtGui, QtWidgets
 from PyQt5 import QtCore, uic
@@ -18,45 +19,47 @@ class pObj(object):
 class LoginWindow(QtWidgets.QDialog):
 	def __init__(self, parent=None):
 		super(LoginWindow, self).__init__()
-		uic.loadUi("loginWnd.ui", self)
+		self.ui = loginWnd.Ui_Form()
+		self.ui.setupUi(self)
+
 		self.loginTmr = QtCore.QTimer()
 		self.loginTmr.timeout.connect(self.on_autologin)
-		self.pbLogin.clicked.connect(self.on_login)
-		self.pbCancel.clicked.connect(self.on_cancel)
-		self.lbBack.setPixmap(QtGui.QPixmap("images/ffupd.png"))
+		self.ui.pbLogin.clicked.connect(self.on_login)
+		self.ui.pbCancel.clicked.connect(self.on_cancel)
+		self.ui.lbBack.setPixmap(QtGui.QPixmap("images/ffupd.png"))
 
 		if os.path.isfile("svpwd.dat"):
 			self.load_passwd()
 
 	def set_wnds(self, mw):
 		self._mw = mw
-		if not ((self.edLogin.text() == "") or (self.edPasswd.text() == "")):
+		if not ((self.ui.edLogin.text() == "") or (self.ui.edPasswd.text() == "")):
 			self.loginTmr.start(2000)
 
 	def on_login(self):
 		self.loginTmr.stop()
 		state = False
 
-		if (self.edLogin.text() == "") or (self.edPasswd.text() == ""):
+		if (self.ui.edLogin.text() == "") or (self.ui.edPasswd.text() == ""):
 			QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Введите логин или пароль!', QtWidgets.QMessageBox.Yes)
 			return
 
-		if (self.cbSave.checkState() == QtCore.Qt.Checked):
+		if (self.ui.cbSave.checkState() == QtCore.Qt.Checked):
 			self.save_passwd()
 
 		mdb = MariaDB()
 		if not mdb.connect(self._mw.MDBServer, self._mw.MDBUser, self._mw.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
 			return
-		state = mdb.check_login(self.edLogin.text(), self.edPasswd.text())
+		state = mdb.check_login(self.ui.edLogin.text(), self.ui.edPasswd.text())
 		mdb.close()
 
 		if state == True:
 			self.hide()
 			self._mw.show()
 			self._mw.init_app()
-			self._mw.passwd = self.edPasswd.text()
-			self._mw.user = self.edLogin.text()
+			self._mw.passwd = self.ui.edPasswd.text()
+			self._mw.user = self.ui.edLogin.text()
 		else:
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный логин или пароль!', QtWidgets.QMessageBox.Yes)
 						
@@ -65,8 +68,8 @@ class LoginWindow(QtWidgets.QDialog):
 		f = open("svpwd.dat", "w")
 		cfgPasswd = pObj()
 		cfgPasswd.config = {}
-		cfgPasswd.config["login"] = self.edLogin.text()
-		cfgPasswd.config["passwd"] = self.edPasswd.text()
+		cfgPasswd.config["login"] = self.ui.edLogin.text()
+		cfgPasswd.config["passwd"] = self.ui.edPasswd.text()
 		json.dump(cfgPasswd.config, f)
 		f.close()
 
@@ -74,12 +77,12 @@ class LoginWindow(QtWidgets.QDialog):
 		try:
 			f = open("svpwd.dat", "r")
 			cfgPasswd = json.load(f)
-			self.edLogin.setText( cfgPasswd["login"] )
-			self.edPasswd.setText( cfgPasswd["passwd"] )
+			self.ui.edLogin.setText( cfgPasswd["login"] )
+			self.ui.edPasswd.setText( cfgPasswd["passwd"] )
 			f.close()
 		except:
-			self.edLogin.setText("")
-			self.edPasswd.setText("")
+			self.ui.edLogin.setText("")
+			self.ui.edPasswd.setText("")
 			os.remove("svpwd.dat")
 
 	def on_autologin(self):
@@ -88,5 +91,5 @@ class LoginWindow(QtWidgets.QDialog):
 
 	def on_cancel(self):
 		self.loginTmr.stop()
-		self.edLogin.setText("")
-		self.edPasswd.setText("")
+		self.ui.edLogin.setText("")
+		self.ui.edPasswd.setText("")
