@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 from send import *
@@ -27,7 +30,7 @@ class MainWindow(QtWidgets.QDialog):
 		self.passwd = str("")
 
 		self.pbMinimize.clicked.connect(self.minimize_app)
-		self.tr = SystemTrayIcon(self)
+		self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
 		self.tr.show()
 		
 		self.pbSendMsg.clicked.connect(self.on_send_msg)
@@ -37,8 +40,41 @@ class MainWindow(QtWidgets.QDialog):
 		self.pbSendFiles.clicked.connect(self.on_sendfiles_clicked)
 		self.pbAddFile.clicked.connect(self.on_add_file)
 		self.pbClearFiles.clicked.connect(self.on_clear_files)
+		self.pbDeleteFile.clicked.connect(self.on_delete_file)
+		self.pbSendAllFiles.clicked.connect(self.on_sendall_files)
+
+		self.pbNews.clicked.connect(self.on_news_clicked)
+		self.pbMessages.clicked.connect(self.on_messages_clicked)		
+		self.pbFiles.clicked.connect(self.on_files_clicked)				
+		self.pbTasks.clicked.connect(self.on_tasks_clicked)
+		self.pbSettings.clicked.connect(self.on_settings_clicked)
+		self.pbAbout.clicked.connect(self.on_about_clicked)
 
 		self.send_files = SendFiles()
+
+	def on_delete_file(self):
+		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)
+
+	def on_sendall_files(self):
+		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)
+
+	def on_news_clicked(self):
+		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
+
+	def on_tasks_clicked(self):
+		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
+
+	def on_settings_clicked(self):
+		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
+
+	def on_about_clicked(self):
+		QtWidgets.QMessageBox.information(self, 'About', 'Created by Denisov Foundation (c) 2014', QtWidgets.QMessageBox.Yes)
+
+	def on_messages_clicked(self):
+		self.stackedWidget.setCurrentIndex(1)
+
+	def on_files_clicked(self):
+		self.stackedWidget.setCurrentIndex(2)
 
 	def on_clear_msg_clicked(self):
 		self.teMsg.clear()
@@ -93,10 +129,16 @@ class MainWindow(QtWidgets.QDialog):
 
 	def on_sendfiles_clicked(self):
 		flist = list()
+		items = self.lwFiles.count()
+
+		if items == 0:
+			QtWidgets.QMessageBox.warning(self, 'Error', 'Добавьте файлы для передачи', QtWidgets.QMessageBox.Yes)
+			return
+
 		for i in range(items):
 				flist.append(self.lwFiles.item(i).text())
 
-		send_files.send(flist)
+		self.send_files.send(self, flist, self.lbAlias.text())
 
 	def minimize_app(self):
 		self.hide()
@@ -105,25 +147,27 @@ class MainWindow(QtWidgets.QDialog):
 		self.lwFiles.clear()
 
 	def on_add_file(self):
-		filename = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'C:/')
+		newfn = str("")
+		filenames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open file', 'C:/')
+		fl = str(filenames[0]).split("[")[1].split("]")[0].split(",")
 
-		""" 
-		Checking on exist file in lists
-		"""
 		items = self.lwFiles.count()
+		for f in fl:
+			try:
+				newfn = f.split("'")[1].split("'")[0]
+			except:
+				break
 
-		if items > 0:
+			flag = False
 			for i in range(items):
-				fname = self.lwFiles.item(i).text()
-				if fname == filename[0]:
-					QtWidgets.QMessageBox.warning(self, 'Error', 'Этот файл уже добавлен в очередь передачи', QtWidgets.QMessageBox.Yes)
-					return
+					fname = self.lwFiles.item(i).text()
+					if fname == newfn:
+						QtWidgets.QMessageBox.warning(self, 'Error', 'Файл "' + newfn + '" уже добавлен в очередь передачи', QtWidgets.QMessageBox.Yes)
+						flag = True
+						break
 
-		""" 
-		If file don't exists then add in list
-		"""
-		if not filename[0] == "":
-			item = QtWidgets.QListWidgetItem()
-			item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
-			item.setText(filename[0])
-			self.lwFiles.insertItem(0, item)
+			if not flag:
+				item = QtWidgets.QListWidgetItem()
+				item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
+				item.setText(newfn)
+				self.lwFiles.insertItem(0, item)

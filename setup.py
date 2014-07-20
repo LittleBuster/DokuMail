@@ -5,7 +5,7 @@ base = None
 if sys.platform == 'win32':
     base = 'Win32GUI'
 
-setup(name = 'spamandeggs',
+setup(name = 'DokuMail',
       version = '0.0.1',
-      executables = [Executable('doku.pyw', base=base)],
+      executables = [Executable('doku.py', icon='images/cmp.ico', base=base)],
       options = {'build_exe': {'includes': ['sip']}})

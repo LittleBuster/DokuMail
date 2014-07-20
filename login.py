@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 from mariadb import MariaDB
 from PyQt5 import QtGui, QtWidgets
@@ -22,6 +25,7 @@ class LoginWindow(QtWidgets.QDialog):
 			self.loginTmr.start(2000)
 
 	def on_login(self):
+		self.loginTmr.stop()
 		state = False
 
 		if (self.edLogin.text() == "") or (self.edPasswd.text() == ""):

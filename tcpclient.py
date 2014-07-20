@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import socket
 from Crypto.Cipher import AES
 import zlib
@@ -11,68 +14,67 @@ class TcpClient():
 
 	def connect(self, ip, port, user, pwd):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		
+
 		try:
 			self.sock.connect((ip, port))
 		except:
 			return False
 
-		self.sock.send( AES256_encode_msg("[CRED]", "retrieve.crt") )
-		self.sock.recv(5)
+		self.sock.send(b"[LOGIN]")
+		print(self.sock.recv(1024))
 
 		h = hashlib.sha512()
 		h.update(pwd.encode('utf-8'))
 		h_passwd = h.hexdigest().upper()
 		
-		cred = "[cred$" + user + "$" + h_passwd + "$]"
-		self.sock.send( AES256_encode_msg(cred, "retrieve.crt") )
+		cred = "login$" + user + "$" + h_passwd + "$"
+		self.sock.send( cred.encode('utf-8') )
 		
-		answ = self.sock.recv(1024)
-		if not AES256_decode_msg(answ, "retrieve.crt") == "[CRED-OK]":
-			self.sock.close()
+		if self.sock.recv(1024) == b'[LOGIN-OK]':
+			print("Login ok")
+			return True
+		else:
+			print("login fail")
 			return False
-		return True
 
 	def send_message(self, toUsers, message):
 		try:
-			self.sock.send( AES256_encode_msg( "MSG-SEND$" + toUsers, "retrieve.crt") )
-			answ = AES256_decode_msg( self.sock.recv(1024), "retrieve.crt" )
-			if answ == "[FAIL-ACCESS]":
+			self.sock.send( ("MSG-SEND$" + toUsers).encode('utf-8') )
+			answ = self.sock.recv(1024)
+			if answ == b"[FAIL-ACCESS]":
 				return answ
 
 			self.sock.send( AES256_encode_msg( message, "transf.crt" ) )
-			answ = AES256_decode_msg( self.sock.recv(1024), "retrieve.crt")
+			answ = self.sock.recv(1024)
+
 			return answ
 		except:
-			return "[FAIL]"
+			return b"[FAIL]"
 
-	def begin_send_files(self):
-		self.sock.send( AES256_encode_msg("[FILES-SEND]$" + toUser, "retrieve.crt"))
-		self.sock.recv(10)
+	def begin_send_files(self, toUser):
+		self.sock.send( ("[SEND-FILES]$" + toUser).encode('utf-8') )
+		print (self.sock.recv(1024))
 
-	def send_file(self, fname, toUser):
+	def send_file(self, fname):
 		lsf = fname.split("/")
 		l = len(lsf)
 
-		self.sock.send( ("FILE$" + lsf[l-1]).encode("utf-8") )
-		self.sock.recv(10)
+		self.sock.send( ("sf$" + lsf[l-1]).encode("utf-8") )
+		print(self.sock.recv(1024).decode('utf-8'))
 
-		f = open(lsf[l-1], "rb")
+		f = open(fname + ".bin", "rb")
 
 		while True:
-			data = f.read(1024)
-
+			data = f.read(4096)
 			if len(data) != 0:
-				self.sock.send( data )
-				self.sock.recv(10)
+				self.sock.send(data)
 			else:
-				self.sock.send("[END-FILE]".encode("utf-8"))
-				self.sock.recv(10)
-				break
+				break;
+		self.sock.send(b"[end]")
+		print(self.sock.recv(1024).decode('utf-8'))
 
 	def end_send_files(self):
-		self.sock.send("[END-RETRIEVE]".encode("utf-8"))
-		
+		self.sock.send(b"[END-RETRIEVE]")
 
 	def close(self):
 		self.sock.close()

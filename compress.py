@@ -1,8 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 import platform
 from ctypes import cdll
 
-def zlib_compress_file( filenme, outfile ):
+def zlib_compress_file( filename, outfile ):
 	lib = None
 
 	if platform.system() == "Linux":
@@ -11,7 +14,10 @@ def zlib_compress_file( filenme, outfile ):
 		lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcompress.dll")]))
 
 	try:
-		lib.compress_file(filename.encode("utf-8"), outfile.encode("utf-8"))
+		if platform.system() == "Linux": 
+			lib.file_compress(filename.encode("utf-8"), outfile.encode("utf-8"))
+		else:
+			lib.file_compress(filename.encode("cp1251"), outfile.encode("cp1251"))
 		return True
 	except:
 		return False
@@ -25,7 +31,10 @@ def zlib_decompress_file( filename, outfile ):
 		lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcompress.dll")]))
 
 	try:
-		lib.decompress_file(filename.encode("utf-8"), outfile.encode("utf-8"))
+		if platform.system() == "Linux":
+			lib.file_decompress(filename.encode("utf-8"), outfile.encode("utf-8"))
+		else:
+			lib.file_decompress(filename.encode("cp1251"), outfile.encode("cp1251"))
 		return True
 	except:
 		return False

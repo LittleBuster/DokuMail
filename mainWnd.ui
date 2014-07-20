@@ -89,6 +89,10 @@
   <property name="windowTitle">
    <string>Doku</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/network-receive.png</normaloff>images/network-receive.png</iconset>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -348,7 +352,7 @@ QPushButton:pressed {
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbLogin_2">
+   <widget class="QPushButton" name="pbAbout">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -397,7 +401,7 @@ QPushButton:pressed {
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbNews_2">
+   <widget class="QPushButton" name="pbMessages">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -446,7 +450,7 @@ QPushButton:pressed {
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbNews_3">
+   <widget class="QPushButton" name="pbFiles">
     <property name="geometry">
      <rect>
       <x>370</x>
@@ -495,7 +499,7 @@ QPushButton:pressed {
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbNews_4">
+   <widget class="QPushButton" name="pbTasks">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -544,7 +548,7 @@ QPushButton:pressed {
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pbNews_5">
+   <widget class="QPushButton" name="pbSettings">
     <property name="geometry">
      <rect>
       <x>710</x>
@@ -1150,7 +1154,7 @@ border-width: 0px;
      </palette>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QToolBox" name="toolBox">
@@ -1348,8 +1352,8 @@ border-width: 0px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>98</width>
+         <height>28</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1374,8 +1378,8 @@ border-width: 0px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>381</width>
-         <height>204</height>
+         <width>98</width>
+         <height>28</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1400,8 +1404,8 @@ border-width: 0px;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>100</width>
-         <height>30</height>
+         <width>98</width>
+         <height>28</height>
         </rect>
        </property>
        <attribute name="label">
@@ -1613,7 +1617,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pbDeleteFile">
       <property name="geometry">
        <rect>
-        <x>8</x>
+        <x>10</x>
         <y>290</y>
         <width>200</width>
         <height>41</height>
@@ -1659,10 +1663,10 @@ QPushButton:pressed {
        </size>
       </property>
      </widget>
-     <widget class="QPushButton" name="pbSendAllMsg_2">
+     <widget class="QPushButton" name="pbSendAllFiles">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>442</x>
         <y>290</y>
         <width>200</width>
         <height>41</height>
@@ -1712,14 +1716,17 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-5</y>
+        <y>0</y>
         <width>651</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <family>Arial Black</family>
+        <family>Arial</family>
+        <pointsize>14</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
       </property>
       <property name="text">
@@ -1732,7 +1739,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pbAddFile">
       <property name="geometry">
        <rect>
-        <x>8</x>
+        <x>10</x>
         <y>240</y>
         <width>200</width>
         <height>41</height>
@@ -1781,7 +1788,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pbClearFiles">
       <property name="geometry">
        <rect>
-        <x>226</x>
+        <x>228</x>
         <y>240</y>
         <width>200</width>
         <height>41</height>
@@ -1830,7 +1837,7 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pbSendFiles">
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>442</x>
         <y>240</y>
         <width>200</width>
         <height>41</height>
@@ -1880,9 +1887,9 @@ QPushButton:pressed {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
+        <y>30</y>
         <width>631</width>
-        <height>211</height>
+        <height>201</height>
        </rect>
       </property>
       <property name="font">
@@ -1895,7 +1902,7 @@ QPushButton:pressed {
       </property>
       <property name="styleSheet">
        <string notr="true">QWidget {
-	background-color: rgba(23, 115, 255, 137);
+	background-color: rgba(255, 255, 255, 71);
 	color: rgb(0, 239, 255);
 	border-width: 1px;
 	border-color: rgb(255, 255, 255);

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 __author__ = 'Denisov Sergey 2014'
 
 import sys
@@ -9,7 +12,7 @@ from main import MainWindow
 
 def main():
 	app = QtWidgets.QApplication(sys.argv)
-	
+
 	mw = MainWindow()
 	mw.load_config()
 	

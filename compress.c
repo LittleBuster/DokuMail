@@ -14,7 +14,7 @@
 #define CHUNK 16384
 
 
-int cmp(FILE *source, FILE *dest, int level)
+int cmpr(FILE *source, FILE *dest, int level)
 {
     int ret, flush;
     unsigned have;
@@ -112,25 +112,25 @@ int dcmp(FILE *source, FILE *dest)
     return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
 }
 
-void file_compress( const char *filename, const char *outfile ) {
+void file_compress( char *filename, char *outfile ) {
     FILE *inf = fopen(filename, "rb");
     FILE *of = fopen(outfile, "wb");
 
-    cmp(inf, of, Z_BEST_COMPRESSION);
+    cmpr(inf, of, Z_BEST_COMPRESSION);
 
     fclose(inf);
     fclose(of);
 }
 
-void file_decompress( const char *filename, const char *outfile ) {
+void file_decompress( char *filename, char *outfile ) {
     FILE *inf = fopen(filename, "rb");
     FILE *of = fopen(outfile, "wb");
 
-    decmp(inf, of);
+    dcmp(inf, of);
 
     fclose(inf);
     fclose(of);
 }
 
-extern void file_compress( const char *filename, const char *outfile );
-extern void file_decompress( const char *filename, const char *outfile );
+extern void file_compress( char *filename, char *outfile );
+extern void file_decompress( char *filename, char *outfile );
