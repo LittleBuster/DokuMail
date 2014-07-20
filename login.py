@@ -2,9 +2,18 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 from mariadb import MariaDB
 from PyQt5 import QtGui, QtWidgets
 from PyQt5 import QtCore, uic
+
+
+class pObj(object):
+	"""
+	JSON temp class
+	"""
+	pass
+
 
 class LoginWindow(QtWidgets.QDialog):
 	def __init__(self, parent=None):
@@ -53,20 +62,22 @@ class LoginWindow(QtWidgets.QDialog):
 						
 
 	def save_passwd(self):
-		f = open("svpwd.dat", "wb")
-		cred = self.edLogin.text() + "$" + self.edPasswd.text() + "$"
-		f.write(cred.encode('utf-8'))
+		f = open("svpwd.dat", "w")
+		cfgPasswd = pObj()
+		cfgPasswd.config = {}
+		cfgPasswd.config["login"] = self.edLogin.text()
+		cfgPasswd.config["passwd"] = self.edPasswd.text()
+		json.dump(cfgPasswd.config, f)
 		f.close()
 
 	def load_passwd(self):
 		try:
-			f = open("svpwd.dat", "rb")
-			cred = f.readline().decode('utf-8')
-			self.edLogin.setText(cred.split("$")[0])
-			self.edPasswd.setText(cred.split("$")[1])
+			f = open("svpwd.dat", "r")
+			cfgPasswd = json.load(f)
+			self.edLogin.setText( cfgPasswd["login"] )
+			self.edPasswd.setText( cfgPasswd["passwd"] )
 			f.close()
 		except:
-			f.close()
 			self.edLogin.setText("")
 			self.edPasswd.setText("")
 			os.remove("svpwd.dat")

@@ -3,16 +3,24 @@
 
 import os
 import sys
+import json
 from send import *
 from compress import *
 from crypt import *
-from PyQt5 import QtCore
+from PyQt5 import QtCore, Qt
 from PyQt5 import QtGui
 from PyQt5 import uic
 from PyQt5 import QtWidgets
 from tray import SystemTrayIcon
 from mariadb import MariaDB
 from tcpclient import TcpClient
+
+
+class pObj(object):
+	"""
+	JSON temp class
+	"""
+	pass
 
 
 class MainWindow(QtWidgets.QDialog):
@@ -41,7 +49,6 @@ class MainWindow(QtWidgets.QDialog):
 		self.pbAddFile.clicked.connect(self.on_add_file)
 		self.pbClearFiles.clicked.connect(self.on_clear_files)
 		self.pbDeleteFile.clicked.connect(self.on_delete_file)
-		self.pbSendAllFiles.clicked.connect(self.on_sendall_files)
 
 		self.pbNews.clicked.connect(self.on_news_clicked)
 		self.pbMessages.clicked.connect(self.on_messages_clicked)		
@@ -50,12 +57,24 @@ class MainWindow(QtWidgets.QDialog):
 		self.pbSettings.clicked.connect(self.on_settings_clicked)
 		self.pbAbout.clicked.connect(self.on_about_clicked)
 
+		"""
+		ti1 = QtWidgets.QTableWidgetItem("lolita")
+		ti2 = QtWidgets.QTableWidgetItem("pkkkkkkkkkkkkkkkkkkkkkkkkkkkkipec")
+
+		self.tw1.setItem(0,0,ti1)
+		self.tw1.setItem(0,1,ti2)
+		lst = list()
+		lst.append("hfjsdhf")
+		lst.append("lolofffffffffffffffffffffffffffffl")
+		lst.append("ddfsd")
+		self.tw1.setHorizontalHeaderLabels(lst)
+
+		self.tw1.horizontalHeader().resizeSection(0, 10)
+		"""
+
 		self.send_files = SendFiles()
 
 	def on_delete_file(self):
-		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)
-
-	def on_sendall_files(self):
 		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)
 
 	def on_news_clicked(self):
@@ -99,9 +118,15 @@ class MainWindow(QtWidgets.QDialog):
 			i = i+1
 
 	def save_config(self):
-		f = open("config.dat", "wb")
-		cfg = self.MDBServer + "$" + self.MDBUser + "$" + self.MDBPassword + "$" + self.TCPServer + "$" + self.TCPPort
-		f.write(cfg.encode('utf-8'))
+		f = open("config.dat", "w")
+		cfg = pObj()
+		cfg.config = {}
+		cfg.config["mdbserver"] = "94.232.48.110"#self.MDBServer
+		cfg.config["mdbuser"] = "doku"#self.MDBUser
+		cfg.config["mdbpasswd"] = "School184"#self.MDBPassword
+		cfg.config["tcpserver"] = "94.232.48.110"#self.TCPServer
+		cfg.config["tcpport"] = 5000#self.TCPPort
+		json.dump(cfg.config, f)
 		f.close()
 
 	def load_config(self):
@@ -110,14 +135,15 @@ class MainWindow(QtWidgets.QDialog):
 			sys.exit()
 			return
 		try:
-			f = open("config.dat", "rb")
-			cfg = f.readline().decode("utf-8").split("$")
+			f = open("config.dat", "r")
+			cfg = json.load(f)
+
+			self.MDBServer = cfg["mdbserver"]
+			self.MDBUser = cfg["mdbuser"]
+			self.MDBPasswd = cfg["mdbpasswd"]
+			self.TCPServer = cfg["tcpserver"]
+			self.TCPPort = cfg["tcpport"]
 			f.close()
-			self.MDBServer = cfg[0]
-			self.MDBUser = cfg[1]
-			self.MDBPasswd = cfg[2]
-			self.TCPServer = cfg[3]
-			self.TCPPort = int(cfg[4])
 		except:
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!', QtWidgets.QMessageBox.Yes)
 

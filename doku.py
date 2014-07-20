@@ -5,7 +5,6 @@ __author__ = 'Denisov Sergey 2014'
 
 import sys
 from PyQt5 import QtWidgets
-from tray import SystemTrayIcon
 from login import LoginWindow
 from main import MainWindow
 

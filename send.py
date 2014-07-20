@@ -92,8 +92,7 @@ class SendFilesThread(QtCore.QThread):
 		if not mdb.connect(self._wnd.MDBServer, self._wnd.MDBUser, self._wnd.MDBPasswd, "DokuMail"):
 			self.err.emit('Ошибка соединения с Базой Данных!')
 			return
-
-		toUser = mdb.get_user_by_alias( self._toUsr )		
+		toUser = mdb.get_user_by_alias( self._toUsr )	
 		mdb.close()
 
 		if not os.path.exists("sendfiles"):
