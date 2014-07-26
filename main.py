@@ -15,6 +15,8 @@ from tray import SystemTrayIcon
 from mariadb import MariaDB
 from tcpclient import TcpClient
 import mainWnd
+from recieve import Recieve
+
 
 class pObj(object):
 	"""
@@ -77,7 +79,29 @@ class MainWindow(QtWidgets.QDialog):
 		self.tw1.horizontalHeader().resizeSection(0, 10)
 		"""
 
+		self.getTmr = QtCore.QTimer()
+		self.getTmr.timeout.connect(self.on_get_data)
+
 		self.send_files = SendFiles()
+		self.recieve = Recieve()
+		self.recieve.downloadComplete.connect(self.on_download_complete)
+
+	def on_get_data(self):
+		self.getTmr.stop()
+
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		if mdb.check_files(self.user):
+			mdb.close()
+			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd)	
+			self.recieve.start()
+		else:
+			self.getTmr.start(5000)
+
+	def on_download_complete(self):
+		self.getTmr.start(5000)
 
 	def on_delete_file(self):
 		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)
@@ -121,6 +145,8 @@ class MainWindow(QtWidgets.QDialog):
 			item.setText(alias)
 			self.ui.lwUsers.insertItem(i, item)
 			i = i+1
+
+		self.getTmr.start(5000)
 
 	def save_config(self):
 		f = open("config.dat", "w")

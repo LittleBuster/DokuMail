@@ -5,10 +5,19 @@ import socket
 from Crypto.Cipher import AES
 import zlib
 from crypt import *
+from compress import *
 import hashlib
+from PyQt5 import QtCore
 
 
-class TcpClient():
+class TcpClient(QtCore.QObject):
+	downloadStart = QtCore.pyqtSignal(str)
+	decryptStart = QtCore.pyqtSignal()
+	decompressStart = QtCore.pyqtSignal()
+	downloadComplete = QtCore.pyqtSignal()
+	fileDownloaded = QtCore.pyqtSignal()
+	fileCount = QtCore.pyqtSignal(int)
+
 	def __init__(self):
 		super(TcpClient, self).__init__()
 
@@ -70,11 +79,82 @@ class TcpClient():
 				self.sock.send(data)
 			else:
 				break;
+		f.close()
 		self.sock.send(b"[end]")
 		print(self.sock.recv(1024).decode('utf-8'))
 
 	def end_send_files(self):
 		self.sock.send(b"[END-RETRIEVE]")
+
+	def get_files(self):
+		self.sock.send( b'[GET-FILES]' )
+
+		if not os.path.exists("downloads"):
+			os.makedirs("downloads")
+
+		cnt = int(self.sock.recv(1024).decode("utf-8"))
+		self.sock.send(b"ok")
+
+		self.fileCount.emit(cnt)
+
+		while True:
+			data = self.sock.recv(1024)
+
+			if data == b'[NOT-FILES]':
+				break
+
+			if data == b"[END-RETRIEVE]":
+				self.downloadComplete.emit()
+				print("All files recieved")
+				break			
+
+			print("Start downloading...")
+			self.sock.send(b'recieveing...')
+
+			fname = str("")
+			try:
+				fname = data.decode('utf-8').split("$")[1]
+			except:
+				return
+			print("New file: " + fname)
+
+			self.downloadStart.emit(fname)
+
+			f = open("downloads/" + fname + ".bin", "wb")
+			while True:
+				data = self.sock.recv(4096)
+				l = len(data) - 5
+
+				try:
+					if data[l:] == b'[end]':
+						print("Download complete")
+						f.write( data[:l] )
+						#mdb.add_file(fname, "file", self.usr, toUsr, str(now_date), now_time_str)
+						self.sock.send("complete".encode('utf-8'))
+						f.close()
+
+						self.decryptStart.emit()
+
+						print("Decrypt: " + fname)
+						if not AES256_decode_file("downloads/" + fname + ".bin", "downloads/" + fname + ".z", "transf.crt"):
+							print("error crypting")
+
+						self.decompressStart.emit()
+
+						print("Decompress: " + fname)
+						if not zlib_decompress_file("downloads/" + fname + ".z", "downloads/" + fname):
+							print("error decompressing")
+
+						self.fileDownloaded.emit()
+
+						os.remove("downloads/" + fname + ".bin")
+						os.remove("downloads/" + fname + ".z")
+
+						break
+				except:
+					print('except')			
+	
+				f.write(data)
 
 	def close(self):
 		self.sock.close()

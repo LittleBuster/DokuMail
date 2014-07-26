@@ -15,7 +15,7 @@ class ServerThread(threading.Thread):
 
 		if cmd == b"[LOGIN]":
 			self.conn.send(b'ok')
-			data = self.conn.recv(1024).decode('utf-8')		
+			data = self.conn.recv(1024).decode('utf-8')
 
 			self.usr = data.split("$")[1]
 			h_pwd = data.split("$")[2]
@@ -60,6 +60,44 @@ class ServerThread(threading.Thread):
 			data = self.conn.recv(1024).decode('utf-8')
 
 			"""
+			Reciveing files
+			"""
+
+			if data == '[GET-FILES]':
+				print("OK")
+				files = mdb.get_file_list(self.usr)
+				if files == '':
+					print("not files")
+					self.conn.send("[NOT-FILES]")
+					return
+
+				self.conn.send( str(len(files)).encode("utf-8") )
+				self.conn.recv(1024)
+
+				print("Sending files... " + str(len(files)))
+				for sfile in files:
+					self.conn.send(("sf$" + sfile).encode("utf-8"))
+					print(self.conn.recv(1024))
+					print("Sending " + sfile)
+					f = open("data/" + self.usr + "/files/" + sfile + ".bin", "rb")
+
+					while True:
+						data = f.read(4096)
+						if len(data) != 0:
+							self.conn.send(data)
+						else:
+							break;
+					f.close()
+					self.conn.send(b"[end]")
+					mdb.delete_file(self.usr, sfile)
+					os.remove("data/" + self.usr + "/files/" + sfile + ".bin")
+					print(self.conn.recv(1024).decode('utf-8'))
+				print("All files sended.")
+				self.conn.send(b"[END-RETRIEVE]")
+				mdb.change_state(self.usr, "isFiles", 0)
+				return
+
+			"""
 			Send messages
 			"""
 
@@ -94,7 +132,7 @@ class ServerThread(threading.Thread):
 
 			"""
 			Send files
-			"""		
+			"""
 
 			if (data.split("$")[0] == "[SEND-FILES]"):
 				self.conn.send(b'ok')

@@ -49,6 +49,17 @@ class MariaDB():
 				usrlist.append(row[0])
 		return usrlist
 
+	def check_files(self, curUser):
+		cur = self.conn.cursor()
+		cur.execute("SELECT isFiles FROM actions WHERE name='" + curUser + "' LIMIT 1" )
+
+		for row in cur:
+			print(type(row[0]))
+			if int(row[0]) == 1:
+				return True
+			else:
+				return False
+
 	def get_alias_list(self):
 		usrlist = list()
 
@@ -59,6 +70,11 @@ class MariaDB():
 			usrlist.append(row[0])
 
 		return usrlist		
+
+	def change_state(self, user, state, param):
+                cur = self.conn.cursor()
+                cur.execute("UPDATE actions SET " + state + "='"+ str(param) +"' WHERE name='" + user + "'")
+                self.conn.commit()
 
 	def close(self):
 		self.conn.close()

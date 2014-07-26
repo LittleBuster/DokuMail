@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Thu Jul 24 01:50:24 2014
+# Created: Sat Jul 26 01:00:30 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -562,7 +562,7 @@ class Ui_Form(object):
         self.pushButton_2.setObjectName("pushButton_2")
         self.toolBox.addItem(self.page_3, "")
         self.page_5 = QtWidgets.QWidget()
-        self.page_5.setGeometry(QtCore.QRect(0, 0, 98, 28))
+        self.page_5.setGeometry(QtCore.QRect(0, 0, 381, 198))
         self.page_5.setObjectName("page_5")
         self.pushButton = QtWidgets.QPushButton(self.page_5)
         self.pushButton.setGeometry(QtCore.QRect(140, 110, 99, 27))
@@ -886,14 +886,33 @@ class Ui_Form(object):
         self.tw1.verticalHeader().setCascadingSectionResizes(True)
         self.tw1.verticalHeader().setStretchLastSection(False)
         self.cbTaskType = QtWidgets.QComboBox(self.page_7)
-        self.cbTaskType.setGeometry(QtCore.QRect(10, 60, 317, 31))
+        self.cbTaskType.setGeometry(QtCore.QRect(10, 60, 211, 31))
         font = QtGui.QFont()
-        font.setFamily("Arial")
+        font.setFamily("Arial Black")
         font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
+        font.setBold(False)
+        font.setWeight(50)
         self.cbTaskType.setFont(font)
         self.cbTaskType.setObjectName("cbTaskType")
+        self.cbTaskType_2 = QtWidgets.QComboBox(self.page_7)
+        self.cbTaskType_2.setGeometry(QtCore.QRect(230, 60, 211, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.cbTaskType_2.setFont(font)
+        self.cbTaskType_2.setObjectName("cbTaskType_2")
+        self.label_12 = QtWidgets.QLabel(self.page_7)
+        self.label_12.setGeometry(QtCore.QRect(230, 30, 151, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_12.setFont(font)
+        self.label_12.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.label_12.setObjectName("label_12")
         self.stackedWidget.addWidget(self.page_7)
         self.widget_4 = QtWidgets.QWidget(Form)
         self.widget_4.setGeometry(QtCore.QRect(667, 450, 221, 51))
@@ -1014,7 +1033,7 @@ class Ui_Form(object):
         self.label_6.setObjectName("label_6")
 
         self.retranslateUi(Form)
-        self.stackedWidget.setCurrentIndex(3)
+        self.stackedWidget.setCurrentIndex(1)
         self.toolBox.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -1045,6 +1064,7 @@ class Ui_Form(object):
         self.label_9.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Заявка на починку/обслуживание ПК системному администратору:</span></p></body></html>"))
         self.label_10.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Заявка на починку/обслуживание ПК системному администратору:</span></p></body></html>"))
         self.label_11.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00f8ff;\">Тип проблемы:</span></p></body></html>"))
+        self.label_12.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00f8ff;\">Срочность:</span></p></body></html>"))
         self.pbMinimize.setText(_translate("Form", "Свернуть программу"))
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Быстрая и защищённая внутрикорпоративная почта </span></p><p align=\"center\"><span style=\" color:#00e9ff;\">для малых, средних организаций и учебных учреждений</span></p></body></html>"))

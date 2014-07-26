@@ -36,6 +36,22 @@ class MariaDB(QtCore.QObject):
 			else:
 				return True
 
+	def get_file_list(self, user):
+		files = []
+
+		cur = self.conn.cursor()
+		cur.execute("SELECT name FROM data WHERE toUsr='" + user + "' and type='file'")
+
+		for row in cur:
+			files.append( row[0] )
+
+		return files
+
+	def delete_file(self, user, fname):
+		cur = self.conn.cursor()
+		cur.execute("DELETE FROM data where name='" + fname + "' and toUsr='" + user + "'")
+		self.conn.commit()
+
 	def add_file(self, idFile, type, fromUsr, toUsr, date, time):
 		cur = self.conn.cursor()
 		

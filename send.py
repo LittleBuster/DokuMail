@@ -169,7 +169,7 @@ class SendFiles(QtCore.QObject):
 		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Готово.</span></p></body></html>")
 		self.uploadWnd.ui.lbFile.setText("")
 		self.uploadWnd.ui.pB.setValue(100)
-		QtWidgets.QMessageBox.information(self._wnd, "Complete", "Файлы отправлены!", QtWidgets.QMessageBox.Yes)
+		QtWidgets.QMessageBox.information(self.uploadWnd, "Complete", "Файлы отправлены!", QtWidgets.QMessageBox.Yes)
 		self.uploadWnd.hide()
 
 	def on_error(self, txt):
