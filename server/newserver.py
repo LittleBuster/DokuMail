@@ -63,23 +63,42 @@ class ServerThread(threading.Thread):
 			Reciveing files
 			"""
 
-			if data == '[GET-FILES]':
-				print("OK")
-				files = mdb.get_file_list(self.usr)
+			if data.split("$")[0] == '[GET-FILES]':
+				isUpdate = False
+
+				if data.split("$")[1] == '[UPDATE]':
+					isUpdate = True
+				elif data.split("$")[1] == '[DOWNLOAD]':
+					isUpdate = False
+
+				files = []
+
+				if not isUpdate:
+					files = mdb.get_file_list(self.usr)
+				else:
+					files = mdb.get_update_list()
+
 				if files == '':
-					print("not files")
-					self.conn.send("[NOT-FILES]")
+					self.sock.send("[NOT-FILES]")
 					return
 
 				self.conn.send( str(len(files)).encode("utf-8") )
 				self.conn.recv(1024)
 
+				dest = str("")
 				print("Sending files... " + str(len(files)))
 				for sfile in files:
 					self.conn.send(("sf$" + sfile).encode("utf-8"))
 					print(self.conn.recv(1024))
 					print("Sending " + sfile)
-					f = open("data/" + self.usr + "/files/" + sfile + ".bin", "rb")
+
+					if not isUpdate:
+						dest = "data/" + self.usr + "/files/" + sfile + ".bin"
+					else:
+						dest = "data/update/" + sfile
+
+					print("DEST: " + dest)
+					f = open(dest, "rb")
 
 					while True:
 						data = f.read(4096)
@@ -88,20 +107,25 @@ class ServerThread(threading.Thread):
 						else:
 							break;
 					f.close()
-					self.conn.send(b"[end]")
-					mdb.delete_file(self.usr, sfile)
-					os.remove("data/" + self.usr + "/files/" + sfile + ".bin")
+					self.conn.send(b"[end]")					
+					if not isUpdate:
+						mdb.delete_file(self.usr, sfile)
+						os.remove("data/" + self.usr + "/files/" + sfile + ".bin")
 					print(self.conn.recv(1024).decode('utf-8'))
+
 				print("All files sended.")
 				self.conn.send(b"[END-RETRIEVE]")
-				mdb.change_state(self.usr, "isFiles", 0)
+				if not isUpdate:
+					mdb.change_state(self.usr, "isFiles", 0)
+				else:
+					mdb.change_state(self.usr, "isUpdate", 0)
 				return
 
 			"""
 			Send messages
 			"""
 
-			if data.split("$")[0] == 'MSG-SEND':
+			if data.split("$")[0] == '[MSG-SEND]':
 				toUsers = data.split("$")[1].split("*")
 				if (len(toUsers) > 2) and (not mdb.check_user_admin(self.usr)):
 					self.conn.send(b"[FAIL-ACCESS]")

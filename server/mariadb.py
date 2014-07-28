@@ -47,6 +47,17 @@ class MariaDB(QtCore.QObject):
 
 		return files
 
+	def get_update_list(self):
+		files = []
+
+		cur = self.conn.cursor()
+		cur.execute("SELECT filename FROM updates")
+
+		for row in cur:
+			files.append( row[0] )
+
+		return files
+
 	def delete_file(self, user, fname):
 		cur = self.conn.cursor()
 		cur.execute("DELETE FROM data where name='" + fname + "' and toUsr='" + user + "'")

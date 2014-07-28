@@ -89,19 +89,35 @@ class MainWindow(QtWidgets.QDialog):
 	def on_get_data(self):
 		self.getTmr.stop()
 
+		f = False
 		mdb = MariaDB()
 		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
 			return
-		if mdb.check_files(self.user):
+
+		if mdb.check_update(self.user):
+			f = True
 			mdb.close()
-			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd)	
+			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd, True)	
 			self.recieve.start()
-		else:
+			return
+
+		if mdb.check_files(self.user):
+			f = True
+			mdb.close()
+			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd, False)	
+			self.recieve.start()
+			return
+		
+		if not f:
 			self.getTmr.start(5000)
 
-	def on_download_complete(self):
-		self.getTmr.start(5000)
+	def on_download_complete(self, update):
+		if not update:
+			self.getTmr.start(5000)
+		else:
+			QtWidgets.QMessageBox.information(self, 'Ошибка', 'Обновление завершено', QtWidgets.QMessageBox.Yes)
+			sys.exit()
 
 	def on_delete_file(self):
 		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)

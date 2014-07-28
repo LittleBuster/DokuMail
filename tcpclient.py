@@ -48,7 +48,7 @@ class TcpClient(QtCore.QObject):
 
 	def send_message(self, toUsers, message):
 		try:
-			self.sock.send( ("MSG-SEND$" + toUsers).encode('utf-8') )
+			self.sock.send( ("[MSG-SEND]$" + toUsers).encode('utf-8') )
 			answ = self.sock.recv(1024)
 			if answ == b"[FAIL-ACCESS]":
 				return answ
@@ -86,11 +86,18 @@ class TcpClient(QtCore.QObject):
 	def end_send_files(self):
 		self.sock.send(b"[END-RETRIEVE]")
 
-	def get_files(self):
-		self.sock.send( b'[GET-FILES]' )
+	def get_files(self, update):
+		if update:
+			self.sock.send( ('[GET-FILES]$[UPDATE]').encode('utf-8') )
+		else:
+			self.sock.send( ('[GET-FILES]$[DOWNLOAD]').encode('utf-8') )
 
-		if not os.path.exists("downloads"):
-			os.makedirs("downloads")
+		if not update:
+			if not os.path.exists("downloads"):
+				os.makedirs("downloads")
+		else:
+			if not os.path.exists("update"):
+				os.makedirs("update")
 
 		cnt = int(self.sock.recv(1024).decode("utf-8"))
 		self.sock.send(b"ok")
@@ -106,7 +113,7 @@ class TcpClient(QtCore.QObject):
 			if data == b"[END-RETRIEVE]":
 				self.downloadComplete.emit()
 				print("All files recieved")
-				break			
+				break
 
 			print("Start downloading...")
 			self.sock.send(b'recieveing...')
@@ -120,7 +127,16 @@ class TcpClient(QtCore.QObject):
 
 			self.downloadStart.emit(fname)
 
-			f = open("downloads/" + fname + ".bin", "wb")
+			dest = str("")
+			destf = str("")
+			if update:
+				dest = "update/"
+				destf = dest + fname
+			else:
+				dest = "downloads/"
+				destf = dest + fname + ".bin"
+
+			f = open(destf, "wb")
 			while True:
 				data = self.sock.recv(4096)
 				l = len(data) - 5
@@ -129,26 +145,27 @@ class TcpClient(QtCore.QObject):
 					if data[l:] == b'[end]':
 						print("Download complete")
 						f.write( data[:l] )
-						#mdb.add_file(fname, "file", self.usr, toUsr, str(now_date), now_time_str)
 						self.sock.send("complete".encode('utf-8'))
 						f.close()
 
-						self.decryptStart.emit()
+						if not update:
+							self.decryptStart.emit()
 
-						print("Decrypt: " + fname)
-						if not AES256_decode_file("downloads/" + fname + ".bin", "downloads/" + fname + ".z", "transf.crt"):
-							print("error crypting")
+							print("Decrypt: " + fname)
+							if not AES256_decode_file(dest + fname + ".bin", dest + fname + ".z", "transf.crt"):
+								print("error crypting")
 
-						self.decompressStart.emit()
+							self.decompressStart.emit()
 
-						print("Decompress: " + fname)
-						if not zlib_decompress_file("downloads/" + fname + ".z", "downloads/" + fname):
-							print("error decompressing")
+							print("Decompress: " + fname)
+							if not zlib_decompress_file(dest + fname + ".z", dest + fname):
+								print("error decompressing")
 
 						self.fileDownloaded.emit()
 
-						os.remove("downloads/" + fname + ".bin")
-						os.remove("downloads/" + fname + ".z")
+						if not update:
+							os.remove(dest + fname + ".bin")
+							os.remove(dest + fname + ".z")
 
 						break
 				except:
