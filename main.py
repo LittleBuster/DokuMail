@@ -120,7 +120,10 @@ class MainWindow(QtWidgets.QDialog):
 			sys.exit()
 
 	def on_delete_file(self):
-		QtWidgets.QMessageBox.information(self, 'Ошибка', 'В разработке!', QtWidgets.QMessageBox.Yes)
+		try:
+			self.ui.lwFiles.removeItemWidget( self.ui.lwFiles.takeItem( self.ui.lwFiles.row(self.ui.lwFiles.selectedItems()[0]) ) )
+		except:
+			QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Выделите файл!', QtWidgets.QMessageBox.Yes)
 
 	def on_news_clicked(self):
 		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)

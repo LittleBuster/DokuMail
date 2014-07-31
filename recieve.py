@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
@@ -78,6 +81,7 @@ class Recieve(QtCore.QObject):
 		self.recieveTh.fileCount.connect(self.on_file_count)
 		self.step = 0
 		self.update = False
+		self.fname = str("")
 
 	def set_configs(self, tcpserver, tcpport, usr, pwd, update):
 		self.update = update
@@ -86,20 +90,30 @@ class Recieve(QtCore.QObject):
 			self.dldWnd.ui.pb2.setValue(0)
 
 	def on_download_start(self, fname):
+		self.fname = fname
 		if not self.update:
 			self.dldWnd.ui.pb1.setValue(0)		
-			self.dldWnd.ui.lbFile.setText( fname )
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>" + "Загрузка: " + fname + "</span></p></body></html>" )
 
 	def on_decrypt_start(self):
 		if not self.update:
 			self.dldWnd.ui.pb1.setValue(33)
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>" + "Дешифрование: " + self.fname + "</span></p></body></html>" )
 
 	def on_decompress_start(self):
 		if not self.update:
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>" + "Распаковка: " + self.fname + "</span></p></body></html>" )
 			self.dldWnd.ui.pb1.setValue(66)
 
 	def on_file_downloaded(self):
 		if not self.update:
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>Готово.</span></p></body></html>" )
+
+			item = QtWidgets.QListWidgetItem()
+			item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
+			item.setText(self.fname)
+
+			self.dldWnd.ui.lwFiles.insertItem(0, item)
 			self.dldWnd.ui.pb1.setValue(100)
 			self.dldWnd.ui.pb2.setValue( self.dldWnd.ui.pb2.value() + self.step )
 
@@ -113,7 +127,6 @@ class Recieve(QtCore.QObject):
 		if not self.update:
 			self.dldWnd.ui.pb2.setValue(100)
 			QtWidgets.QMessageBox.information(self.dldWnd, 'Complete', 'Скачивание завершено!', QtWidgets.QMessageBox.Yes)
-			self.dldWnd.hide()
 		self.downloadComplete.emit(self.update)
 
 	def start(self):

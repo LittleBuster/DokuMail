@@ -3,12 +3,15 @@ import socket
 import threading
 import datetime
 from mariadb import MariaDB
+import multiprocessing as mp
 
-class ServerThread(threading.Thread):
+
+class ServerThread():
 	def __init__(self, _sock, _addr):
 		self.conn = _sock
 		self.addr = _addr
-		threading.Thread.__init__(self)
+		#threading.Thread.__init__(self)a
+		self.run()
 
 	def run(self):
 		cmd = self.conn.recv(1024)
@@ -86,14 +89,19 @@ class ServerThread(threading.Thread):
 				self.conn.recv(1024)
 
 				dest = str("")
-				print("Sending files... " + str(len(files)))
+
+				if not isUpdate:
+					print("Sending files... " + str(len(files)))
+				else:
+					print("Start Update...")
+
 				for sfile in files:
 					self.conn.send(("sf$" + sfile).encode("utf-8"))
 					print(self.conn.recv(1024))
 					print("Sending " + sfile)
 
 					if not isUpdate:
-						dest = "data/" + self.usr + "/files/" + sfile + ".bin"
+						dest = "data/" + self.usr + "/files/" + sfile + ".bin"							
 					else:
 						dest = "data/update/" + sfile
 
@@ -181,6 +189,21 @@ class ServerThread(threading.Thread):
 					fname = data.decode('utf-8').split("$")[1]
 					print("New file: " + fname)
 
+					index = 0
+					newfn = fname
+					while True:
+						if not os.path.exists("data/" + toUsr + "/files/" + newfn + ".bin"):
+							fname = newfn
+							break
+						else:
+							newfn = fname
+							index += 1
+							fn = fname.split(".")
+							nm = fn[0] + "(" + str(index) + ")"
+							fe = fn[1]
+
+							newfn = nm + "." + fe
+
 					f = open("data/" + toUsr + "/files/" + fname + ".bin", "wb")
 					while True:
 						data = self.conn.recv(4096)
@@ -210,7 +233,9 @@ def main():
 
 	while True:
 		conn, addr = s.accept()
-		ServerThread(conn, addr).start()
+		proc = mp.Process(target=ServerThread, args=(conn, addr))
+		proc.start()
+		#ServerThread(conn, addr).start()
 
 if __name__ == '__main__':
 	main()

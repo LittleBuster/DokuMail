@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'uploadWnd.ui'
 #
-# Created: Wed Jul 23 22:30:51 2014
+# Created: Thu Jul 31 23:22:50 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -48,7 +48,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Отправка"))
         self.lbAct.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00d4ff;\">sfdfsdf</span></p></body></html>"))
         self.lbFile.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">sfdfsdf</span></p></body></html>"))
 
