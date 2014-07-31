@@ -46,6 +46,16 @@ class TcpClient(QtCore.QObject):
 			print("login fail")
 			return False
 
+	def check_status(self, ip, port):
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+		try:
+			self.sock.connect((ip, port))
+			self.sock.close()
+			return True
+		except:
+			return False
+
 	def send_message(self, toUsers, message):
 		try:
 			self.sock.send( ("[MSG-SEND]$" + toUsers).encode('utf-8') )

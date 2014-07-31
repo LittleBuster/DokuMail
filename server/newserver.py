@@ -11,7 +11,10 @@ class ServerThread():
 		self.conn = _sock
 		self.addr = _addr
 		#threading.Thread.__init__(self)a
-		self.run()
+		try:
+			self.run()
+		except:
+			print("Client: " + str(_addr[0]) + " check status")
 
 	def run(self):
 		cmd = self.conn.recv(1024)
@@ -105,7 +108,6 @@ class ServerThread():
 					else:
 						dest = "data/update/" + sfile
 
-					print("DEST: " + dest)
 					f = open(dest, "rb")
 
 					while True:

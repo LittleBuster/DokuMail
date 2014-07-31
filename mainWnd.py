@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Sat Jul 26 01:00:30 2014
+# Created: Fri Aug  1 05:56:45 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -555,7 +555,7 @@ class Ui_Form(object):
 "}")
         self.toolBox.setObjectName("toolBox")
         self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 98, 28))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 100, 30))
         self.page_3.setObjectName("page_3")
         self.pushButton_2 = QtWidgets.QPushButton(self.page_3)
         self.pushButton_2.setGeometry(QtCore.QRect(130, 80, 99, 27))
@@ -569,7 +569,7 @@ class Ui_Form(object):
         self.pushButton.setObjectName("pushButton")
         self.toolBox.addItem(self.page_5, "")
         self.page_4 = QtWidgets.QWidget()
-        self.page_4.setGeometry(QtCore.QRect(0, 0, 98, 28))
+        self.page_4.setGeometry(QtCore.QRect(0, 0, 100, 30))
         self.page_4.setObjectName("page_4")
         self.toolBox.addItem(self.page_4, "")
         self.stackedWidget.addWidget(self.page)
@@ -1031,6 +1031,25 @@ class Ui_Form(object):
         font.setWeight(75)
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
+        self.label_13 = QtWidgets.QLabel(Form)
+        self.label_13.setGeometry(QtCore.QRect(20, 0, 141, 16))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_13.setFont(font)
+        self.label_13.setObjectName("label_13")
+        self.lbStatus = QtWidgets.QLabel(Form)
+        self.lbStatus.setGeometry(QtCore.QRect(10, 20, 161, 31))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(20)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lbStatus.setFont(font)
+        self.lbStatus.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbStatus.setObjectName("lbStatus")
 
         self.retranslateUi(Form)
         self.stackedWidget.setCurrentIndex(1)
@@ -1068,4 +1087,6 @@ class Ui_Form(object):
         self.pbMinimize.setText(_translate("Form", "Свернуть программу"))
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Быстрая и защищённая внутрикорпоративная почта </span></p><p align=\"center\"><span style=\" color:#00e9ff;\">для малых, средних организаций и учебных учреждений</span></p></body></html>"))
+        self.label_13.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Статус сервера:</span></p></body></html>"))
+        self.lbStatus.setText(_translate("Form", "<html><head/><body><p><span style=\'color:#ff0000;\'>Оффлайн</span></p></body></html>"))
 

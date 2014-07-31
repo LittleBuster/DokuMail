@@ -89,6 +89,15 @@ class MainWindow(QtWidgets.QDialog):
 	def on_get_data(self):
 		self.getTmr.stop()
 
+		client = TcpClient()
+		if not client.check_status(self.TCPServer, self.TCPPort):
+			self.ui.lbStatus.setText("<html><head/><body><p><span style='color:#ff0000;'>Оффлайн</span></p></body></html>")
+			self.getTmr.start(5000)
+			return
+		else:
+			client.close()
+			self.ui.lbStatus.setText("<html><head/><body><p><span style='color:#00ff0b;'>Онлайн</span></p></body></html>")
+
 		f = False
 		mdb = MariaDB()
 		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
