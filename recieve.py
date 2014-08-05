@@ -7,9 +7,46 @@ from PyQt5 import QtWidgets
 from mariadb import MariaDB
 from tcpclient import TcpClient
 from download import DownloadWnd
+from msg import MsgWnd
 
 
-class RecieveThread(QtCore.QThread):
+class TcpConfig():
+	__tcpServer = str
+	__tcpPort = int
+	__user = str
+	__passwd = str
+
+	def setTcpServer(self, server):
+		self.__tcpServer = server
+
+	def getTcpServer(self):
+		return self.__tcpServer
+
+	def setTcpPort(self, port):
+		self.__tcpPort = port
+
+	def getTcpPort(self):
+		return self.__tcpPort
+
+	def setUser(self, user):
+		self.__user = user
+
+	def getUser(self):
+		return self.__user
+
+	def setPasswd(self, passwd):
+		self.__passwd = passwd
+
+	def getPasswd(self):
+		return self.__passwd
+
+	TCPServer = property(getTcpServer, setTcpServer)
+	TCPPort = property(getTcpPort, setTcpPort)
+	user = property(getUser, setUser)
+	passwd = property(getPasswd, setPasswd)
+
+
+class RecieveThread(QtCore.QThread, TcpConfig):
 	err = QtCore.pyqtSignal(str)
 	downloadStart = QtCore.pyqtSignal(str)
 	decryptStart = QtCore.pyqtSignal()
@@ -18,10 +55,6 @@ class RecieveThread(QtCore.QThread):
 	fileDownloaded = QtCore.pyqtSignal()
 	fileCount = QtCore.pyqtSignal(int)
 
-	TCPServer = str("")
-	TCPPort = 0
-	user = str("")
-	passwd = str("")
 	update = False
 
 	def __init__(self):
@@ -133,3 +166,61 @@ class Recieve(QtCore.QObject):
 		if not self.update:
 			self.dldWnd.show()
 		self.recieveTh.start()
+
+
+class RecieveMsgThread(QtCore.QThread, TcpConfig):
+	msgRecieved = QtCore.pyqtSignal([str, str, str])
+	msgNone = QtCore.pyqtSignal()
+
+	def __init__(self):
+		super(RecieveMsgThread, self).__init__()
+		self.client = TcpClient()
+
+	def set_configs(self, tcpserver, tcpport, usr, pwd):
+		self.TCPServer = tcpserver
+		self.TCPPort = tcpport
+		self.user = usr
+		self.passwd = pwd
+
+	def run(self):
+		if self.client.connect(self.TCPServer, self.TCPPort, self.user, self.passwd):
+			msg = self.client.get_messages()
+			if msg == "[EMPTY-MSG]":
+				self.client.close()
+				self.msgNone.emit()
+			else:
+				self.msgRecieved.emit(msg["FromUser"], msg["Time"], msg["Data"])
+				self.client.close()
+
+
+class RecieveMsg(QtCore.QObject):
+	msgComplete = QtCore.pyqtSignal()
+
+	def __init__(self):
+		super(RecieveMsg, self).__init__()
+		self.msgWnd = MsgWnd()
+		self.rt = RecieveMsgThread()
+		self.rt.msgRecieved.connect(self.show_msg)
+		self.rt.msgNone.connect(self.msg_empty)
+
+	def show_msg(self, fromUser, timeMsg, Data):
+		self.msgWnd.ui.lbFrom.setText("<html><head/><body><p><span style='color:#ffffff;'>" + fromUser + "</span></p></body></html>")
+		self.msgWnd.ui.lbTime.setText("<html><head/><body><p><span style='color:#ffffff;'>" + timeMsg + "</span></p></body></html>")
+		self.msgWnd.ui.teMsg.setPlainText(Data)
+		self.msgWnd.show()
+		self.msgComplete.emit()
+
+	def msg_empty(self):
+		self.msgComplete.emit()
+
+	def get_msg_status(self):
+		if self.msgWnd.isVisible():
+			return True
+		else:
+			return False
+
+	def set_configs(self, tcpserver, tcpport, usr, pwd):
+		self.rt.set_configs(tcpserver, tcpport, usr, pwd)
+
+	def start(self):
+		self.rt.start()

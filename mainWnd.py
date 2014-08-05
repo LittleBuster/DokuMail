@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Fri Aug  1 05:56:45 2014
+# Created: Tue Aug  5 11:04:02 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1088,5 +1088,5 @@ class Ui_Form(object):
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Быстрая и защищённая внутрикорпоративная почта </span></p><p align=\"center\"><span style=\" color:#00e9ff;\">для малых, средних организаций и учебных учреждений</span></p></body></html>"))
         self.label_13.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Статус сервера:</span></p></body></html>"))
-        self.lbStatus.setText(_translate("Form", "<html><head/><body><p><span style=\'color:#ff0000;\'>Оффлайн</span></p></body></html>"))
+        self.lbStatus.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#f5ff00;\">Соединение...</span></p></body></html>"))
 

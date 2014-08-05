@@ -11,6 +11,9 @@ from PyQt5 import QtCore
 
 
 class TcpClient(QtCore.QObject):
+	"""
+	Class for low-level communication with a socket
+	"""
 	downloadStart = QtCore.pyqtSignal(str)
 	decryptStart = QtCore.pyqtSignal()
 	decompressStart = QtCore.pyqtSignal()
@@ -95,6 +98,24 @@ class TcpClient(QtCore.QObject):
 
 	def end_send_files(self):
 		self.sock.send(b"[END-RETRIEVE]")
+
+	def get_messages(self):
+		self.sock.send(b'[GET-MSG]')
+		msgInfo = self.sock.recv(1024).decode("utf-8")
+
+		if msgInfo == '[EMPTY-MSG]':
+			self.sock.close()
+			print("No new messages")
+			return "[EMPTY-MSG]"
+		
+		self.sock.send(b"ok")
+		data = self.sock.recv(4096)
+
+		msg = {}
+		msg["FromUser"] = msgInfo.split("$")[0]
+		msg["Time"] = msgInfo.split("$")[1]
+		msg["Data"] = AES256_decode_msg(data, "transf.crt")
+		return msg
 
 	def get_files(self, update):
 		if update:

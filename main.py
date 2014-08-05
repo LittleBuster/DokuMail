@@ -15,7 +15,7 @@ from tray import SystemTrayIcon
 from mariadb import MariaDB
 from tcpclient import TcpClient
 import mainWnd
-from recieve import Recieve
+from recieve import Recieve, RecieveMsg
 
 
 class pObj(object):
@@ -84,6 +84,8 @@ class MainWindow(QtWidgets.QDialog):
 
 		self.send_files = SendFiles()
 		self.recieve = Recieve()
+		self.recieveMsg = RecieveMsg()
+		self.recieveMsg.msgComplete.connect(self.on_msg_complete)
 		self.recieve.downloadComplete.connect(self.on_download_complete)
 
 	def on_get_data(self):
@@ -117,9 +119,19 @@ class MainWindow(QtWidgets.QDialog):
 			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd, False)	
 			self.recieve.start()
 			return
+
+		if (mdb.check_messages(self.user) and (not self.recieveMsg.get_msg_status())):
+			f = True
+			mdb.close()			
+			self.recieveMsg.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd)	
+			self.recieveMsg.start()
+			return
 		
 		if not f:
 			self.getTmr.start(5000)
+
+	def on_msg_complete(self):
+		self.getTmr.start(5000)
 
 	def on_download_complete(self, update):
 		if not update:
@@ -157,6 +169,14 @@ class MainWindow(QtWidgets.QDialog):
 
 	def lwusers_item_clicked(self, item):
 		self.ui.lbAlias.setText( str(item.text()) )
+
+	def closeEvent(self, e):
+		result = QtWidgets.QMessageBox.question(self, 'Закрытие', 'Вы действительно хотите выйти из программы?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+		if result == QtWidgets.QMessageBox.Yes:
+			e.accept()
+			QtWidgets.QWidget.closeEvent(self, e)
+		else:
+			e.ignore()
 
 	def init_app(self):
 		mdb = MariaDB()

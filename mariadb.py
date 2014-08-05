@@ -71,6 +71,17 @@ class MariaDB():
 			else:
 				return False
 
+	def check_messages(self, curUser):
+		cur = self.conn.cursor()
+		cur.execute("SELECT isMsg FROM actions WHERE name='" + curUser + "' LIMIT 1" )
+
+		for row in cur:
+			print(type(row[0]))
+			if int(row[0]) == 1:
+				return True
+			else:
+				return False
+
 	def get_alias_list(self):
 		usrlist = list()
 
