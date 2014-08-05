@@ -11,10 +11,10 @@ class ServerThread():
 		self.conn = _sock
 		self.addr = _addr
 		#threading.Thread.__init__(self)a
-		try:
-			self.run()
-		except:
-			print("Client: " + str(_addr[0]) + " check status")
+#		try:
+		self.run()
+#		except:
+#			print("Client: " + str(_addr[0]) + " check status")
 
 	def run(self):
 		cmd = self.conn.recv(1024)
@@ -54,10 +54,6 @@ class ServerThread():
 			"""
 			lfiles = str("")
 
-			mdb = MariaDB()
-			if not mdb.connect("172.20.0.11", "doku", "School184", "DokuMail"):
-				return
-
 			now_date = datetime.date.today()
 			now_time = datetime.datetime.now()
 			msg_name = str(now_date.year) + str(now_date.month) + str(now_date.day) + str(now_time.hour) + str(now_time.minute) + str(now_time.second)
@@ -65,6 +61,29 @@ class ServerThread():
 
 			data = self.conn.recv(1024).decode('utf-8')
 
+			if data == '[GET-MSG]':
+				print("Getting message")
+				msgInfo = mdb.get_msg_info(self.usr)
+				if msgInfo == None:
+					mdb.change_state(self.usr, "isMsg", 0)
+					print("No new messages")
+					self.conn.send(b"[EMPTY-MSG]")
+					self.conn.close()
+					print("Client " + self.usr + " disconnected.")
+					return
+
+				idMsg = msgInfo.split("$")[0]
+				fromMsg = msgInfo.split("$")[1]
+				timeMsg = msgInfo.split("$")[2]
+			
+				self.conn.send( ( mdb.get_alias_by_user(fromMsg) + "$" + timeMsg).encode("utf-8") )
+				self.conn.recv(1024)
+				
+				f = open("data/" + self.usr + "/" + idMsg + ".bin", "rb")
+				self.conn.send( f.read() )
+				f.close()
+				mdb.delete_message(self.usr, fromMsg, idMsg)
+			 
 			"""
 			Reciveing files
 			"""
@@ -216,7 +235,7 @@ class ServerThread():
 								print("Download complete")
 								f.write( data[:l] )
 								f.close()
-								lfiles = lfiles + fname
+								lfiles = lfiles + fname + ","
 								mdb.add_file(fname, "file", self.usr, toUsr, str(now_date), now_time_str)
 								self.conn.send("complete".encode('utf-8'))
 								break
@@ -224,8 +243,8 @@ class ServerThread():
 							print('except')			
 	
 						f.write(data)
-		print("Client " + self.usr + " disconnected")
-		mdb.close()
+			print("Client " + self.usr + " disconnected")
+			mdb.close()
 		self.conn.close()
 
 def main():
