@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Tue Aug  5 11:04:02 2014
+# Created: Tue Aug  5 21:31:25 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -865,17 +865,10 @@ class Ui_Form(object):
         self.label_11.setObjectName("label_11")
         self.tw1 = QtWidgets.QTableWidget(self.page_7)
         self.tw1.setGeometry(QtCore.QRect(10, 100, 631, 231))
-        self.tw1.setStyleSheet("QWidget {\n"
-"    background-color: rgba(23, 115, 255, 137);\n"
-"    color:rgb(255, 255, 255);\n"
-"    border-width: 1px;\n"
-"    border-color: rgb(255, 255, 255);\n"
-"     border-style: solid;\n"
-"     border-radius: 5px;\n"
-"}")
+        self.tw1.setStyleSheet("")
         self.tw1.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tw1.setTextElideMode(QtCore.Qt.ElideMiddle)
-        self.tw1.setRowCount(4)
+        self.tw1.setRowCount(0)
         self.tw1.setColumnCount(4)
         self.tw1.setObjectName("tw1")
         self.tw1.horizontalHeader().setCascadingSectionResizes(True)
@@ -894,15 +887,15 @@ class Ui_Form(object):
         font.setWeight(50)
         self.cbTaskType.setFont(font)
         self.cbTaskType.setObjectName("cbTaskType")
-        self.cbTaskType_2 = QtWidgets.QComboBox(self.page_7)
-        self.cbTaskType_2.setGeometry(QtCore.QRect(230, 60, 211, 31))
+        self.cbTaskDiff = QtWidgets.QComboBox(self.page_7)
+        self.cbTaskDiff.setGeometry(QtCore.QRect(230, 60, 211, 31))
         font = QtGui.QFont()
         font.setFamily("Arial Black")
         font.setPointSize(12)
         font.setBold(False)
         font.setWeight(50)
-        self.cbTaskType_2.setFont(font)
-        self.cbTaskType_2.setObjectName("cbTaskType_2")
+        self.cbTaskDiff.setFont(font)
+        self.cbTaskDiff.setObjectName("cbTaskDiff")
         self.label_12 = QtWidgets.QLabel(self.page_7)
         self.label_12.setGeometry(QtCore.QRect(230, 30, 151, 31))
         font = QtGui.QFont()
@@ -913,6 +906,33 @@ class Ui_Form(object):
         self.label_12.setFont(font)
         self.label_12.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label_12.setObjectName("label_12")
+        self.pbCreateTask = QtWidgets.QPushButton(self.page_7)
+        self.pbCreateTask.setGeometry(QtCore.QRect(450, 60, 191, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pbCreateTask.setFont(font)
+        self.pbCreateTask.setStyleSheet("QPushButton {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"     border-style: solid;\n"
+"     border-radius: 10px;\n"
+"    min-width: 80px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}")
+        self.pbCreateTask.setIcon(icon5)
+        self.pbCreateTask.setIconSize(QtCore.QSize(20, 20))
+        self.pbCreateTask.setObjectName("pbCreateTask")
         self.stackedWidget.addWidget(self.page_7)
         self.widget_4 = QtWidgets.QWidget(Form)
         self.widget_4.setGeometry(QtCore.QRect(667, 450, 221, 51))
@@ -1032,7 +1052,7 @@ class Ui_Form(object):
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.label_13 = QtWidgets.QLabel(Form)
-        self.label_13.setGeometry(QtCore.QRect(20, 0, 141, 16))
+        self.label_13.setGeometry(QtCore.QRect(20, 5, 141, 16))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(11)
@@ -1084,6 +1104,7 @@ class Ui_Form(object):
         self.label_10.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Заявка на починку/обслуживание ПК системному администратору:</span></p></body></html>"))
         self.label_11.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00f8ff;\">Тип проблемы:</span></p></body></html>"))
         self.label_12.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00f8ff;\">Срочность:</span></p></body></html>"))
+        self.pbCreateTask.setText(_translate("Form", "Подать заявку"))
         self.pbMinimize.setText(_translate("Form", "Свернуть программу"))
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Быстрая и защищённая внутрикорпоративная почта </span></p><p align=\"center\"><span style=\" color:#00e9ff;\">для малых, средних организаций и учебных учреждений</span></p></body></html>"))

@@ -91,7 +91,32 @@ class MariaDB():
 		for row in cur:	
 			usrlist.append(row[0])
 
-		return usrlist		
+		return usrlist
+
+	def create_task(self, name, task, typeTask, date, diff, status):
+		cur = self.conn.cursor()
+		try:
+			cur.execute("INSERT INTO tasks(name,task,typeTask,dateTask,difficult,status) VALUES ('" + name + "','" + task + "','" + typeTask + "','" + str(date) + "','" + diff + "','" + status + "')")
+			self.conn.commit()
+			return True
+		except:
+			return False
+
+	def get_task_list(self, user):
+		taskList = list()
+
+		cur = self.conn.cursor()
+		cur.execute("SELECT id,typeTask,dateTask,status FROM tasks WHERE name='" + user + "'")
+
+		for row in cur:
+			task = {}
+			task["id"] = str(row[0])
+			task["type"] = row[1]
+			task["date"] = row[2]
+			task["status"] = row[3]
+			taskList.append( task )
+
+		return taskList
 
 	def change_state(self, user, state, param):
                 cur = self.conn.cursor()

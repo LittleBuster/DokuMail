@@ -15,6 +15,8 @@ from tray import SystemTrayIcon
 from mariadb import MariaDB
 from tcpclient import TcpClient
 import mainWnd
+import datetime
+from task import TaskWnd
 from recieve import Recieve, RecieveMsg
 
 
@@ -44,9 +46,15 @@ class MainWindow(QtWidgets.QDialog):
 		self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
 		self.tr.show()
 
+		self.ui.cbTaskType.addItem("")
 		self.ui.cbTaskType.addItem("Microsoft Office")
 		self.ui.cbTaskType.addItem("Интернет")
 		self.ui.cbTaskType.addItem("Принтер")
+		self.ui.cbTaskType.addItem("Антивирус")
+		self.ui.cbTaskType.addItem("Другое")
+		self.ui.cbTaskDiff.addItem("Низкая")
+		self.ui.cbTaskDiff.addItem("Средняя")
+		self.ui.cbTaskDiff.addItem("Высокая")
 		
 		self.ui.pbSendMsg.clicked.connect(self.on_send_msg)
 		self.ui.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
@@ -63,30 +71,32 @@ class MainWindow(QtWidgets.QDialog):
 		self.ui.pbTasks.clicked.connect(self.on_tasks_clicked)
 		self.ui.pbSettings.clicked.connect(self.on_settings_clicked)
 		self.ui.pbAbout.clicked.connect(self.on_about_clicked)
+		self.ui.pbCreateTask.clicked.connect(self.on_create_task)
 
 		"""
-		ti1 = QtWidgets.QTableWidgetItem("lolita")
-		ti2 = QtWidgets.QTableWidgetItem("pkkkkkkkkkkkkkkkkkkkkkkkkkkkkipec")
-
-		self.tw1.setItem(0,0,ti1)
-		self.tw1.setItem(0,1,ti2)
+		Task List
+		"""
 		lst = list()
-		lst.append("hfjsdhf")
-		lst.append("lolofffffffffffffffffffffffffffffl")
-		lst.append("ddfsd")
-		self.tw1.setHorizontalHeaderLabels(lst)
-
-		self.tw1.horizontalHeader().resizeSection(0, 10)
-		"""
-
+		lst.append("№")
+		lst.append("Тип проблемы")
+		lst.append("Дата")
+		lst.append("Решение")
+		self.ui.tw1.setHorizontalHeaderLabels(lst)
+		self.ui.tw1.horizontalHeader().resizeSection(0, 30)
+		self.ui.tw1.horizontalHeader().resizeSection(1, 350)
+		self.ui.tw1.horizontalHeader().resizeSection(2, 100)
+		""""""
+		
 		self.getTmr = QtCore.QTimer()
 		self.getTmr.timeout.connect(self.on_get_data)
 
 		self.send_files = SendFiles()
 		self.recieve = Recieve()
+		self.taskWnd = TaskWnd()
 		self.recieveMsg = RecieveMsg()
 		self.recieveMsg.msgComplete.connect(self.on_msg_complete)
-		self.recieve.downloadComplete.connect(self.on_download_complete)
+		self.recieve.downloadComplete.connect(self.on_download_complete)		
+		self.taskWnd.ui.pbSendTask.clicked.connect(self.on_send_task)
 
 	def on_get_data(self):
 		self.getTmr.stop()
@@ -140,6 +150,48 @@ class MainWindow(QtWidgets.QDialog):
 			QtWidgets.QMessageBox.information(self, 'Ошибка', 'Обновление завершено', QtWidgets.QMessageBox.Yes)
 			sys.exit()
 
+	def on_send_task(self):
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+
+		date = datetime.date.today()
+		if mdb.create_task(self.user, self.taskWnd.ui.teMsg.document().toPlainText(), self.ui.cbTaskType.currentText(), date, self.ui.cbTaskDiff.currentText(), "Нет"):
+			self.taskWnd.ui.teMsg.clear()
+			self.taskWnd.close()
+			self.check_tasks()
+			QtWidgets.QMessageBox.information(self, 'Complete', 'Заявка зарегистрирована', QtWidgets.QMessageBox.Yes)
+		else:
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка при регистрации заявки', QtWidgets.QMessageBox.Yes)
+		mdb.close()
+
+	def on_create_task(self):
+		if self.ui.cbTaskType.currentText() != "":
+			self.taskWnd.show()
+		else:
+			QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Выберите тип проблемы!', QtWidgets.QMessageBox.Yes)
+
+	def check_tasks(self):
+		self.ui.tw1.setRowCount(0)
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		taskList = mdb.get_task_list(self.user)
+	
+		for task in taskList:
+			self.ui.tw1.setRowCount(self.ui.tw1.rowCount() + 1)
+			item = QtWidgets.QTableWidgetItem(task["id"])
+			self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 0, item)
+			item = QtWidgets.QTableWidgetItem(task["type"])
+			self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 1, item)
+			item = QtWidgets.QTableWidgetItem(task["date"])
+			self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 2, item)
+			item = QtWidgets.QTableWidgetItem(task["status"])
+			self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 3, item)
+		mdb.close()
+
 	def on_delete_file(self):
 		try:
 			self.ui.lwFiles.removeItemWidget( self.ui.lwFiles.takeItem( self.ui.lwFiles.row(self.ui.lwFiles.selectedItems()[0]) ) )
@@ -150,7 +202,7 @@ class MainWindow(QtWidgets.QDialog):
 		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
 
 	def on_tasks_clicked(self):
-		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
+		self.ui.stackedWidget.setCurrentIndex(3)
 
 	def on_settings_clicked(self):
 		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
@@ -192,19 +244,20 @@ class MainWindow(QtWidgets.QDialog):
 			item.setIcon(QtGui.QIcon("images/cmp.ico"))
 			item.setText(alias)
 			self.ui.lwUsers.insertItem(i, item)
-			i = i+1
+			i += 1
 
+		self.check_tasks()
 		self.getTmr.start(5000)
 
 	def save_config(self):
 		f = open("config.dat", "w")
 		cfg = pObj()
 		cfg.config = {}
-		cfg.config["mdbserver"] = "94.232.48.110"#self.MDBServer
-		cfg.config["mdbuser"] = "doku"#self.MDBUser
-		cfg.config["mdbpasswd"] = "School184"#self.MDBPassword
-		cfg.config["tcpserver"] = "94.232.48.110"#self.TCPServer
-		cfg.config["tcpport"] = 5000#self.TCPPort
+		cfg.config["mdbserver"] = self.MDBServer
+		cfg.config["mdbuser"] = self.MDBUser
+		cfg.config["mdbpasswd"] = self.MDBPassword
+		cfg.config["tcpserver"] = self.TCPServer
+		cfg.config["tcpport"] = self.TCPPort
 		json.dump(cfg.config, f)
 		f.close()
 

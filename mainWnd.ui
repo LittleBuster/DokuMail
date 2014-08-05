@@ -1952,14 +1952,7 @@ QPushButton:pressed {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">QWidget {
-	background-color: rgba(23, 115, 255, 137);
-	color:rgb(255, 255, 255);
-	border-width: 1px;
-	border-color: rgb(255, 255, 255);
-     border-style: solid;
-     border-radius: 5px;
-}</string>
+       <string notr="true"/>
       </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
@@ -1968,7 +1961,7 @@ QPushButton:pressed {
        <enum>Qt::ElideMiddle</enum>
       </property>
       <property name="rowCount">
-       <number>4</number>
+       <number>0</number>
       </property>
       <property name="columnCount">
        <number>4</number>
@@ -1994,10 +1987,6 @@ QPushButton:pressed {
       <attribute name="verticalHeaderStretchLastSection">
        <bool>false</bool>
       </attribute>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
       <column/>
       <column/>
       <column/>
@@ -2021,7 +2010,7 @@ QPushButton:pressed {
        </font>
       </property>
      </widget>
-     <widget class="QComboBox" name="cbTaskType_2">
+     <widget class="QComboBox" name="cbTaskDiff">
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -2061,6 +2050,55 @@ QPushButton:pressed {
       </property>
       <property name="alignment">
        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbCreateTask">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>60</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
+	color:rgb(255, 255, 255);
+	border-width: 1px;
+     border-style: solid;
+     border-radius: 10px;
+	min-width: 80px;
+}
+
+QPushButton:hover {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
+}
+
+QPushButton:pressed {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
+}</string>
+      </property>
+      <property name="text">
+       <string>Подать заявку</string>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>images/filenew_8842.ico</normaloff>images/filenew_8842.ico</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
      </widget>
     </widget>
@@ -2363,7 +2401,7 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>0</y>
+     <y>5</y>
      <width>141</width>
      <height>16</height>
     </rect>
