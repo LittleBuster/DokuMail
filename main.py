@@ -4,6 +4,7 @@
 import os
 import sys
 import json
+import sqlite3
 from send import *
 from compress import *
 from crypt import *
@@ -18,6 +19,7 @@ import mainWnd
 import datetime
 from task import TaskWnd
 from recieve import Recieve, RecieveMsg
+from news import NewsWnd, NewsCurWnd, NewsBaloonWnd
 
 
 class pObj(object):
@@ -41,6 +43,7 @@ class MainWindow(QtWidgets.QDialog):
 
 		self.user = str
 		self.passwd = str
+		self.news_count = 0
 
 		self.ui.pbMinimize.clicked.connect(self.minimize_app)
 		self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
@@ -90,15 +93,25 @@ class MainWindow(QtWidgets.QDialog):
 		
 		self.getTmr = QtCore.QTimer()
 		self.getTmr.timeout.connect(self.on_get_data)
+		self.newsTmr = QtCore.QTimer()
+		self.getTmr.timeout.connect(self.check_news)
 
 		self.send_files = SendFiles()
 		self.recieve = Recieve()
 		self.taskWnd = TaskWnd()
+		self.newsWnd = NewsWnd()
+		self.newsCurWnd = NewsCurWnd()
 		self.recieveMsg = RecieveMsg()
+		self.newsBaloon = NewsBaloonWnd()
 		self.recieveMsg.msgComplete.connect(self.on_msg_complete)
 		self.recieve.downloadComplete.connect(self.on_download_complete)		
 		self.taskWnd.ui.pbSendTask.clicked.connect(self.on_send_task)
 		self.ui.pbSetConfig.clicked.connect(self.on_set_config)
+		self.ui.pbCreateNews.clicked.connect(self.on_create_news)
+		self.newsWnd.ui.pbSendNews.clicked.connect(self.on_send_news)
+		self.ui.lwNews.itemClicked.connect(self.on_lwnews_clicked)
+		self.newsBaloon.ui.pbRead.clicked.connect(self.on_read_news)
+		self.newsBaloon.ui.pbClose.clicked.connect(self.on_baloon_close)
 
 	"""
 	Properties for configs
@@ -195,8 +208,102 @@ class MainWindow(QtWidgets.QDialog):
 		if not update:
 			self.getTmr.start(5000)
 		else:
-			QtWidgets.QMessageBox.information(self, 'Ошибка', 'Обновление завершено', QtWidgets.QMessageBox.Yes)
+			QtWidgets.QMessageBox.information(self, 'Complete', 'Обновление завершено', QtWidgets.QMessageBox.Yes)
 			sys.exit()
+
+	def on_create_news(self):		
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		if mdb.is_admin( self.user ):
+			self.newsWnd.show()
+		else:
+			QtWidgets.QMessageBox.warning(self, 'Error', 'У вас нет прав на создание новостей!', QtWidgets.QMessageBox.Yes)
+		mdb.close()
+
+	def on_send_news(self):
+		if self.newsWnd.ui.leTitle.text() == "":
+			QtWidgets.QMessageBox.warning(self.newsWnd, 'Error', 'Введите заголовок новости!', QtWidgets.QMessageBox.Yes)
+			return
+
+		if self.newsWnd.ui.teNews.document().toPlainText() == "" or self.newsWnd.ui.teNews.document().toPlainText() == "Напишите новость...":
+			QtWidgets.QMessageBox.warning(self.newsWnd, 'Error', 'Введите текст новости!', QtWidgets.QMessageBox.Yes)
+			return
+
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		date = datetime.date.today()
+		if mdb.send_news( mdb.get_alias_by_user(self.user), self.newsWnd.ui.teNews.document().toPlainText(), self.newsWnd.ui.leTitle.text(), str(date) ):
+			self.newsWnd.close()
+			QtWidgets.QMessageBox.information(self, 'Complete', 'Новость успешно добавлена!', QtWidgets.QMessageBox.Yes)
+		else:
+			QtWidgets.QMessageBox.critical(self, 'Error', 'Ошибка добавления новости', QtWidgets.QMessageBox.Yes)
+		mdb.close()
+
+	def check_news(self):
+		con = sqlite3.connect('news.db')
+		cur = con.cursor()
+
+		try:
+			cur.execute('CREATE TABLE news(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(512), date VARCHAR(20))')
+			con.commit()
+		except:
+			pass	
+		
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		news_list = mdb.check_news()
+
+		l = len(news_list)
+		if l != self.news_count:
+			self.news_count = l
+
+			self.ui.lwNews.clear()
+			for news in news_list:
+
+				cur.execute("SELECT * FROM news WHERE title='" + news["title"] + "' and date='" + news["date"] + "'")
+				if len(cur.fetchall()) == 0:
+					cur.execute("INSERT INTO news(title, date) VALUES('" + news["title"] + "', '" + news["date"] + "')")
+					con.commit()
+
+					"""
+					Show tooltip
+					"""
+					if not mdb.is_admin(self.user):
+						rect = self.newsBaloon.geometry()
+						rect.setY(0)
+						self.newsBaloon.setGeometry(rect)
+						self.newsBaloon.ui.leTitle.setText("[" + news["date"] + "]" + news["title"])
+						self.newsBaloon.show()
+
+				item = QtWidgets.QListWidgetItem()
+				item.setIcon(QtGui.QIcon("images/news.ico"))
+				item.setText("[" + news["date"] + "]" + news["title"])
+				self.ui.lwNews.insertItem(0, item)
+		mdb.close()
+		con.close()
+
+	def on_read_news(self):
+		item = QtWidgets.QListWidgetItem()
+		item.setText(self.newsBaloon.ui.leTitle.text())
+		self.newsBaloon.close()
+		self.on_lwnews_clicked(item)
+
+	def on_baloon_close(self):
+		self.newsBaloon.close()
+		con = sqlite3.connect('news.db')
+		cur = con.cursor()
+		title = self.newsBaloon.ui.leTitle.text().split("]")[1]
+		date = self.newsBaloon.ui.leTitle.text().split("[")[1].split("]")[0]
+
+		cur.execute("DELETE FROM news WHERE title='" + title + "' and date='" + date + "'")
+		con.commit()
+		con.close()
 
 	def on_send_task(self):
 		mdb = MariaDB()
@@ -260,7 +367,7 @@ class MainWindow(QtWidgets.QDialog):
 			QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Выделите файл!', QtWidgets.QMessageBox.Yes)
 
 	def on_news_clicked(self):
-		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
+		self.ui.stackedWidget.setCurrentIndex(0)
 
 	def on_tasks_clicked(self):
 		self.ui.stackedWidget.setCurrentIndex(3)
@@ -279,6 +386,20 @@ class MainWindow(QtWidgets.QDialog):
 
 	def on_clear_msg_clicked(self):
 		self.ui.teMsg.clear()
+
+	def on_lwnews_clicked(self, item):
+		title = str(item.text()).split("]")[1]
+		mdb = MariaDB()
+		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+			return
+		news = mdb.get_news( title )
+		self.newsCurWnd.ui.lbFrom.setText("<html><head/><body><p><span style='color:#ffffff;'>" + news["user"] + "</span></p></body></html>")
+		self.newsCurWnd.ui.lbTime.setText("<html><head/><body><p><span style='color:#ffffff;'>" + news["date"] + "</span></p></body></html>")
+		self.newsCurWnd.ui.teNews.setPlainText(news["news"])
+		self.newsCurWnd.ui.leTitle.setText(news["title"])
+		self.newsCurWnd.show()
+		mdb.close()		
 
 	def lwusers_item_clicked(self, item):
 		self.ui.lbAlias.setText( str(item.text()) )
@@ -308,7 +429,9 @@ class MainWindow(QtWidgets.QDialog):
 			i += 1
 
 		self.check_tasks()
+		self.check_news()
 		self.getTmr.start(5000)
+		self.newsTmr.start(10000)
 
 	def save_config(self):
 		f = open("config.dat", "w")

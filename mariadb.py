@@ -39,6 +39,13 @@ class MariaDB():
 		for row in cur:
 			return row[0]
 
+	def get_alias_by_user(self, user):
+		cur = self.conn.cursor()
+		cur.execute("SELECT alias FROM users WHERE name='" + user + "' LIMIT 1")
+		
+		for row in cur:
+			return row[0]
+
 	def get_user_list(self, curUser):
 		usrlist = list()
 		cur = self.conn.cursor()
@@ -48,6 +55,39 @@ class MariaDB():
 			if row[0] != curUser:
 				usrlist.append(row[0])
 		return usrlist
+
+	def send_news(self, user, news, title, date):
+		cur = self.conn.cursor()
+		try:
+			cur.execute("INSERT INTO news(name,news,title,date) VALUES ('" + user + "', '" + news + "', '" + title + "', '" + date + "')")
+			self.conn.commit()
+			return True
+		except:
+			return False
+
+	def get_news(self, title):
+		news = {}
+		cur = self.conn.cursor()
+		cur.execute("SELECT name,news,title,date FROM news WHERE title='" + title + "'")
+
+		for row in cur:
+			news["user"] = row[0]
+			news["news"] = row[1]
+			news["title"] = row[2]
+			news["date"] = row[3]
+			return news
+
+	def check_news(self):
+		news_list = list()
+		cur = self.conn.cursor()
+		cur.execute("SELECT title,date FROM news")
+
+		for row in cur:
+			news = {}
+			news["title"] = row[0]
+			news["date"] = row[1]
+			news_list.append( news )
+		return news_list
 
 	def check_files(self, curUser):
 		cur = self.conn.cursor()
@@ -118,10 +158,20 @@ class MariaDB():
 
 		return taskList
 
+	def is_admin(self, user):
+		cur = self.conn.cursor()
+		cur.execute("SELECT priv FROM users WHERE name='" + user + "' LIMIT 1")
+
+		for row in cur:
+			if row[0] == "admin":
+				return True
+			else:
+				return False
+
 	def change_state(self, user, state, param):
                 cur = self.conn.cursor()
                 cur.execute("UPDATE actions SET " + state + "='"+ str(param) +"' WHERE name='" + user + "'")
                 self.conn.commit()
 
 	def close(self):
-		self.conn.close()
+		self.conn.close()		

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Wed Aug  6 09:37:04 2014
+# Created: Wed Aug  6 16:41:49 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -491,87 +491,58 @@ class Ui_Form(object):
         self.stackedWidget.setObjectName("stackedWidget")
         self.page = QtWidgets.QWidget()
         self.page.setObjectName("page")
-        self.toolBox = QtWidgets.QToolBox(self.page)
-        self.toolBox.setGeometry(QtCore.QRect(130, 20, 381, 291))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(23, 115, 255, 137))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.toolBox.setPalette(palette)
-        self.toolBox.setStyleSheet("QToolBox#toolBox {\n"
+        self.lwNews = QtWidgets.QListWidget(self.page)
+        self.lwNews.setGeometry(QtCore.QRect(10, 70, 631, 261))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lwNews.setFont(font)
+        self.lwNews.setStyleSheet("QWidget {\n"
 "    background-color: rgba(23, 115, 255, 137);\n"
 "    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
 "}")
-        self.toolBox.setObjectName("toolBox")
-        self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 100, 30))
-        self.page_3.setObjectName("page_3")
-        self.pushButton_2 = QtWidgets.QPushButton(self.page_3)
-        self.pushButton_2.setGeometry(QtCore.QRect(130, 80, 99, 27))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.toolBox.addItem(self.page_3, "")
-        self.page_5 = QtWidgets.QWidget()
-        self.page_5.setGeometry(QtCore.QRect(0, 0, 381, 198))
-        self.page_5.setObjectName("page_5")
-        self.pushButton = QtWidgets.QPushButton(self.page_5)
-        self.pushButton.setGeometry(QtCore.QRect(140, 110, 99, 27))
-        self.pushButton.setObjectName("pushButton")
-        self.toolBox.addItem(self.page_5, "")
-        self.page_4 = QtWidgets.QWidget()
-        self.page_4.setGeometry(QtCore.QRect(0, 0, 100, 30))
-        self.page_4.setObjectName("page_4")
-        self.toolBox.addItem(self.page_4, "")
+        self.lwNews.setIconSize(QtCore.QSize(32, 32))
+        self.lwNews.setObjectName("lwNews")
+        self.label_16 = QtWidgets.QLabel(self.page)
+        self.label_16.setGeometry(QtCore.QRect(0, 0, 651, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial Black")
+        self.label_16.setFont(font)
+        self.label_16.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_16.setObjectName("label_16")
+        self.pbCreateNews = QtWidgets.QPushButton(self.page)
+        self.pbCreateNews.setGeometry(QtCore.QRect(420, 30, 221, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pbCreateNews.setFont(font)
+        self.pbCreateNews.setStyleSheet("QPushButton {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"     border-style: solid;\n"
+"     border-radius: 10px;\n"
+"    min-width: 80px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}")
+        self.pbCreateNews.setIcon(icon1)
+        self.pbCreateNews.setIconSize(QtCore.QSize(20, 20))
+        self.pbCreateNews.setObjectName("pbCreateNews")
         self.stackedWidget.addWidget(self.page)
         self.page_2 = QtWidgets.QWidget()
         self.page_2.setObjectName("page_2")
@@ -986,6 +957,7 @@ class Ui_Form(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.leMDBPasswd.setFont(font)
+        self.leMDBPasswd.setEchoMode(QtWidgets.QLineEdit.Password)
         self.leMDBPasswd.setObjectName("leMDBPasswd")
         self.label_20 = QtWidgets.QLabel(self.page_8)
         self.label_20.setGeometry(QtCore.QRect(350, 177, 171, 20))
@@ -1197,8 +1169,7 @@ class Ui_Form(object):
         self.lbStatus.setObjectName("lbStatus")
 
         self.retranslateUi(Form)
-        self.stackedWidget.setCurrentIndex(1)
-        self.toolBox.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -1211,11 +1182,8 @@ class Ui_Form(object):
         self.pbTasks.setText(_translate("Form", "Заявки"))
         self.pbSettings.setText(_translate("Form", "Настройки"))
         self.label_7.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00e9ff;\">Список пользователей</span></p></body></html>"))
-        self.pushButton_2.setText(_translate("Form", "PushButton"))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page_3), _translate("Form", "Page 1"))
-        self.pushButton.setText(_translate("Form", "PushButton"))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page_5), _translate("Form", "Страница"))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page_4), _translate("Form", "Page 2"))
+        self.label_16.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Новости учреждения</span></p></body></html>"))
+        self.pbCreateNews.setText(_translate("Form", "Написать новость"))
         self.pbSendMsg.setText(_translate("Form", "Отправить"))
         self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Отправить сообщение</span></p></body></html>"))
         self.pbClearMsg.setText(_translate("Form", "Очистить"))
