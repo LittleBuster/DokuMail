@@ -28,33 +28,23 @@ class pObj(object):
 
 
 class MainWindow(QtWidgets.QDialog):
+	__MDBServer = str
+	__MDBUser = str
+	__MDBPasswd = str
+	__TCPServer = str
+	__TCPPort = int
+
 	def __init__(self, parent=None):
 		super(MainWindow, self).__init__()
 		self.ui = mainWnd.Ui_Form()
 		self.ui.setupUi(self)
 
-		self.MDBServer = str("")
-		self.MDBUser = str("")
-		self.MDBPasswd = str("")
-		self.TCPServer = str("")
-		self.TCPPort = 0
-
-		self.user = str("")
-		self.passwd = str("")
+		self.user = str
+		self.passwd = str
 
 		self.ui.pbMinimize.clicked.connect(self.minimize_app)
 		self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
-		self.tr.show()
-
-		self.ui.cbTaskType.addItem("")
-		self.ui.cbTaskType.addItem("Microsoft Office")
-		self.ui.cbTaskType.addItem("Интернет")
-		self.ui.cbTaskType.addItem("Принтер")
-		self.ui.cbTaskType.addItem("Антивирус")
-		self.ui.cbTaskType.addItem("Другое")
-		self.ui.cbTaskDiff.addItem("Низкая")
-		self.ui.cbTaskDiff.addItem("Средняя")
-		self.ui.cbTaskDiff.addItem("Высокая")
+		self.tr.show()		
 		
 		self.ui.pbSendMsg.clicked.connect(self.on_send_msg)
 		self.ui.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
@@ -76,6 +66,17 @@ class MainWindow(QtWidgets.QDialog):
 		"""
 		Task List
 		"""
+
+		self.ui.cbTaskType.addItem("")
+		self.ui.cbTaskType.addItem("Microsoft Office")
+		self.ui.cbTaskType.addItem("Интернет")
+		self.ui.cbTaskType.addItem("Принтер")
+		self.ui.cbTaskType.addItem("Антивирус")
+		self.ui.cbTaskType.addItem("Другое")
+		self.ui.cbTaskDiff.addItem("Низкая")
+		self.ui.cbTaskDiff.addItem("Средняя")
+		self.ui.cbTaskDiff.addItem("Высокая")
+
 		lst = list()
 		lst.append("№")
 		lst.append("Тип проблемы")
@@ -97,6 +98,53 @@ class MainWindow(QtWidgets.QDialog):
 		self.recieveMsg.msgComplete.connect(self.on_msg_complete)
 		self.recieve.downloadComplete.connect(self.on_download_complete)		
 		self.taskWnd.ui.pbSendTask.clicked.connect(self.on_send_task)
+		self.ui.pbSetConfig.clicked.connect(self.on_set_config)
+
+	"""
+	Properties for configs
+	"""
+	def setTcpServer(self, server):
+		self.__TCPServer = server
+		self.ui.leTcpServer.setText(server)
+
+	def getTcpServer(self):
+		return self.__TCPServer
+
+	def setTcpPort(self, port):
+		self.__TCPPort = port
+		self.ui.leTcpPort.setText( str(port) )
+
+	def getTcpPort(self):
+		return self.__TCPPort
+
+	def setMDBServer(self, server):
+		self.__MDBServer = server
+		self.ui.leMDBServer.setText(server)
+
+	def getMDBServer(self):
+		return self.__MDBServer
+
+	def setMDBUser(self, user):
+		self.__MDBUser = user
+		self.ui.leMDBUser.setText(user)
+
+	def getMDBUser(self):
+		return self.__MDBUser
+
+	def setMDBPasswd(self, passwd):
+		self.__MDBPasswd = passwd
+		self.ui.leMDBPasswd.setText(passwd)
+
+	def getMDBPasswd(self):
+		return self.__MDBPasswd
+
+	TCPServer = property(getTcpServer, setTcpServer)
+	TCPPort = property(getTcpPort, setTcpPort)
+	MDBServer = property(getMDBServer, setMDBServer)
+	MDBUser = property(getMDBUser, setMDBUser)
+	MDBPasswd = property(getMDBPasswd, setMDBPasswd)	
+
+	""""""	
 
 	def on_get_data(self):
 		self.getTmr.stop()
@@ -192,6 +240,19 @@ class MainWindow(QtWidgets.QDialog):
 			self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 3, item)
 		mdb.close()
 
+	def on_set_config(self):
+		result = QtWidgets.QMessageBox.question(self, 'Configs', 'Применить изменения?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+		if result == QtWidgets.QMessageBox.Yes:
+			self.TCPServer = self.ui.leTcpServer.text()
+			try:
+				self.TCPPort = int(self.ui.leTcpPort.text())
+			except:
+				QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный номер порта!', QtWidgets.QMessageBox.Yes)
+			self.MDBServer = self.ui.leMDBServer.text()
+			self.MDBUser = self.ui.leMDBUser.text()
+			self.MDBPasswd = self.ui.leMDBPasswd.text()
+			self.save_config()
+
 	def on_delete_file(self):
 		try:
 			self.ui.lwFiles.removeItemWidget( self.ui.lwFiles.takeItem( self.ui.lwFiles.row(self.ui.lwFiles.selectedItems()[0]) ) )
@@ -205,7 +266,7 @@ class MainWindow(QtWidgets.QDialog):
 		self.ui.stackedWidget.setCurrentIndex(3)
 
 	def on_settings_clicked(self):
-		QtWidgets.QMessageBox.information(self, 'Ошибка', 'Раздел в разработке!', QtWidgets.QMessageBox.Yes)
+		self.ui.stackedWidget.setCurrentIndex(4)
 
 	def on_about_clicked(self):
 		QtWidgets.QMessageBox.information(self, 'About', 'Created by Denisov Foundation (c) 2014', QtWidgets.QMessageBox.Yes)
@@ -255,7 +316,7 @@ class MainWindow(QtWidgets.QDialog):
 		cfg.config = {}
 		cfg.config["mdbserver"] = self.MDBServer
 		cfg.config["mdbuser"] = self.MDBUser
-		cfg.config["mdbpasswd"] = self.MDBPassword
+		cfg.config["mdbpasswd"] = self.MDBPasswd
 		cfg.config["tcpserver"] = self.TCPServer
 		cfg.config["tcpport"] = self.TCPPort
 		json.dump(cfg.config, f)
