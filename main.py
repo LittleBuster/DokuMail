@@ -94,7 +94,7 @@ class MainWindow(QtWidgets.QDialog):
 		self.getTmr = QtCore.QTimer()
 		self.getTmr.timeout.connect(self.on_get_data)
 		self.newsTmr = QtCore.QTimer()
-		self.getTmr.timeout.connect(self.check_news)
+		self.newsTmr.timeout.connect(self.check_news)
 
 		self.send_files = SendFiles()
 		self.recieve = Recieve()
