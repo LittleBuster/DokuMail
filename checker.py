@@ -166,8 +166,8 @@ class Checker():
 		self.mainWnd.recieve.start()
 
 	def on_msg_available(self):
-		self.recieveMsg.set_configs(self.mainWnd.TCPServer, self.mainWnd.TCPPort, self.mainWnd.user, self.mainWnd.passwd)	
-		self.recieveMsg.start()
+		self.mainWnd.recieveMsg.set_configs(self.mainWnd.TCPServer, self.mainWnd.TCPPort, self.mainWnd.user, self.mainWnd.passwd)	
+		self.mainWnd.recieveMsg.start()
 
 	def on_nothing_available(self):
 		self.getTmr.start(5000)

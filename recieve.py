@@ -126,21 +126,21 @@ class Recieve(QtCore.QObject):
 		self.fname = fname
 		if not self.update:
 			self.dldWnd.ui.pb1.setValue(0)		
-			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>" + "Загрузка: " + fname + "</span></p></body></html>" )
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#00ffd5;'>" + "Загрузка: " + fname + "</span></p></body></html>" )
 
 	def on_decrypt_start(self):
 		if not self.update:
 			self.dldWnd.ui.pb1.setValue(33)
-			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>" + "Дешифрование: " + self.fname + "</span></p></body></html>" )
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#00ffd5;'>" + "Дешифрование: " + self.fname + "</span></p></body></html>" )
 
 	def on_decompress_start(self):
 		if not self.update:
-			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>" + "Распаковка: " + self.fname + "</span></p></body></html>" )
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#00ffd5;'>" + "Распаковка: " + self.fname + "</span></p></body></html>" )
 			self.dldWnd.ui.pb1.setValue(66)
 
 	def on_file_downloaded(self):
 		if not self.update:
-			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#ffffff;'>Готово.</span></p></body></html>" )
+			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#00ffd5;'>Готово.</span></p></body></html>" )
 
 			item = QtWidgets.QListWidgetItem()
 			item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
@@ -159,7 +159,7 @@ class Recieve(QtCore.QObject):
 	def on_download_complete(self):
 		if not self.update:
 			self.dldWnd.ui.pb2.setValue(100)
-			QtWidgets.QMessageBox.information(self.dldWnd, 'Complete', 'Скачивание завершено!', QtWidgets.QMessageBox.Yes)
+			QtWidgets.QMessageBox.information(self.dldWnd, 'Complete', 'Приняты новые файлы!', QtWidgets.QMessageBox.Yes)
 		self.downloadComplete.emit(self.update)
 
 	def start(self):

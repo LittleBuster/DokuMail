@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'downloadWnd.ui'
 #
-# Created: Fri Aug  1 03:11:46 2014
+# Created: Thu Aug  7 18:55:06 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,9 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_DownloadWnd(object):
     def setupUi(self, DownloadWnd):
         DownloadWnd.setObjectName("DownloadWnd")
-        DownloadWnd.resize(719, 422)
-        DownloadWnd.setMinimumSize(QtCore.QSize(719, 422))
-        DownloadWnd.setMaximumSize(QtCore.QSize(719, 422))
+        DownloadWnd.resize(719, 426)
+        DownloadWnd.setMinimumSize(QtCore.QSize(719, 426))
+        DownloadWnd.setMaximumSize(QtCore.QSize(719, 426))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("images/downloads.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         DownloadWnd.setWindowIcon(icon)
@@ -40,24 +40,6 @@ class Ui_DownloadWnd(object):
         self.label_3.setFont(font)
         self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label_3.setObjectName("label_3")
-        self.lwFiles = QtWidgets.QListWidget(DownloadWnd)
-        self.lwFiles.setGeometry(QtCore.QRect(20, 60, 681, 221))
-        font = QtGui.QFont()
-        font.setFamily("Times New Roman")
-        font.setPointSize(18)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lwFiles.setFont(font)
-        self.lwFiles.setStyleSheet("QWidget {\n"
-"    background-color: rgba(23, 115, 255, 137);\n"
-"    color:rgb(255, 255, 255);\n"
-"    border-width: 1px;\n"
-"    border-color: rgb(255, 255, 255);\n"
-"     border-style: solid;\n"
-"     border-radius: 5px;\n"
-"}")
-        self.lwFiles.setIconSize(QtCore.QSize(30, 30))
-        self.lwFiles.setObjectName("lwFiles")
         self.pbOpen = QtWidgets.QPushButton(DownloadWnd)
         self.pbOpen.setGeometry(QtCore.QRect(320, 372, 251, 41))
         font = QtGui.QFont()
@@ -132,6 +114,30 @@ class Ui_DownloadWnd(object):
         font.setWeight(75)
         self.lbFile.setFont(font)
         self.lbFile.setObjectName("lbFile")
+        self.label_4 = QtWidgets.QLabel(DownloadWnd)
+        self.label_4.setGeometry(QtCore.QRect(240, 40, 261, 251))
+        self.label_4.setText("")
+        self.label_4.setPixmap(QtGui.QPixmap("images/Downloads_Folder.png"))
+        self.label_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label_4.setObjectName("label_4")
+        self.lwFiles = QtWidgets.QListWidget(DownloadWnd)
+        self.lwFiles.setGeometry(QtCore.QRect(20, 60, 681, 221))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(18)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lwFiles.setFont(font)
+        self.lwFiles.setStyleSheet("QWidget {\n"
+"    background-color: rgba(23, 115, 255, 137);\n"
+"    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
+        self.lwFiles.setIconSize(QtCore.QSize(30, 30))
+        self.lwFiles.setObjectName("lwFiles")
 
         self.retranslateUi(DownloadWnd)
         QtCore.QMetaObject.connectSlotsByName(DownloadWnd)
