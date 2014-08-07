@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'msgWnd.ui'
 #
-# Created: Tue Aug  5 14:23:48 2014
+# Created: Thu Aug  7 19:20:07 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -94,6 +94,7 @@ class Ui_MsgWnd(object):
 "     border-style: solid;\n"
 "     border-radius: 5px;\n"
 "}")
+        self.teMsg.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.teMsg.setObjectName("teMsg")
         self.lbFile_2 = QtWidgets.QLabel(MsgWnd)
         self.lbFile_2.setGeometry(QtCore.QRect(490, 50, 91, 41))

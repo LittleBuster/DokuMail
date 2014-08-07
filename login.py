@@ -29,7 +29,7 @@ class LoginWindow(QtWidgets.QDialog):
 		self.ui.lbBack.setPixmap(QtGui.QPixmap("images/ffupd.png"))
 
 		if os.path.isfile("svpwd.dat"):
-			self.load_passwd()
+			self.load_passwd()	
 
 	def set_wnds(self, mw):
 		self._mw = mw
@@ -57,9 +57,9 @@ class LoginWindow(QtWidgets.QDialog):
 		if state == True:
 			self.hide()
 			self._mw.show()
-			self._mw.init_app()
 			self._mw.passwd = self.ui.edPasswd.text()
 			self._mw.user = self.ui.edLogin.text()
+			self._mw.init_app()			
 		else:
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный логин или пароль!', QtWidgets.QMessageBox.Yes)
 						

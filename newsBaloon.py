@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'newsBaloon.ui'
 #
-# Created: Wed Aug  6 19:06:55 2014
+# Created: Thu Aug  7 19:17:14 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,16 +12,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_NewsBaloon(object):
     def setupUi(self, NewsBaloon):
         NewsBaloon.setObjectName("NewsBaloon")
-        NewsBaloon.resize(560, 143)
-        NewsBaloon.setMinimumSize(QtCore.QSize(560, 143))
-        NewsBaloon.setMaximumSize(QtCore.QSize(719, 451))
+        NewsBaloon.resize(560, 148)
+        NewsBaloon.setMinimumSize(QtCore.QSize(560, 148))
+        NewsBaloon.setMaximumSize(QtCore.QSize(719, 148))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("images/news.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         NewsBaloon.setWindowIcon(icon)
         self.label = QtWidgets.QLabel(NewsBaloon)
-        self.label.setGeometry(QtCore.QRect(-190, -110, 751, 261))
+        self.label.setGeometry(QtCore.QRect(-80, -80, 751, 261))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("images/news_fon.png"))
+        self.label.setPixmap(QtGui.QPixmap("images/baloon.png"))
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label.setObjectName("label")
         self.label_3 = QtWidgets.QLabel(NewsBaloon)

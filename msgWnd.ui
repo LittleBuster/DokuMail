@@ -188,6 +188,9 @@ QPushButton:pressed {
      border-radius: 5px;
 }</string>
    </property>
+   <property name="textInteractionFlags">
+    <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+   </property>
   </widget>
   <widget class="QLabel" name="lbFile_2">
    <property name="geometry">

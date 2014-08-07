@@ -3,6 +3,7 @@
 
 from compress import *
 from crypt import *
+import shutil
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
@@ -72,7 +73,8 @@ class SendFilesThread(QtCore.QThread):
 	compressStart = QtCore.pyqtSignal(str)
 	cryptStart = QtCore.pyqtSignal(str)
 	sendStart = QtCore.pyqtSignal(str)
-	sendComplete = QtCore.pyqtSignal()	
+	sendComplete = QtCore.pyqtSignal()
+	sendFileComplete = QtCore.pyqtSignal()
 
 	def __init__(self):
 		super(SendFilesThread, self).__init__()		
@@ -103,6 +105,26 @@ class SendFilesThread(QtCore.QThread):
 			print("fail connection")
 			self.err.emit("Ошибка соединения с сервером!")
 			return
+		
+		exts = []
+		f = open("unzip_formats.cfg", "r")
+		while True:
+			line = f.readline().split("\n")[0]
+			if line == "":
+				break
+			else:
+				exts.append(line)
+		f.close()
+
+		c_exts = []
+		f = open("uncrypt_formats.cfg", "r")
+		while True:
+			line = f.readline().split("\n")[0]
+			if line == "":
+				break
+			else:
+				c_exts.append(line)
+		f.close()
 
 		print("start send")
 		self.client.begin_send_files(toUser)		
@@ -112,16 +134,44 @@ class SendFilesThread(QtCore.QThread):
 			l = len(lsf)
 			fname = lsf[l-1]
 
-			self.compressStart.emit(fname)
-			if not zlib_compress_file(sfile, "sendfiles/" + fname + ".z"):
-				print("error compressing")
+			"""
+			Checking extension
+			"""	
+			isCompress = True
+			isCrypt = True
+			
+			tmp_fname = fname.split(".")
+			ext = tmp_fname[ len(tmp_fname)-1 ].lower()
 
-			self.cryptStart.emit(fname)
-			if not AES256_encode_file("sendfiles/" + fname + ".z", "sendfiles/" + fname + ".bin", "transf.crt"):
-				print("error crypting")
+			for ex in exts:
+				if ex == ext:
+					isCompress = False
+					break
+
+			for ex in c_exts:
+				if ex == ext:
+					isCrypt = False
+					break
+
+			self.compressStart.emit(fname)
+			if isCompress:				
+				if not zlib_compress_file(sfile, "sendfiles/" + fname + ".z"):
+					print("error compressing")
+			else:
+				print(fname + " not compressed")
+				shutil.copy2(sfile, "sendfiles/" + fname + ".z")
+
+			if isCrypt:
+				self.cryptStart.emit(fname)
+				if not AES256_encode_file("sendfiles/" + fname + ".z", "sendfiles/" + fname + ".bin", "transf.crt"):
+					print("error crypting")
+			else:
+				print(fname + " not crypt")
+				shutil.copy2("sendfiles/" + fname + ".z", "sendfiles/" + fname + ".bin")
 
 			self.sendStart.emit(fname)
 			self.client.send_file( "sendfiles/" + fname )
+			self.sendFileComplete.emit()
 			os.remove("sendfiles/" + fname + ".z")
 			os.remove("sendfiles/" + fname + ".bin")
 
@@ -142,6 +192,7 @@ class SendFiles(QtCore.QObject):
 		self.sth.cryptStart.connect(self.on_crypt_start)
 		self.sth.sendStart.connect(self.on_send_start)
 		self.sth.sendComplete.connect(self.on_send_complete)
+		self.sth.sendFileComplete.connect(self.on_send_file_complete)
 		self.sth.err.connect(self.on_error)
 
 		self.uploadWnd = UploadWindow()
@@ -164,6 +215,11 @@ class SendFiles(QtCore.QObject):
 	def on_send_start(self, filename):
 		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Отправка:</span></p></body></html>")
 		self.uploadWnd.ui.pB.setValue(66)
+
+	def on_send_file_complete(self):
+		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Готово.</span></p></body></html>")
+		self.uploadWnd.ui.lbFile.setText("")
+		self.uploadWnd.ui.pB.setValue(100)
 
 	def on_send_complete(self):
 		self.uploadWnd.ui.lbAct.setText("<html><head/><body><p><span style=' color:#00d4ff;'>Готово.</span></p></body></html>")

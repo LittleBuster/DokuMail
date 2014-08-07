@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Wed Aug  6 16:41:49 2014
+# Created: Thu Aug  7 20:03:38 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -910,8 +910,19 @@ class Ui_Form(object):
         self.leTcpServer = QtWidgets.QLineEdit(self.page_8)
         self.leTcpServer.setGeometry(QtCore.QRect(80, 80, 211, 31))
         font = QtGui.QFont()
+        font.setFamily("Arial")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.leTcpServer.setFont(font)
+        self.leTcpServer.setStyleSheet("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
         self.leTcpServer.setObjectName("leTcpServer")
         self.label_14 = QtWidgets.QLabel(self.page_8)
         self.label_14.setGeometry(QtCore.QRect(80, 57, 171, 20))
@@ -930,8 +941,19 @@ class Ui_Form(object):
         self.leTcpPort = QtWidgets.QLineEdit(self.page_8)
         self.leTcpPort.setGeometry(QtCore.QRect(80, 140, 211, 31))
         font = QtGui.QFont()
+        font.setFamily("Arial")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.leTcpPort.setFont(font)
+        self.leTcpPort.setStyleSheet("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
         self.leTcpPort.setObjectName("leTcpPort")
         self.label_17 = QtWidgets.QLabel(self.page_8)
         self.label_17.setGeometry(QtCore.QRect(350, 57, 171, 20))
@@ -943,20 +965,53 @@ class Ui_Form(object):
         self.leMDBUser = QtWidgets.QLineEdit(self.page_8)
         self.leMDBUser.setGeometry(QtCore.QRect(350, 140, 211, 31))
         font = QtGui.QFont()
+        font.setFamily("Arial")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.leMDBUser.setFont(font)
+        self.leMDBUser.setStyleSheet("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
         self.leMDBUser.setObjectName("leMDBUser")
         self.leMDBServer = QtWidgets.QLineEdit(self.page_8)
         self.leMDBServer.setGeometry(QtCore.QRect(350, 80, 211, 31))
         font = QtGui.QFont()
+        font.setFamily("Arial")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.leMDBServer.setFont(font)
+        self.leMDBServer.setStyleSheet("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
         self.leMDBServer.setObjectName("leMDBServer")
         self.leMDBPasswd = QtWidgets.QLineEdit(self.page_8)
         self.leMDBPasswd.setGeometry(QtCore.QRect(350, 200, 211, 31))
         font = QtGui.QFont()
+        font.setFamily("Arial")
         font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
         self.leMDBPasswd.setFont(font)
+        self.leMDBPasswd.setStyleSheet("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
         self.leMDBPasswd.setEchoMode(QtWidgets.QLineEdit.Password)
         self.leMDBPasswd.setObjectName("leMDBPasswd")
         self.label_20 = QtWidgets.QLabel(self.page_8)

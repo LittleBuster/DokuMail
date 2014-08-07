@@ -1962,8 +1962,21 @@ QPushButton:pressed {
       </property>
       <property name="font">
        <font>
+        <family>Arial</family>
         <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit{
+	background-color: rgba(255, 255, 255, 71);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_14">
@@ -2015,8 +2028,21 @@ QPushButton:pressed {
       </property>
       <property name="font">
        <font>
+        <family>Arial</family>
         <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit{
+	background-color: rgba(255, 255, 255, 71);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_17">
@@ -2049,8 +2075,21 @@ QPushButton:pressed {
       </property>
       <property name="font">
        <font>
+        <family>Arial</family>
         <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit{
+	background-color: rgba(255, 255, 255, 71);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="leMDBServer">
@@ -2064,8 +2103,21 @@ QPushButton:pressed {
       </property>
       <property name="font">
        <font>
+        <family>Arial</family>
         <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit{
+	background-color: rgba(255, 255, 255, 71);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="leMDBPasswd">
@@ -2079,8 +2131,21 @@ QPushButton:pressed {
       </property>
       <property name="font">
        <font>
+        <family>Arial</family>
         <pointsize>12</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit{
+	background-color: rgba(255, 255, 255, 71);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
       </property>
       <property name="echoMode">
        <enum>QLineEdit::Password</enum>

@@ -435,6 +435,6 @@ class MainWindow(QtWidgets.QDialog):
 
 			if not flag:
 				item = QtWidgets.QListWidgetItem()
-				item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
+				item.setIcon(QtGui.QIcon("images/document_5907.png"))
 				item.setText(newfn)
 				self.ui.lwFiles.insertItem(0, item)

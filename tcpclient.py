@@ -7,6 +7,7 @@ import zlib
 from crypt import *
 from compress import *
 import hashlib
+import shutil
 from PyQt5 import QtCore
 
 
@@ -118,6 +119,26 @@ class TcpClient(QtCore.QObject):
 		return msg
 
 	def get_files(self, update):
+		exts = []
+		f = open("unzip_formats.cfg", "r")
+		while True:
+			line = f.readline().split("\n")[0]
+			if line == "":
+				break
+			else:
+				exts.append(line)
+		f.close()
+
+		c_exts = []
+		f = open("uncrypt_formats.cfg", "r")
+		while True:
+			line = f.readline().split("\n")[0]
+			if line == "":
+				break
+			else:
+				c_exts.append(line)
+		f.close()
+
 		if update:
 			self.sock.send( ('[GET-FILES]$[UPDATE]').encode('utf-8') )
 		else:
@@ -167,6 +188,25 @@ class TcpClient(QtCore.QObject):
 				dest = "downloads/"
 				destf = dest + fname + ".bin"
 
+			"""
+			Check extention
+			"""
+			isDecompress = True
+			isCrypt = True
+
+			tmp_fname = fname.split(".")
+			ext = tmp_fname[ len(tmp_fname)-1 ].lower()
+
+			for ex in exts:
+				if ex == ext:
+					isCompress = False
+					break
+
+			for ex in c_exts:
+				if ex == ext:
+					isCrypt = False
+					break
+
 			f = open(destf, "wb")
 			while True:
 				data = self.sock.recv(4096)
@@ -177,20 +217,26 @@ class TcpClient(QtCore.QObject):
 						print("Download complete")
 						f.write( data[:l] )
 						self.sock.send("complete".encode('utf-8'))
-						f.close()
+						f.close()					
 
 						if not update:
 							self.decryptStart.emit()
 
-							print("Decrypt: " + fname)
-							if not AES256_decode_file(dest + fname + ".bin", dest + fname + ".z", "transf.crt"):
-								print("error crypting")
+							if isCrypt:
+								print("Decrypt: " + fname)
+								if not AES256_decode_file(dest + fname + ".bin", dest + fname + ".z", "transf.crt"):
+									print("error crypting")
+							else:
+								shutil.copy2(dest + fname + ".bin", dest + fname + ".z")
 
 							self.decompressStart.emit()
 
-							print("Decompress: " + fname)
-							if not zlib_decompress_file(dest + fname + ".z", dest + fname):
-								print("error decompressing")
+							if isDecompress:
+								print("Decompress: " + fname)
+								if not zlib_decompress_file(dest + fname + ".z", dest + fname):
+									print("error decompressing")
+								else:
+									shutil.copy2(dest + fname + ".z", dest + fname)
 
 						self.fileDownloaded.emit()
 
