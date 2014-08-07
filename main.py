@@ -4,7 +4,7 @@
 import os
 import sys
 import json
-import sqlite3
+from checker import Checker
 from send import *
 from compress import *
 from crypt import *
@@ -89,12 +89,7 @@ class MainWindow(QtWidgets.QDialog):
 		self.ui.tw1.horizontalHeader().resizeSection(0, 30)
 		self.ui.tw1.horizontalHeader().resizeSection(1, 350)
 		self.ui.tw1.horizontalHeader().resizeSection(2, 100)
-		""""""
-		
-		self.getTmr = QtCore.QTimer()
-		self.getTmr.timeout.connect(self.on_get_data)
-		self.newsTmr = QtCore.QTimer()
-		self.newsTmr.timeout.connect(self.check_news)
+		""""""		
 
 		self.send_files = SendFiles()
 		self.recieve = Recieve()
@@ -112,6 +107,8 @@ class MainWindow(QtWidgets.QDialog):
 		self.ui.lwNews.itemClicked.connect(self.on_lwnews_clicked)
 		self.newsBaloon.ui.pbRead.clicked.connect(self.on_read_news)
 		self.newsBaloon.ui.pbClose.clicked.connect(self.on_baloon_close)
+
+		self.checker = Checker(self)
 
 	"""
 	Properties for configs
@@ -157,56 +154,14 @@ class MainWindow(QtWidgets.QDialog):
 	MDBUser = property(getMDBUser, setMDBUser)
 	MDBPasswd = property(getMDBPasswd, setMDBPasswd)	
 
-	""""""	
-
-	def on_get_data(self):
-		self.getTmr.stop()
-
-		client = TcpClient()
-		if not client.check_status(self.TCPServer, self.TCPPort):
-			self.ui.lbStatus.setText("<html><head/><body><p><span style='color:#ff0000;'>Оффлайн</span></p></body></html>")
-			self.getTmr.start(5000)
-			return
-		else:
-			client.close()
-			self.ui.lbStatus.setText("<html><head/><body><p><span style='color:#00ff0b;'>Онлайн</span></p></body></html>")
-
-		f = False
-		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
-			return
-
-		if mdb.check_update(self.user):
-			f = True
-			mdb.close()
-			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd, True)	
-			self.recieve.start()
-			return
-
-		if mdb.check_files(self.user):
-			f = True
-			mdb.close()
-			self.recieve.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd, False)	
-			self.recieve.start()
-			return
-
-		if (mdb.check_messages(self.user) and (not self.recieveMsg.get_msg_status())):
-			f = True
-			mdb.close()			
-			self.recieveMsg.set_configs(self.TCPServer, self.TCPPort, self.user, self.passwd)	
-			self.recieveMsg.start()
-			return
-		
-		if not f:
-			self.getTmr.start(5000)
+	""""""
 
 	def on_msg_complete(self):
-		self.getTmr.start(5000)
+		self.checker.getTmr.start(5000)
 
 	def on_download_complete(self, update):
 		if not update:
-			self.getTmr.start(5000)
+			self.checker.getTmr.start(5000)
 		else:
 			QtWidgets.QMessageBox.information(self, 'Complete', 'Обновление завершено', QtWidgets.QMessageBox.Yes)
 			sys.exit()
@@ -242,51 +197,6 @@ class MainWindow(QtWidgets.QDialog):
 		else:
 			QtWidgets.QMessageBox.critical(self, 'Error', 'Ошибка добавления новости', QtWidgets.QMessageBox.Yes)
 		mdb.close()
-
-	def check_news(self):
-		con = sqlite3.connect('news.db')
-		cur = con.cursor()
-
-		try:
-			cur.execute('CREATE TABLE news(id INTEGER PRIMARY KEY AUTOINCREMENT, title VARCHAR(512), date VARCHAR(20))')
-			con.commit()
-		except:
-			pass	
-		
-		mdb = MariaDB()
-		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
-			return
-		news_list = mdb.check_news()
-
-		l = len(news_list)
-		if l != self.news_count:
-			self.news_count = l
-
-			self.ui.lwNews.clear()
-			for news in news_list:
-
-				cur.execute("SELECT * FROM news WHERE title='" + news["title"] + "' and date='" + news["date"] + "'")
-				if len(cur.fetchall()) == 0:
-					cur.execute("INSERT INTO news(title, date) VALUES('" + news["title"] + "', '" + news["date"] + "')")
-					con.commit()
-
-					"""
-					Show tooltip
-					"""
-					if not mdb.is_admin(self.user):
-						rect = self.newsBaloon.geometry()
-						rect.setY(0)
-						self.newsBaloon.setGeometry(rect)
-						self.newsBaloon.ui.leTitle.setText("[" + news["date"] + "]" + news["title"])
-						self.newsBaloon.show()
-
-				item = QtWidgets.QListWidgetItem()
-				item.setIcon(QtGui.QIcon("images/news.ico"))
-				item.setText("[" + news["date"] + "]" + news["title"])
-				self.ui.lwNews.insertItem(0, item)
-		mdb.close()
-		con.close()
 
 	def on_read_news(self):
 		item = QtWidgets.QListWidgetItem()
@@ -358,6 +268,15 @@ class MainWindow(QtWidgets.QDialog):
 			self.MDBServer = self.ui.leMDBServer.text()
 			self.MDBUser = self.ui.leMDBUser.text()
 			self.MDBPasswd = self.ui.leMDBPasswd.text()
+
+			config = {}
+			config["TcpServer"] = self.TCPServer
+			config["TcpPort"] = self.TCPPort
+			config["MDBServer"] = self.MDBServer
+			config["MDBUser"] = self.MDBUser
+			config["MDBPasswd"] = self.MDBPasswd
+			self.checker.set_configs(config, self.user)
+
 			self.save_config()
 
 	def on_delete_file(self):
@@ -429,9 +348,15 @@ class MainWindow(QtWidgets.QDialog):
 			i += 1
 
 		self.check_tasks()
-		self.check_news()
-		self.getTmr.start(5000)
-		self.newsTmr.start(10000)
+
+		config = {}
+		config["TcpServer"] = self.TCPServer
+		config["TcpPort"] = self.TCPPort
+		config["MDBServer"] = self.MDBServer
+		config["MDBUser"] = self.MDBUser
+		config["MDBPasswd"] = self.MDBPasswd
+		self.checker.set_configs(config, self.user)
+		self.checker.start_timers()
 
 	def save_config(self):
 		f = open("config.dat", "w")
