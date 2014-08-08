@@ -26,7 +26,6 @@ class LoginWindow(QtWidgets.QDialog):
 		self.loginTmr.timeout.connect(self.on_autologin)
 		self.ui.pbLogin.clicked.connect(self.on_login)
 		self.ui.pbCancel.clicked.connect(self.on_cancel)
-		self.ui.lbBack.setPixmap(QtGui.QPixmap("images/ffupd.png"))
 
 		if os.path.isfile("svpwd.dat"):
 			self.load_passwd()	

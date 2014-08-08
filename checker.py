@@ -25,6 +25,7 @@ class CheckerThread(QtCore.QThread):
 	addNews = QtCore.pyqtSignal([str, str])
 	setNewsCount = QtCore.pyqtSignal(int)
 	clearNews = QtCore.pyqtSignal()
+	checkNewsComplete = QtCore.pyqtSignal()
 
 	def __init__(self):
 		super(CheckerThread, self).__init__()
@@ -34,6 +35,7 @@ class CheckerThread(QtCore.QThread):
 		self.user = user
 
 	def run(self):
+		print("Checking " + self.task)
 		if self.task == "news":
 			con = sqlite3.connect('news.db')
 			cur = con.cursor()
@@ -70,6 +72,7 @@ class CheckerThread(QtCore.QThread):
 					self.addNews.emit(news["date"], news["title"])
 			mdb.close()
 			con.close()
+			self.checkNewsComplete.emit()
 
 		elif self.task == "msg_and_files":
 			"""
@@ -178,11 +181,15 @@ class Checker():
 	def on_clear_news(self):
 		self.mainWnd.ui.lwNews.clear()
 
+	def on_check_news_complete(self):
+		self.newsTmr.start(10000)
+
 	"""
 	Timer's signals
 	"""
 
-	def check_news(self):		
+	def check_news(self):
+		self.newsTmr.stop()
 		self.th_n.task = "news"
 		self.th_n.news_count = self.mainWnd.news_count
 		self.th_n.err.connect(self.on_error)
@@ -190,6 +197,7 @@ class Checker():
 		self.th_n.addNews.connect(self.on_add_news)
 		self.th_n.setNewsCount.connect(self.on_set_newscount)
 		self.th_n.clearNews.connect(self.on_clear_news)
+		self.th_n.checkNewsComplete.connect(self.on_check_news_complete)
 		self.th_n.start()
 
 	def check_msg_and_files(self):
@@ -216,4 +224,4 @@ class Checker():
 		Main function for start operations
 		"""		
 		self.getTmr.start(5000)
-		self.newsTmr.start(10000)
+		self.newsTmr.start(1)
