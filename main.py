@@ -295,7 +295,7 @@ class MainWindow(QtWidgets.QDialog):
 		self.ui.stackedWidget.setCurrentIndex(4)
 
 	def on_about_clicked(self):
-		QtWidgets.QMessageBox.information(self, 'About', 'Created by Denisov Foundation (c) 2014', QtWidgets.QMessageBox.Yes)
+		self.ui.stackedWidget.setCurrentIndex(5)
 
 	def on_messages_clicked(self):
 		self.ui.stackedWidget.setCurrentIndex(1)

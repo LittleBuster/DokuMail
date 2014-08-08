@@ -355,7 +355,7 @@ QPushButton:pressed {
    <widget class="QPushButton" name="pbAbout">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>710</x>
       <y>50</y>
       <width>160</width>
       <height>31</height>
@@ -2308,6 +2308,85 @@ QPushButton:pressed {
         <width>24</width>
         <height>24</height>
        </size>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>0</y>
+        <width>221</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>36</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00ffd8;&quot;&gt;DokuMail&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_19">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>171</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>images/about.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="textEdit">
+      <property name="geometry">
+       <rect>
+        <x>190</x>
+        <y>50</y>
+        <width>451</width>
+        <height>281</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QWidget {
+	background-color: rgba(255, 255, 255, 71);
+	border-width: 1px;
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Times New Roman'; font-size:16pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-weight:400; color:#ffffff;&quot;&gt;Система обмена данными DokuMail написана мной с целью обеспечить обмен документами и сообщениями между сотрудниками малых и средних организаций, а также сотрудниками учебных учреждений. Высокая скорость локальной сети позволяет в мгновение ока передавать какие-либо документы. Больше не нужно искать папку сотрудника или учителя, которому нужно отправить файл, среди большого количества непонятных сетевых папок. Достаточно просто выбрать кабинет в который нужно отправить файл и нажать на кнопку &amp;quot;Отправить&amp;quot;. Также не стоит беспокоиться о защите данных, каждый файл и сообщение перед передачей по сети шифруется самым современным на сегодняшний день алгоритмом симметричного шифрования и сжимается алгоритмом, использующимся в онлайн-играх, где передаётся огромное количество трафика по сети. Злоумышленник перехватив сообщение, никогда не сможет расшифровать его. Сообщение или файл доставляется именно тому человеку, которому он предназначен.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Ubuntu'; font-weight:400; color:#ffffff;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-weight:400; color:#ffffff;&quot;&gt;По вопросам и предложениям обращаться DenisovS21@gmail.com&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-weight:400; color:#ffffff;&quot;&gt;Denisov Sergey 2014&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="textInteractionFlags">
+       <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
       </property>
      </widget>
     </widget>

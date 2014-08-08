@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Thu Aug  7 20:03:38 2014
+# Created: Fri Aug  8 15:45:58 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -141,7 +141,7 @@ class Ui_Form(object):
         self.pbNews.setIconSize(QtCore.QSize(20, 20))
         self.pbNews.setObjectName("pbNews")
         self.pbAbout = QtWidgets.QPushButton(self.widget)
-        self.pbAbout.setGeometry(QtCore.QRect(10, 50, 160, 31))
+        self.pbAbout.setGeometry(QtCore.QRect(710, 50, 160, 31))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -1086,6 +1086,40 @@ class Ui_Form(object):
         self.pbSetConfig.setIconSize(QtCore.QSize(24, 24))
         self.pbSetConfig.setObjectName("pbSetConfig")
         self.stackedWidget.addWidget(self.page_8)
+        self.page_3 = QtWidgets.QWidget()
+        self.page_3.setObjectName("page_3")
+        self.label_18 = QtWidgets.QLabel(self.page_3)
+        self.label_18.setGeometry(QtCore.QRect(320, 0, 221, 51))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(36)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_18.setFont(font)
+        self.label_18.setObjectName("label_18")
+        self.label_19 = QtWidgets.QLabel(self.page_3)
+        self.label_19.setGeometry(QtCore.QRect(10, 60, 171, 251))
+        self.label_19.setText("")
+        self.label_19.setPixmap(QtGui.QPixmap("images/about.png"))
+        self.label_19.setObjectName("label_19")
+        self.textEdit = QtWidgets.QTextEdit(self.page_3)
+        self.textEdit.setGeometry(QtCore.QRect(190, 50, 451, 281))
+        font = QtGui.QFont()
+        font.setFamily("Times New Roman")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.textEdit.setFont(font)
+        self.textEdit.setStyleSheet("QWidget {\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}")
+        self.textEdit.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
+        self.textEdit.setObjectName("textEdit")
+        self.stackedWidget.addWidget(self.page_3)
         self.widget_4 = QtWidgets.QWidget(Form)
         self.widget_4.setGeometry(QtCore.QRect(667, 450, 221, 51))
         palette = QtGui.QPalette()
@@ -1262,6 +1296,15 @@ class Ui_Form(object):
         self.label_23.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">TCP Server:</span></p></body></html>"))
         self.label_24.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">MariaDB Server:</span></p></body></html>"))
         self.pbSetConfig.setText(_translate("Form", "Применить"))
+        self.label_18.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>"))
+        self.textEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Times New Roman\'; font-size:16pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-weight:400; color:#ffffff;\">Система обмена данными DokuMail написана мной с целью обеспечить обмен документами и сообщениями между сотрудниками малых и средних организаций, а также сотрудниками учебных учреждений. Высокая скорость локальной сети позволяет в мгновение ока передавать какие-либо документы. Больше не нужно искать папку сотрудника или учителя, которому нужно отправить файл, среди большого количества непонятных сетевых папок. Достаточно просто выбрать кабинет в который нужно отправить файл и нажать на кнопку &quot;Отправить&quot;. Также не стоит беспокоиться о защите данных, каждый файл и сообщение перед передачей по сети шифруется самым современным на сегодняшний день алгоритмом симметричного шифрования и сжимается алгоритмом, использующимся в онлайн-играх, где передаётся огромное количество трафика по сети. Злоумышленник перехватив сообщение, никогда не сможет расшифровать его. Сообщение или файл доставляется именно тому человеку, которому он предназначен.</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Ubuntu\'; font-weight:400; color:#ffffff;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-weight:400; color:#ffffff;\">По вопросам и предложениям обращаться DenisovS21@gmail.com</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'Ubuntu\'; font-weight:400; color:#ffffff;\">Denisov Sergey 2014</span></p></body></html>"))
         self.pbMinimize.setText(_translate("Form", "Свернуть программу"))
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" color:#00e9ff;\">Быстрая и защищённая внутрикорпоративная почта </span></p><p align=\"center\"><span style=\" color:#00e9ff;\">для малых, средних организаций и учебных учреждений</span></p></body></html>"))
