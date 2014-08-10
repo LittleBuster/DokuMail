@@ -2368,7 +2368,7 @@ QPushButton:pressed {
       </property>
       <property name="styleSheet">
        <string notr="true">QWidget {
-	background-color: rgba(255, 255, 255, 71);
+	background-color: rgba(23, 115, 255, 137);
 	border-width: 1px;
 	border-color: rgb(255, 255, 255);
      border-style: solid;

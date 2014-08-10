@@ -9,6 +9,7 @@ from compress import *
 import hashlib
 import shutil
 from PyQt5 import QtCore
+from logging import Log
 
 
 class TcpClient(QtCore.QObject):
@@ -31,6 +32,7 @@ class TcpClient(QtCore.QObject):
 		try:
 			self.sock.connect((ip, port))
 		except:
+			Log().local("TCP Client: error connection to server: " + ip)
 			return False
 
 		self.sock.send(b"[LOGIN]")
@@ -40,6 +42,9 @@ class TcpClient(QtCore.QObject):
 		h.update(pwd.encode('utf-8'))
 		h_passwd = h.hexdigest().upper()
 		
+		"""
+		Send creditionals login and password hash to server
+		"""
 		cred = "login$" + user + "$" + h_passwd + "$"
 		self.sock.send( cred.encode('utf-8') )
 		
@@ -48,9 +53,13 @@ class TcpClient(QtCore.QObject):
 			return True
 		else:
 			print("login fail")
+			Log().local("TCP Server: Login fail")
 			return False
 
 	def check_status(self, ip, port):
+		"""
+		Check server status: offline/online
+		"""
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 		try:
@@ -72,13 +81,20 @@ class TcpClient(QtCore.QObject):
 
 			return answ
 		except:
+			Log().local("TCP Server: Fail sending message")
 			return b"[FAIL]"
 
 	def begin_send_files(self, toUser):
+		"""
+		Init send files process
+		"""
 		self.sock.send( ("[SEND-FILES]$" + toUser).encode('utf-8') )
 		print (self.sock.recv(1024))
 
 	def send_file(self, fname):
+		"""
+		Send single file to server
+		"""
 		lsf = fname.split("/")
 		l = len(lsf)
 
@@ -98,9 +114,15 @@ class TcpClient(QtCore.QObject):
 		print(self.sock.recv(1024).decode('utf-8'))
 
 	def end_send_files(self):
+		"""
+		Stop sending files process
+		"""
 		self.sock.send(b"[END-RETRIEVE]")
 
 	def get_messages(self):
+		"""
+		Get from server 1 last message
+		"""
 		self.sock.send(b'[GET-MSG]')
 		msgInfo = self.sock.recv(1024).decode("utf-8")
 
@@ -115,29 +137,41 @@ class TcpClient(QtCore.QObject):
 		msg = {}
 		msg["FromUser"] = msgInfo.split("$")[0]
 		msg["Time"] = msgInfo.split("$")[1]
-		msg["Data"] = AES256_decode_msg(data, "transf.crt")
+		try:
+			msg["Data"] = AES256_decode_msg(data, "transf.crt")
+		except:
+			Log().local("Error reading message file")
 		return msg
 
 	def get_files(self, update):
+		"""
+		Get all files for client, from remote TCP server
+		"""
 		exts = []
-		f = open("unzip_formats.cfg", "r")
-		while True:
-			line = f.readline().split("\n")[0]
-			if line == "":
-				break
-			else:
-				exts.append(line)
-		f.close()
+		try:
+			f = open("unzip_formats.cfg", "r")
+			while True:
+				line = f.readline().split("\n")[0]
+				if line == "":
+					break
+				else:
+					exts.append(line)
+			f.close()
+		except:
+			Log().local("Error reading unzip formats file")
 
 		c_exts = []
-		f = open("uncrypt_formats.cfg", "r")
-		while True:
-			line = f.readline().split("\n")[0]
-			if line == "":
-				break
-			else:
-				c_exts.append(line)
-		f.close()
+		try:
+			f = open("uncrypt_formats.cfg", "r")
+			while True:
+				line = f.readline().split("\n")[0]
+				if line == "":
+					break
+				else:
+					c_exts.append(line)
+			f.close()
+		except:
+			Log().local("Error reading uncrypt formats file")
 
 		if update:
 			self.sock.send( ('[GET-FILES]$[UPDATE]').encode('utf-8') )
@@ -149,7 +183,7 @@ class TcpClient(QtCore.QObject):
 				os.makedirs("downloads")
 		else:
 			if not os.path.exists("update"):
-				os.makedirs("update")
+				os.makedirs("update/data")
 
 		cnt = int(self.sock.recv(1024).decode("utf-8"))
 		self.sock.send(b"ok")
@@ -225,7 +259,8 @@ class TcpClient(QtCore.QObject):
 							if isCrypt:
 								print("Decrypt: " + fname)
 								if not AES256_decode_file(dest + fname + ".bin", dest + fname + ".z", "transf.crt"):
-									print("error crypting")
+									Log().local("Error decrypting recieved file: " + fname)
+									print("error decrypting")
 							else:
 								shutil.copy2(dest + fname + ".bin", dest + fname + ".z")
 
@@ -234,6 +269,7 @@ class TcpClient(QtCore.QObject):
 							if isDecompress:
 								print("Decompress: " + fname)
 								if not zlib_decompress_file(dest + fname + ".z", dest + fname):
+									Log().local("Error decompressing recieved file: " + fname)
 									print("error decompressing")
 								else:
 									shutil.copy2(dest + fname + ".z", dest + fname)
@@ -246,6 +282,7 @@ class TcpClient(QtCore.QObject):
 
 						break
 				except:
+					Log().local("Fatal error when files recieved")
 					print('except')			
 	
 				f.write(data)

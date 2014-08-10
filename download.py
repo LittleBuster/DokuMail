@@ -8,6 +8,10 @@ import platform
 
 
 class DownloadWnd(QtWidgets.QDialog):
+	"""
+	Class which connect Download Window interface
+	in python app
+	"""
 	def __init__(self, parent=None):
 		super(DownloadWnd, self).__init__()
 		self.ui = downloadWnd.Ui_DownloadWnd()
@@ -19,8 +23,12 @@ class DownloadWnd(QtWidgets.QDialog):
 		self.close()
 
 	def on_open_dir(self):
-		if not platform.system() == "Linux":
-			subprocess.call("explorer downloads/", shell=True)
-		else:
+		"""
+		Open local folder for downloads
+		"""
+		if platform.system() == "Linux":
 			subprocess.call("nautilus downloads/", shell=True)
+		else:
+			import win32api
+			win32api.ShellExecute(0, 'open', 'downloads', '', '', 1)
 		self.close()

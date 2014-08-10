@@ -10,6 +10,9 @@ from main import MainWindow
 
 
 def main():
+	"""
+	Main function for start app
+	"""
 	app = QtWidgets.QApplication(sys.argv)
 
 	mw = MainWindow()

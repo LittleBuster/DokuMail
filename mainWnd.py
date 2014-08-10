@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Fri Aug  8 15:45:58 2014
+# Created: Fri Aug  8 17:02:44 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -1111,7 +1111,7 @@ class Ui_Form(object):
         font.setWeight(75)
         self.textEdit.setFont(font)
         self.textEdit.setStyleSheet("QWidget {\n"
-"    background-color: rgba(255, 255, 255, 71);\n"
+"    background-color: rgba(23, 115, 255, 137);\n"
 "    border-width: 1px;\n"
 "    border-color: rgb(255, 255, 255);\n"
 "     border-style: solid;\n"

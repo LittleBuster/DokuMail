@@ -9,10 +9,19 @@ from Crypto.Cipher import AES
 
 
 class AES_KEY():
+	"""
+	This class include 256 bit key and
+	128 bit key IV4 for aes encrypting
+	"""
 	key = b''
 	key4 = b''
 
 def AES256_cert_create( fname ):
+	"""
+	This function create key file on disk, which
+	include 256 bit aes random key and 128 bit
+	aes IV4 random key
+	"""
 	key = os.urandom(32)
 	key4 = os.urandom(16)
 
@@ -24,6 +33,11 @@ def AES256_cert_create( fname ):
 	f.close()
 
 def AES256_cert_read( fname ):
+	"""
+	This function read from disk file, which
+	include 256 bit aes random key and 128 bit
+	aes IV4 random key
+	"""
 	a_key = AES_KEY()	
 
 	f = open(fname, "rb")
@@ -35,6 +49,14 @@ def AES256_cert_read( fname ):
 	return a_key
 
 def AES256_encode_file(filename, outfile, certFile):
+	"""
+	This function encrypt files by aes256 alorithm.
+
+	Call C-language dlls from python app
+
+	If system linux - call .so libs, if Windows call .dll libs and change 
+	encoding to cp1251 for russian language.
+	"""
 	lib = None
 
 	a_key = AES256_cert_read(certFile)
@@ -54,6 +76,14 @@ def AES256_encode_file(filename, outfile, certFile):
 		return False
 
 def AES256_decode_file(filename, outfile, certFile):
+	"""
+	This function decrypt files by aes256 alorithm.
+
+	Call C-language dlls from python app
+
+	If system linux - call .so libs, if Windows call .dll libs and change 
+	encoding to cp1251 for russian language.
+	"""
 	lib = None
 
 	a_key = AES256_cert_read(certFile)
@@ -73,6 +103,10 @@ def AES256_decode_file(filename, outfile, certFile):
 		return False
 
 def AES256_encode_msg( message, certFile ):
+	"""
+	This function is used for encrypting messages,
+	which send on server
+	"""
 	a_key = AES256_cert_read(certFile)
 
 	obj = AES.new(a_key.key, AES.MODE_CBC, a_key.key4)
@@ -88,8 +122,11 @@ def AES256_encode_msg( message, certFile ):
 	return cdata
 
 def AES256_decode_msg( message, certFile ):
-        a_key = AES256_cert_read(certFile)
-
-        obj = AES.new(a_key.key, AES.MODE_CBC, a_key.key4)
-        data = zlib.decompress(message)
-        return obj.decrypt(data).decode("utf-8").split("|")[0]
+	"""
+	This function is used for encrypting messages,
+	which send from server
+	"""
+	a_key = AES256_cert_read(certFile)
+	obj = AES.new(a_key.key, AES.MODE_CBC, a_key.key4)
+	data = zlib.decompress(message)
+	return obj.decrypt(data).decode("utf-8").split("|")[0]

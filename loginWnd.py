@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'loginWnd.ui'
 #
-# Created: Fri Aug  8 16:28:28 2014
+# Created: Fri Aug  8 17:07:43 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,6 +13,8 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(613, 340)
+        Form.setMinimumSize(QtCore.QSize(613, 340))
+        Form.setMaximumSize(QtCore.QSize(613, 340))
         self.lbBack = QtWidgets.QLabel(Form)
         self.lbBack.setGeometry(QtCore.QRect(-20, -40, 661, 391))
         self.lbBack.setText("")

@@ -189,6 +189,9 @@ class Checker():
 	"""
 
 	def check_news(self):
+		"""
+		Start checking news
+		"""
 		self.newsTmr.stop()
 		self.th_n.task = "news"
 		self.th_n.news_count = self.mainWnd.news_count
@@ -201,6 +204,9 @@ class Checker():
 		self.th_n.start()
 
 	def check_msg_and_files(self):
+		"""
+		Start checking files on server
+		"""
 		self.getTmr.stop()
 		
 		self.th_c.task = "msg_and_files"

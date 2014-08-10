@@ -6,6 +6,14 @@ import platform
 from ctypes import cdll
 
 def zlib_compress_file( filename, outfile ):
+	"""
+	Compress files by zlib alorithm.
+
+	Call C-language dlls from python app
+
+	If system linux - call .so libs, if Windows call .dll libs and change 
+	encoding to cp1251 for russian language.
+	"""
 	lib = None
 
 	if platform.system() == "Linux":
@@ -23,6 +31,14 @@ def zlib_compress_file( filename, outfile ):
 		return False
 
 def zlib_decompress_file( filename, outfile ):
+	"""
+	Decompress files by zlib alorithm.
+
+	Call C-language dlls from python app
+
+	If system linux - call .so libs, if Windows call .dll libs and change 
+	encoding to cp1251 for russian language.
+	"""
 	lib = None
 
 	if platform.system() == "Linux":

@@ -10,19 +10,26 @@ from PyQt5 import QtWidgets
 from upload import UploadWindow
 from mariadb import MariaDB
 from tcpclient import TcpClient
+from logger import Log
 
 
 def send_msg(wnd, msg, all, lUsrPwd, usr):
-	answ = str("")
-	toUser = str("")
-	toUsersStr = str("")
-	toUsers = None
+	"""
+	Send message to remote tcp server
+	"""
+	answ = str
+	toUser = str
+	toUsersStr = str
+	toUsers = list
 
-	if msg == str(""):
+	if msg == "":
 		QtWidgets.QMessageBox.warning(wnd, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
 		return
 
-	if (usr == str("") and (not all)):
+	if (usr == "") and (not all)):
+		"""
+		If message sending to single user and user not selected then fail
+		"""
 		QtWidgets.QMessageBox.warning(wnd, 'Complete', 'Выберите пользователя!', QtWidgets.QMessageBox.Yes)
 		return
 
@@ -80,6 +87,9 @@ class SendFilesThread(QtCore.QThread):
 		super(SendFilesThread, self).__init__()		
 
 	def send(self, wnd, TCPServer, TCPPort, flist, toUsr):
+		"""
+		Set connection configs
+		"""
 		self._wnd = wnd
 		self._server = TCPServer
 		self._port = TCPPort
@@ -107,24 +117,30 @@ class SendFilesThread(QtCore.QThread):
 			return
 		
 		exts = []
-		f = open("unzip_formats.cfg", "r")
-		while True:
-			line = f.readline().split("\n")[0]
-			if line == "":
-				break
-			else:
-				exts.append(line)
-		f.close()
+		try:
+			f = open("unzip_formats.cfg", "r")
+			while True:
+				line = f.readline().split("\n")[0]
+				if line == "":
+					break
+				else:
+					exts.append(line)
+			f.close()
+		except:
+			Log().local("Error reading unzip formats file")
 
 		c_exts = []
-		f = open("uncrypt_formats.cfg", "r")
-		while True:
-			line = f.readline().split("\n")[0]
-			if line == "":
-				break
-			else:
-				c_exts.append(line)
-		f.close()
+		try:
+			f = open("uncrypt_formats.cfg", "r")
+			while True:
+				line = f.readline().split("\n")[0]
+				if line == "":
+					break
+				else:
+					c_exts.append(line)
+			f.close()
+		except:
+			Log().local("Error reading uncrypted formats")
 
 		print("start send")
 		self.client.begin_send_files(toUser)		
@@ -156,6 +172,7 @@ class SendFilesThread(QtCore.QThread):
 			self.compressStart.emit(fname)
 			if isCompress:				
 				if not zlib_compress_file(sfile, "sendfiles/" + fname + ".z"):
+					Log().local("Error compressing send file: " + fname)
 					print("error compressing")
 			else:
 				print(fname + " not compressed")
@@ -164,6 +181,7 @@ class SendFilesThread(QtCore.QThread):
 			if isCrypt:
 				self.cryptStart.emit(fname)
 				if not AES256_encode_file("sendfiles/" + fname + ".z", "sendfiles/" + fname + ".bin", "transf.crt"):
+					Log().local("Error encrypting send file: " + fname)
 					print("error crypting")
 			else:
 				print(fname + " not crypt")

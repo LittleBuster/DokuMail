@@ -17,6 +17,10 @@ class pObj(object):
 
 
 class LoginWindow(QtWidgets.QDialog):
+	"""
+	Class which connect Login Window interface
+	in python app
+	"""
 	def __init__(self, parent=None):
 		super(LoginWindow, self).__init__()
 		self.ui = loginWnd.Ui_Form()
@@ -31,11 +35,18 @@ class LoginWindow(QtWidgets.QDialog):
 			self.load_passwd()	
 
 	def set_wnds(self, mw):
+		"""
+		Start Autologin timer
+		"""
 		self._mw = mw
 		if not ((self.ui.edLogin.text() == "") or (self.ui.edPasswd.text() == "")):
 			self.loginTmr.start(2000)
 
 	def on_login(self):
+		"""
+		Checking login and password in database and init start processes
+		in main window. After close login windows and show main window.
+		"""
 		self.loginTmr.stop()
 		state = False
 
@@ -64,6 +75,10 @@ class LoginWindow(QtWidgets.QDialog):
 						
 
 	def save_passwd(self):
+		"""
+		Create json object. Send password in it.
+		Save json object in file.
+		"""
 		f = open("svpwd.dat", "w")
 		cfgPasswd = pObj()
 		cfgPasswd.config = {}
@@ -73,6 +88,10 @@ class LoginWindow(QtWidgets.QDialog):
 		f.close()
 
 	def load_passwd(self):
+		"""
+		Create json object. Load password from file in it.
+		Set password and login in line edits.
+		"""
 		try:
 			f = open("svpwd.dat", "r")
 			cfgPasswd = json.load(f)

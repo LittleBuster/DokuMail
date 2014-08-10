@@ -4,6 +4,7 @@
 import os
 import sys
 import json
+from logger import Log
 from checker import Checker
 from send import *
 from compress import *
@@ -163,7 +164,11 @@ class MainWindow(QtWidgets.QDialog):
 		if not update:
 			self.checker.getTmr.start(5000)
 		else:
-			QtWidgets.QMessageBox.information(self, 'Complete', 'Обновление завершено', QtWidgets.QMessageBox.Yes)
+			import platform
+			if platform.system() == "Windows":
+				import win32api
+				os.chdir("update")
+				win32api.ShellExecute(0, 'open', 'update.exe', '', '', 1)
 			sys.exit()
 
 	def on_create_news(self):		
@@ -264,7 +269,8 @@ class MainWindow(QtWidgets.QDialog):
 			try:
 				self.TCPPort = int(self.ui.leTcpPort.text())
 			except:
-				QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный номер порта!', QtWidgets.QMessageBox.Yes)
+				Log().local("Settings: set not port correct")
+				QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный номер порта!', QtWidgets.QMessageBox.Yes)				
 			self.MDBServer = self.ui.leMDBServer.text()
 			self.MDBUser = self.ui.leMDBUser.text()
 			self.MDBPasswd = self.ui.leMDBPasswd.text()
@@ -332,6 +338,8 @@ class MainWindow(QtWidgets.QDialog):
 			e.ignore()
 
 	def init_app(self):
+		Log().local("init app")
+
 		mdb = MariaDB()
 		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
@@ -372,6 +380,7 @@ class MainWindow(QtWidgets.QDialog):
 
 	def load_config(self):
 		if not os.path.isfile("config.dat"):
+			Log().local("Config file not exists")
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Отсутствует файл конфигураций!', QtWidgets.QMessageBox.Yes)
 			sys.exit()
 			return
@@ -386,6 +395,7 @@ class MainWindow(QtWidgets.QDialog):
 			self.TCPPort = cfg["tcpport"]
 			f.close()
 		except:
+			Log().local("Error reading config file")
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!', QtWidgets.QMessageBox.Yes)
 
 	def on_send_msg(self):
