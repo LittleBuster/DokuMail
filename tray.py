@@ -27,6 +27,14 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 		shAction3.triggered.connect(self.close_app)
 
 		self.setContextMenu(menu)
+		self.activated.connect(self.on_active)
+
+	def on_active(self, reason):
+		"""
+		If 1 click
+		"""
+		if reason == 3:
+			self._mw.show()
 
 	def show_main(self):
 		self._mw.show()

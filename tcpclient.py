@@ -182,7 +182,7 @@ class TcpClient(QtCore.QObject):
 			if not os.path.exists("downloads"):
 				os.makedirs("downloads")
 		else:
-			if not os.path.exists("update"):
+			if not os.path.exists("update/data"):
 				os.makedirs("update/data")
 
 		cnt = int(self.sock.recv(1024).decode("utf-8"))
@@ -216,7 +216,7 @@ class TcpClient(QtCore.QObject):
 			dest = str("")
 			destf = str("")
 			if update:
-				dest = "update/"
+				dest = "update/data/"
 				destf = dest + fname
 			else:
 				dest = "downloads/"

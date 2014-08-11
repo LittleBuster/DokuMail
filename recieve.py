@@ -8,6 +8,7 @@ from mariadb import MariaDB
 from tcpclient import TcpClient
 from download import DownloadWnd
 from msg import MsgWnd
+from update import UpdateWnd
 
 
 class TcpConfig():
@@ -104,6 +105,7 @@ class Recieve(QtCore.QObject):
 	def __init__(self):
 		super(Recieve, self).__init__()
 		self.dldWnd = DownloadWnd()
+		self.updWnd = UpdateWnd()
 		self.recieveTh = RecieveThread()
 		self.recieveTh.downloadStart.connect(self.on_download_start)
 		self.recieveTh.decryptStart.connect(self.on_decrypt_start)
@@ -127,6 +129,8 @@ class Recieve(QtCore.QObject):
 		if not self.update:
 			self.dldWnd.ui.pb1.setValue(0)		
 			self.dldWnd.ui.lbFile.setText( "<html><head/><body><p><span style='color:#00ffd5;'>" + "Загрузка: " + fname + "</span></p></body></html>" )
+		else:
+			self.updWnd.ui.lbFile.setText("<html><head/><body><p><span style='color:#00d2ff;'>Загрузка: " + fname + "</span></p></body></html>")
 
 	def on_decrypt_start(self):
 		if not self.update:
@@ -165,6 +169,8 @@ class Recieve(QtCore.QObject):
 	def start(self):
 		if not self.update:
 			self.dldWnd.show()
+		else:
+			self.updWnd.show()
 		self.recieveTh.start()
 
 
