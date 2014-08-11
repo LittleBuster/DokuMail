@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Система Обмена Данными</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/elena8d89.png</normaloff>images/elena8d89.png</iconset>
+  </property>
   <widget class="QLabel" name="lbBack">
    <property name="geometry">
     <rect>

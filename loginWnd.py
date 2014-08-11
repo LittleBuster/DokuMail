@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'loginWnd.ui'
 #
-# Created: Fri Aug  8 17:07:43 2014
+# Created: Mon Aug 11 15:35:15 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,6 +15,9 @@ class Ui_Form(object):
         Form.resize(613, 340)
         Form.setMinimumSize(QtCore.QSize(613, 340))
         Form.setMaximumSize(QtCore.QSize(613, 340))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("images/elena8d89.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Form.setWindowIcon(icon)
         self.lbBack = QtWidgets.QLabel(Form)
         self.lbBack.setGeometry(QtCore.QRect(-20, -40, 661, 391))
         self.lbBack.setText("")
@@ -59,9 +62,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("images/login.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbLogin.setIcon(icon)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("images/login.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbLogin.setIcon(icon1)
         self.pbLogin.setIconSize(QtCore.QSize(24, 24))
         self.pbLogin.setObjectName("pbLogin")
         self.edLogin = QtWidgets.QLineEdit(Form)
@@ -145,9 +148,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("images/exit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbCancel.setIcon(icon1)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("images/exit.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbCancel.setIcon(icon2)
         self.pbCancel.setIconSize(QtCore.QSize(24, 24))
         self.pbCancel.setObjectName("pbCancel")
         self.label = QtWidgets.QLabel(Form)
