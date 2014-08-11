@@ -332,6 +332,7 @@ class MainWindow(QtWidgets.QWidget):
 	def closeEvent(self, e):
 		result = QtWidgets.QMessageBox.question(self, 'Закрытие', 'Вы действительно хотите выйти из программы?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 		if result == QtWidgets.QMessageBox.Yes:
+			sys.exit()
 			e.accept()
 			QtWidgets.QWidget.closeEvent(self, e)
 		else:

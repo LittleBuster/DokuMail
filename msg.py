@@ -21,5 +21,9 @@ class MsgWnd(QtWidgets.QDialog):
 
 		self.setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height)
 
+	def closeEvent(self, e):
+		e.ignore()
+		self.hide()
+
 	def on_close(self):
 		self.close()

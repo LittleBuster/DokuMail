@@ -13,3 +13,7 @@ class UploadWindow(QtWidgets.QDialog):
 		super(UploadWindow, self).__init__()
 		self.ui = uploadWnd.Ui_Form()
 		self.ui.setupUi(self)
+
+	def closeEvent(self, e):
+		e.ignore()
+		self.hide()

@@ -67,3 +67,7 @@ class NewsBaloonWnd(QtWidgets.QDialog):
 		super(NewsBaloonWnd, self).__init__()
 		self.ui = newsBaloon.Ui_NewsBaloon()
 		self.ui.setupUi(self)
+
+	def closeEvent(self, e):
+		e.ignore()
+		self.hide()
