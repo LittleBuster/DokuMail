@@ -32,7 +32,8 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 		self._mw.show()
 
 	def show_about(self):
-		None
+		self._mw.show()
+		self._mw.ui.stackedWidget.setCurrentIndex(5)
 
 	def close_app(self):
 		sys.exit()

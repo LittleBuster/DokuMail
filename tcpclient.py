@@ -9,7 +9,7 @@ from compress import *
 import hashlib
 import shutil
 from PyQt5 import QtCore
-from logging import Log
+from logger import Log
 
 
 class TcpClient(QtCore.QObject):
@@ -241,6 +241,7 @@ class TcpClient(QtCore.QObject):
 					isCrypt = False
 					break
 
+			print(isDecompress, isCrypt)
 			f = open(destf, "wb")
 			while True:
 				data = self.sock.recv(4096)
@@ -271,8 +272,8 @@ class TcpClient(QtCore.QObject):
 								if not zlib_decompress_file(dest + fname + ".z", dest + fname):
 									Log().local("Error decompressing recieved file: " + fname)
 									print("error decompressing")
-								else:
-									shutil.copy2(dest + fname + ".z", dest + fname)
+							else:
+								shutil.copy2(dest + fname + ".z", dest + fname)
 
 						self.fileDownloaded.emit()
 

@@ -26,7 +26,7 @@ def send_msg(wnd, msg, all, lUsrPwd, usr):
 		QtWidgets.QMessageBox.warning(wnd, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
 		return
 
-	if (usr == "") and (not all)):
+	if (usr == "") and (not all):
 		"""
 		If message sending to single user and user not selected then fail
 		"""

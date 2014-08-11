@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'downloadWnd.ui'
 #
-# Created: Thu Aug  7 18:55:06 2014
+# Created: Mon Aug 11 06:02:38 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -99,11 +99,13 @@ class Ui_DownloadWnd(object):
         self.pb1 = QtWidgets.QProgressBar(DownloadWnd)
         self.pb1.setGeometry(QtCore.QRect(20, 310, 681, 23))
         self.pb1.setProperty("value", 24)
+        self.pb1.setTextVisible(False)
         self.pb1.setObjectName("pb1")
         self.pb2 = QtWidgets.QProgressBar(DownloadWnd)
         self.pb2.setGeometry(QtCore.QRect(20, 340, 681, 23))
         self.pb2.setStyleSheet("")
         self.pb2.setProperty("value", 24)
+        self.pb2.setTextVisible(False)
         self.pb2.setObjectName("pb2")
         self.lbFile = QtWidgets.QLabel(DownloadWnd)
         self.lbFile.setGeometry(QtCore.QRect(20, 280, 681, 31))

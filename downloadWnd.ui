@@ -201,6 +201,9 @@ QPushButton:pressed {
    <property name="value">
     <number>24</number>
    </property>
+   <property name="textVisible">
+    <bool>false</bool>
+   </property>
   </widget>
   <widget class="QProgressBar" name="pb2">
    <property name="geometry">
@@ -216,6 +219,9 @@ QPushButton:pressed {
    </property>
    <property name="value">
     <number>24</number>
+   </property>
+   <property name="textVisible">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QLabel" name="lbFile">

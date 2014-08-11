@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'uploadWnd.ui'
 #
-# Created: Mon Aug 11 00:52:02 2014
+# Created: Mon Aug 11 06:02:24 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -23,6 +23,7 @@ class Ui_Form(object):
         self.pB = QtWidgets.QProgressBar(Form)
         self.pB.setGeometry(QtCore.QRect(10, 198, 726, 19))
         self.pB.setProperty("value", 24)
+        self.pB.setTextVisible(False)
         self.pB.setOrientation(QtCore.Qt.Horizontal)
         self.pB.setTextDirection(QtWidgets.QProgressBar.BottomToTop)
         self.pB.setObjectName("pB")

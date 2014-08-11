@@ -30,7 +30,7 @@ class pObj(object):
 	pass
 
 
-class MainWindow(QtWidgets.QDialog):
+class MainWindow(QtWidgets.QWidget):
 	__MDBServer = str
 	__MDBUser = str
 	__MDBPasswd = str
@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QDialog):
 
 		self.ui.pbMinimize.clicked.connect(self.minimize_app)
 		self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
-		self.tr.show()		
+		self.tr.show()
 		
 		self.ui.pbSendMsg.clicked.connect(self.on_send_msg)
 		self.ui.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
@@ -338,8 +338,6 @@ class MainWindow(QtWidgets.QDialog):
 			e.ignore()
 
 	def init_app(self):
-		Log().local("init app")
-
 		mdb = MariaDB()
 		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)

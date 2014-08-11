@@ -42,6 +42,9 @@ class LoginWindow(QtWidgets.QDialog):
 		if not ((self.ui.edLogin.text() == "") or (self.ui.edPasswd.text() == "")):
 			self.loginTmr.start(2000)
 
+	def finish(self):
+		self._mw.hide()
+
 	def on_login(self):
 		"""
 		Checking login and password in database and init start processes
@@ -66,7 +69,25 @@ class LoginWindow(QtWidgets.QDialog):
 
 		if state == True:
 			self.hide()
+
+			"""
+			Show window on center of the screen
+			"""
+
+			width = self._mw.frameGeometry().width()
+			height = self._mw.frameGeometry().height()
+
+			wid = QtWidgets.QDesktopWidget()
+			screenWidth = wid.screen().width()
+			screenHeight = wid.screen().height()
+
+			self._mw.setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height)
 			self._mw.show()
+
+			import platform
+			if platform.system() == "Windows":
+				QtCore.QTimer().singleShot(1500, self.finish)
+				
 			self._mw.passwd = self.ui.edPasswd.text()
 			self._mw.user = self.ui.edLogin.text()
 			self._mw.init_app()			
@@ -104,10 +125,16 @@ class LoginWindow(QtWidgets.QDialog):
 			os.remove("svpwd.dat")
 
 	def on_autologin(self):
+		"""
+		After some time check edits and try autologin
+		"""
 		self.loginTmr.stop()
 		self.on_login()
 
 	def on_cancel(self):
+		"""
+		Emergency stop autologin
+		"""
 		self.loginTmr.stop()
 		self.ui.edLogin.setText("")
 		self.ui.edPasswd.setText("")

@@ -24,7 +24,7 @@ class MariaDB():
 			self.conn = pymysql.connect(host=ip, port=3306, user=usr, passwd=pwd, db=database, charset='utf8')
 			return True
 		except:
-			Log().local("MariaDB: Fail to connection to server " + ip))
+			Log().local("MariaDB: Fail to connection to server " + ip)
 			return False
 
 	def check_login(self, login, password):
