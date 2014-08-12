@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>Отправка</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/cloud.png</normaloff>images/cloud.png</iconset>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>

@@ -75,6 +75,7 @@ class LoginWindow(QtWidgets.QWidget):
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
 			return
 		state = mdb.check_login(self.ui.edLogin.text(), self.ui.edPasswd.text())
+		username = mdb.get_alias_by_user(self.ui.edLogin.text())
 		mdb.close()
 
 		if state == True:
@@ -92,6 +93,7 @@ class LoginWindow(QtWidgets.QWidget):
 			screenHeight = wid.screen().height()
 
 			self._mw.setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height)
+			self._mw.setWindowTitle("Doku (" + username + ")")
 			self._mw.show()
 
 			import platform

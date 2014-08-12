@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'uploadWnd.ui'
 #
-# Created: Mon Aug 11 06:02:24 2014
+# Created: Tue Aug 12 16:58:50 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,6 +15,9 @@ class Ui_Form(object):
         Form.resize(747, 225)
         Form.setMinimumSize(QtCore.QSize(747, 225))
         Form.setMaximumSize(QtCore.QSize(747, 225))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("images/cloud.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Form.setWindowIcon(icon)
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(0, 0, 747, 225))
         self.label.setText("")
