@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'newsCurrentWnd.ui'
 #
-# Created: Wed Aug  6 16:42:28 2014
+# Created: Tue Aug 12 14:44:54 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -82,7 +82,7 @@ class Ui_CurNewsWnd(object):
         self.teNews.setGeometry(QtCore.QRect(20, 160, 681, 231))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
-        font.setPointSize(22)
+        font.setPointSize(18)
         font.setBold(True)
         font.setWeight(75)
         self.teNews.setFont(font)
@@ -98,7 +98,7 @@ class Ui_CurNewsWnd(object):
         self.teNews.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.teNews.setObjectName("teNews")
         self.lbFile_2 = QtWidgets.QLabel(CurNewsWnd)
-        self.lbFile_2.setGeometry(QtCore.QRect(470, 40, 71, 41))
+        self.lbFile_2.setGeometry(QtCore.QRect(480, 40, 71, 41))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(22)
@@ -116,7 +116,7 @@ class Ui_CurNewsWnd(object):
         self.lbFrom.setFont(font)
         self.lbFrom.setObjectName("lbFrom")
         self.lbTime = QtWidgets.QLabel(CurNewsWnd)
-        self.lbTime.setGeometry(QtCore.QRect(550, 40, 161, 41))
+        self.lbTime.setGeometry(QtCore.QRect(560, 40, 161, 41))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(22)
@@ -128,7 +128,7 @@ class Ui_CurNewsWnd(object):
         self.leTitle.setGeometry(QtCore.QRect(20, 96, 531, 31))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
-        font.setPointSize(15)
+        font.setPointSize(17)
         font.setBold(True)
         font.setWeight(75)
         self.leTitle.setFont(font)
@@ -167,6 +167,11 @@ class Ui_CurNewsWnd(object):
         self.label_3.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#00ffd5;\">Новость</span></p></body></html>"))
         self.pbClose.setText(_translate("CurNewsWnd", "Закрыть Новость"))
         self.lbFile.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#00dbff;\">От кого:</span></p></body></html>"))
+        self.teNews.setHtml(_translate("CurNewsWnd", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'Times New Roman\'; font-size:18pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.lbFile_2.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#00dbff;\">Дата:</span></p></body></html>"))
         self.lbFrom.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#ffffff;\">От кого:</span></p></body></html>"))
         self.lbTime.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#ffffff;\">22:23:23</span></p></body></html>"))

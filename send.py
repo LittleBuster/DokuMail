@@ -247,7 +247,8 @@ class SendFiles(QtCore.QObject):
 		self.uploadWnd.hide()
 
 	def on_error(self, txt):
-		QtWidgets.QMessageBox.critical(self._wnd, "Ошибка", txt, QtWidgets.QMessageBox.Yes)
+		QtWidgets.QMessageBox.critical(self.uploadWnd, "Ошибка", txt, QtWidgets.QMessageBox.Yes)
+		self.uploadWnd.hide()
 
 	def send(self, wnd, flist, toUsr):
 		if toUsr == "":

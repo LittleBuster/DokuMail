@@ -16,7 +16,7 @@ class pObj(object):
 	pass
 
 
-class LoginWindow(QtWidgets.QDialog):
+class LoginWindow(QtWidgets.QWidget):
 	"""
 	Class which connect Login Window interface
 	in python app
@@ -31,8 +31,18 @@ class LoginWindow(QtWidgets.QDialog):
 		self.ui.pbLogin.clicked.connect(self.on_login)
 		self.ui.pbCancel.clicked.connect(self.on_cancel)
 
+		width = self.frameGeometry().width()
+		height = self.frameGeometry().height()
+
+		wid = QtWidgets.QDesktopWidget()
+		screenWidth = wid.screen().width()
+		screenHeight = wid.screen().height()
+
+		self.setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height)
+
+
 		if os.path.isfile("svpwd.dat"):
-			self.load_passwd()	
+			self.load_passwd()
 
 	def set_wnds(self, mw):
 		"""

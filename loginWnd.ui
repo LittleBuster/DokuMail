@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>images/elena8d89.png</normaloff>images/elena8d89.png</iconset>
+    <normaloff>images/network-receive.png</normaloff>images/network-receive.png</iconset>
   </property>
   <widget class="QLabel" name="lbBack">
    <property name="geometry">

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'newsWnd.ui'
 #
-# Created: Wed Aug  6 19:01:32 2014
+# Created: Tue Aug 12 14:44:42 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -73,7 +73,7 @@ class Ui_NewsWnd(object):
         self.teNews.setGeometry(QtCore.QRect(20, 140, 681, 251))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
-        font.setPointSize(18)
+        font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
         self.teNews.setFont(font)
@@ -126,7 +126,7 @@ class Ui_NewsWnd(object):
         self.leTitle.setGeometry(QtCore.QRect(20, 80, 531, 31))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
-        font.setPointSize(15)
+        font.setPointSize(17)
         font.setBold(True)
         font.setWeight(75)
         self.leTitle.setFont(font)
@@ -159,8 +159,8 @@ class Ui_NewsWnd(object):
         self.teNews.setHtml(_translate("NewsWnd", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Times New Roman\'; font-size:18pt; font-weight:600; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:22pt;\">Haпишите новость...</span></p></body></html>"))
+"</style></head><body style=\" font-family:\'Times New Roman\'; font-size:14pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt;\">Haпишите новость...</span></p></body></html>"))
         self.pbSendNews.setText(_translate("NewsWnd", "Отправить новость"))
         self.label_21.setText(_translate("NewsWnd", "<html><head/><body><p><span style=\" color:#00fffa;\">Заголовок:</span></p></body></html>"))
         self.label_22.setText(_translate("NewsWnd", "<html><head/><body><p><span style=\" color:#00fffa;\">Подробное описание:</span></p></body></html>"))

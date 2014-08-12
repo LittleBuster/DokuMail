@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'loginWnd.ui'
 #
-# Created: Mon Aug 11 15:35:15 2014
+# Created: Tue Aug 12 14:42:10 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -16,7 +16,7 @@ class Ui_Form(object):
         Form.setMinimumSize(QtCore.QSize(613, 340))
         Form.setMaximumSize(QtCore.QSize(613, 340))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("images/elena8d89.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("images/network-receive.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Form.setWindowIcon(icon)
         self.lbBack = QtWidgets.QLabel(Form)
         self.lbBack.setGeometry(QtCore.QRect(-20, -40, 661, 391))
