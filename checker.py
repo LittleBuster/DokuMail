@@ -59,7 +59,8 @@ class CheckerThread(QtCore.QThread):
 
 				for news in news_list:
 					cur.execute("SELECT * FROM news WHERE title='" + news["title"] + "' and date='" + news["date"] + "'")
-					if len(cur.fetchall()) == 0:
+					n_list = cur.fetchall()
+					if len(n_list) == 0:
 						cur.execute("INSERT INTO news(title, date) VALUES('" + news["title"] + "', '" + news["date"] + "')")
 						con.commit()
 

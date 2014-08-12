@@ -18,6 +18,7 @@ from mariadb import MariaDB
 from tcpclient import TcpClient
 import mainWnd
 import datetime
+import sqlite3
 from task import TaskWnd
 from recieve import Recieve, RecieveMsg
 from news import NewsWnd, NewsCurWnd, NewsBaloonWnd
@@ -99,6 +100,7 @@ class MainWindow(QtWidgets.QWidget):
 		self.newsCurWnd = NewsCurWnd()
 		self.recieveMsg = RecieveMsg()
 		self.newsBaloon = NewsBaloonWnd()
+		self.newsBaloon.hideBaloon.connect(self.on_baloon_close)
 		self.recieveMsg.msgComplete.connect(self.on_msg_complete)
 		self.recieve.downloadComplete.connect(self.on_download_complete)		
 		self.taskWnd.ui.pbSendTask.clicked.connect(self.on_send_task)
@@ -206,7 +208,7 @@ class MainWindow(QtWidgets.QWidget):
 	def on_read_news(self):
 		item = QtWidgets.QListWidgetItem()
 		item.setText(self.newsBaloon.ui.leTitle.text())
-		self.newsBaloon.close()
+		self.newsBaloon.hide()
 		self.on_lwnews_clicked(item)
 
 	def on_baloon_close(self):
@@ -333,8 +335,6 @@ class MainWindow(QtWidgets.QWidget):
 		result = QtWidgets.QMessageBox.question(self, 'Закрытие', 'Вы действительно хотите выйти из программы?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 		if result == QtWidgets.QMessageBox.Yes:
 			sys.exit()
-			e.accept()
-			QtWidgets.QWidget.closeEvent(self, e)
 		else:
 			e.ignore()
 

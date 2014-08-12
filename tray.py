@@ -44,4 +44,6 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 		self._mw.ui.stackedWidget.setCurrentIndex(5)
 
 	def close_app(self):
-		sys.exit()
+		result = QtWidgets.QMessageBox.question(self, 'Закрытие', 'Вы действительно хотите выйти из программы?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
+		if result == QtWidgets.QMessageBox.Yes:
+			sys.exit()

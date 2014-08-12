@@ -4,7 +4,7 @@
 import newsWnd
 import newsCurrentWnd
 import newsBaloon
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 
 
 class NewsWnd(QtWidgets.QDialog):
@@ -35,7 +35,7 @@ class NewsWnd(QtWidgets.QDialog):
 			self.ui.teNews.clear()
 
 
-class NewsCurWnd(QtWidgets.QDialog):
+class NewsCurWnd(QtWidgets.QWidget):
 	"""
 	Show current news window
 	"""
@@ -58,16 +58,29 @@ class NewsCurWnd(QtWidgets.QDialog):
 		self.close()
 
 
-class NewsBaloonWnd(QtWidgets.QDialog):
+class NewsBaloonWnd(QtWidgets.QWidget):
 	"""
 	If news not exists in local databse
 	Then show tooltip with news header
 	"""
+	hideBaloon = QtCore.pyqtSignal()
+
 	def __init__(self, parent=None):
 		super(NewsBaloonWnd, self).__init__()
 		self.ui = newsBaloon.Ui_NewsBaloon()
 		self.ui.setupUi(self)
 
+		width = self.frameGeometry().width()
+		height = self.frameGeometry().height()
+
+		wid = QtWidgets.QDesktopWidget()
+		screenWidth = wid.screen().width()
+		screenHeight = wid.screen().height()
+
+		self.setGeometry((screenWidth/2)-(width/2),(screenHeight/2)-(height/2),width,height)
+		self.setWindowFlags( QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowStaysOnTopHint )
+
 	def closeEvent(self, e):
 		e.ignore()
 		self.hide()
+		self.hideBaloon.emit()

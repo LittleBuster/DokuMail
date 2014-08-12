@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'newsBaloon.ui'
 #
-# Created: Thu Aug  7 19:17:14 2014
+# Created: Tue Aug 12 15:15:45 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,9 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_NewsBaloon(object):
     def setupUi(self, NewsBaloon):
         NewsBaloon.setObjectName("NewsBaloon")
-        NewsBaloon.resize(560, 148)
-        NewsBaloon.setMinimumSize(QtCore.QSize(560, 148))
-        NewsBaloon.setMaximumSize(QtCore.QSize(719, 148))
+        NewsBaloon.resize(560, 141)
+        NewsBaloon.setMinimumSize(QtCore.QSize(560, 141))
+        NewsBaloon.setMaximumSize(QtCore.QSize(560, 141))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("images/news.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         NewsBaloon.setWindowIcon(icon)
