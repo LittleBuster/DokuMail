@@ -7,6 +7,7 @@ import json
 from logger import Log
 from checker import Checker
 from send import *
+import subprocess
 from compress import *
 from crypt import *
 from PyQt5 import QtCore, Qt
@@ -19,6 +20,7 @@ from tcpclient import TcpClient
 import mainWnd
 import datetime
 import sqlite3
+from login import LoginWindow
 from task import TaskWnd
 from recieve import Recieve, RecieveMsg
 from news import NewsWnd, NewsCurWnd, NewsBaloonWnd
@@ -37,6 +39,7 @@ class MainWindow(QtWidgets.QWidget):
 	__MDBPasswd = str
 	__TCPServer = str
 	__TCPPort = int
+	loginWnd = LoginWindow
 
 	def __init__(self, parent=None):
 		super(MainWindow, self).__init__()
@@ -113,6 +116,8 @@ class MainWindow(QtWidgets.QWidget):
 
 		self.checker = Checker(self)		
 		self.newsCurWnd.ui.pbDeleteNews.clicked.connect(self.checker.on_delete_news)
+		self.ui.pbRelogin.clicked.connect(self.on_relogin)
+		self.ui.pbDownloads.clicked.connect(self.on_downloads)
 
 	"""
 	Properties for configs
@@ -223,6 +228,13 @@ class MainWindow(QtWidgets.QWidget):
 		con.commit()
 		con.close()
 
+	def on_relogin(self):
+		self.checker.stop_timers()
+		self.hide()
+		self.ui.lwUsers.clear()
+		self.ui.stackedWidget.setCurrentIndex(0)
+		self.loginWnd.show()
+
 	def on_send_task(self):
 		mdb = MariaDB()
 		if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
@@ -287,6 +299,13 @@ class MainWindow(QtWidgets.QWidget):
 			self.checker.set_configs(config, self.user)
 
 			self.save_config()
+
+	def on_downloads(self):
+		if platform.system() == "Linux":
+			subprocess.call("nautilus downloads/", shell=True)
+		else:
+			import win32api
+			win32api.ShellExecute(0, 'open', 'downloads', '', '', 1)
 
 	def on_delete_file(self):
 		try:

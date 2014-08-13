@@ -102,6 +102,7 @@ class LoginWindow(QtWidgets.QWidget):
 				
 			self._mw.passwd = self.ui.edPasswd.text()
 			self._mw.user = self.ui.edLogin.text()
+			self._mw.loginWnd = self
 			self._mw.init_app()			
 		else:
 			QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный логин или пароль!', QtWidgets.QMessageBox.Yes)

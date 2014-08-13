@@ -300,3 +300,7 @@ class Checker():
 		"""		
 		self.getTmr.start(5000)
 		self.newsTmr.start(1)
+
+	def stop_timers(self):
+		self.getTmr.stop()
+		self.newsTmr.stop()

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Wed Aug 13 16:16:44 2014
+# Created: Wed Aug 13 16:49:41 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -141,7 +141,7 @@ class Ui_Form(object):
         self.pbNews.setIconSize(QtCore.QSize(20, 20))
         self.pbNews.setObjectName("pbNews")
         self.pbAbout = QtWidgets.QPushButton(self.widget)
-        self.pbAbout.setGeometry(QtCore.QRect(710, 50, 160, 31))
+        self.pbAbout.setGeometry(QtCore.QRect(540, 50, 160, 31))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -285,6 +285,64 @@ class Ui_Form(object):
         self.pbSettings.setIcon(icon6)
         self.pbSettings.setIconSize(QtCore.QSize(20, 20))
         self.pbSettings.setObjectName("pbSettings")
+        self.pbRelogin = QtWidgets.QPushButton(self.widget)
+        self.pbRelogin.setGeometry(QtCore.QRect(710, 50, 160, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pbRelogin.setFont(font)
+        self.pbRelogin.setStyleSheet("QPushButton {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"     border-style: solid;\n"
+"     border-radius: 10px;\n"
+"    min-width: 80px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}")
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("images/touser.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbRelogin.setIcon(icon7)
+        self.pbRelogin.setIconSize(QtCore.QSize(20, 20))
+        self.pbRelogin.setObjectName("pbRelogin")
+        self.pbDownloads = QtWidgets.QPushButton(self.widget)
+        self.pbDownloads.setGeometry(QtCore.QRect(370, 50, 160, 31))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pbDownloads.setFont(font)
+        self.pbDownloads.setStyleSheet("QPushButton {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"     border-style: solid;\n"
+"     border-radius: 10px;\n"
+"    min-width: 80px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}")
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("images/downloads.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbDownloads.setIcon(icon8)
+        self.pbDownloads.setIconSize(QtCore.QSize(20, 20))
+        self.pbDownloads.setObjectName("pbDownloads")
         self.widget_3 = QtWidgets.QWidget(Form)
         self.widget_3.setGeometry(QtCore.QRect(667, 160, 221, 285))
         palette = QtGui.QPalette()
@@ -570,9 +628,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("images/cloud.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbSendMsg.setIcon(icon7)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap("images/cloud.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbSendMsg.setIcon(icon9)
         self.pbSendMsg.setIconSize(QtCore.QSize(24, 24))
         self.pbSendMsg.setObjectName("pbSendMsg")
         self.label_4 = QtWidgets.QLabel(self.page_2)
@@ -624,9 +682,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("images/recycle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbClearMsg.setIcon(icon8)
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap("images/recycle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbClearMsg.setIcon(icon10)
         self.pbClearMsg.setIconSize(QtCore.QSize(24, 24))
         self.pbClearMsg.setObjectName("pbClearMsg")
         self.pbSendAllMsg = QtWidgets.QPushButton(self.page_2)
@@ -653,9 +711,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap("images/users.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbSendAllMsg.setIcon(icon9)
+        icon11 = QtGui.QIcon()
+        icon11.addPixmap(QtGui.QPixmap("images/users.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbSendAllMsg.setIcon(icon11)
         self.pbSendAllMsg.setIconSize(QtCore.QSize(24, 24))
         self.pbSendAllMsg.setObjectName("pbSendAllMsg")
         self.stackedWidget.addWidget(self.page_2)
@@ -685,9 +743,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon10 = QtGui.QIcon()
-        icon10.addPixmap(QtGui.QPixmap("images/cancel.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbDeleteFile.setIcon(icon10)
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap("images/cancel.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbDeleteFile.setIcon(icon12)
         self.pbDeleteFile.setIconSize(QtCore.QSize(24, 24))
         self.pbDeleteFile.setObjectName("pbDeleteFile")
         self.label_8 = QtWidgets.QLabel(self.page_6)
@@ -724,9 +782,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        icon11 = QtGui.QIcon()
-        icon11.addPixmap(QtGui.QPixmap("images/add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbAddFile.setIcon(icon11)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap("images/add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbAddFile.setIcon(icon13)
         self.pbAddFile.setIconSize(QtCore.QSize(24, 24))
         self.pbAddFile.setObjectName("pbAddFile")
         self.pbClearFiles = QtWidgets.QPushButton(self.page_6)
@@ -753,7 +811,7 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        self.pbClearFiles.setIcon(icon8)
+        self.pbClearFiles.setIcon(icon10)
         self.pbClearFiles.setIconSize(QtCore.QSize(24, 24))
         self.pbClearFiles.setObjectName("pbClearFiles")
         self.pbSendFiles = QtWidgets.QPushButton(self.page_6)
@@ -780,7 +838,7 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}")
-        self.pbSendFiles.setIcon(icon7)
+        self.pbSendFiles.setIcon(icon9)
         self.pbSendFiles.setIconSize(QtCore.QSize(24, 24))
         self.pbSendFiles.setObjectName("pbSendFiles")
         self.lwFiles = QtWidgets.QListWidget(self.page_6)
@@ -1260,6 +1318,8 @@ class Ui_Form(object):
         self.pbFiles.setText(_translate("Form", "Файлы"))
         self.pbTasks.setText(_translate("Form", "Заявки"))
         self.pbSettings.setText(_translate("Form", "Настройки"))
+        self.pbRelogin.setText(_translate("Form", "Выйти"))
+        self.pbDownloads.setText(_translate("Form", "Загрузки"))
         self.label_7.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00e9ff;\">Список пользователей</span></p></body></html>"))
         self.label_16.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Новости учреждения</span></p></body></html>"))
         self.pbCreateNews.setText(_translate("Form", "Написать новость"))
