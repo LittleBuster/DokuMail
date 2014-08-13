@@ -263,7 +263,7 @@ class Checker():
 
 	def on_delnews_error(self, text):
 		Log().local("News delete:" + text)
-		QtWidgets.QMessageBox.critical(self, 'Ошибка', text, QtWidgets.QMessageBox.Yes)
+		QtWidgets.QMessageBox.warning(self.mainWnd.newsCurWnd, 'Ошибка', text, QtWidgets.QMessageBox.Yes)
 		self.newsTmr.start(10000)
 
 	"""
