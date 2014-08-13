@@ -19,7 +19,7 @@ def send_msg(wnd, msg, all, lUsrPwd, usr):
 	"""
 	answ = str
 	toUser = str
-	toUsersStr = str
+	toUsersStr = str("")
 	toUsers = list
 
 	if msg == "":

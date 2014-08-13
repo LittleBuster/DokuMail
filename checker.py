@@ -5,6 +5,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from tcpclient import TcpClient
 from mariadb import MariaDB
 import sqlite3
+from logger import Log
 
 
 class CheckerThread(QtCore.QThread):
@@ -35,7 +36,6 @@ class CheckerThread(QtCore.QThread):
 		self.user = user
 
 	def run(self):
-		print("Checking " + self.task)
 		if self.task == "news":
 			con = sqlite3.connect('news.db')
 			cur = con.cursor()
@@ -53,11 +53,10 @@ class CheckerThread(QtCore.QThread):
 			news_list = mdb.check_news()
 
 			l = len(news_list)
+
 			if l != self.news_count:
 				self.setNewsCount.emit(l)
 				self.clearNews.emit()
-
-				print(str(l) + " news")
 
 				for news in news_list:
 					cur.execute("SELECT * FROM news WHERE title='" + news["title"] + "' and date='" + news["date"] + "'")
@@ -76,7 +75,6 @@ class CheckerThread(QtCore.QThread):
 
 			mdb.close()
 			con.close()
-			print("check complete from Thread")
 			self.checkNewsComplete.emit()
 			self.exit(0)
 
@@ -123,6 +121,41 @@ class CheckerThread(QtCore.QThread):
 			self.nothingAvailable.emit()
 			return
 
+class DeleteNewsThread(QtCore.QThread):
+	deleteComplete = QtCore.pyqtSignal()
+	err = QtCore.pyqtSignal(str)
+	news = {}
+	configs = {}
+
+	def __init__(self):
+		super(DeleteNewsThread, self).__init__()
+
+	def set_news(self, news):
+		self.news = news
+
+	def set_configs(self, configs):
+		self.configs = configs
+
+	def run(self):
+		mdb = MariaDB()
+		if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"], "DokuMail"):
+			self.err.emit("Ошибка соединения с Базой Данных!", self.task)
+			return
+		if not mdb.is_admin( self.news["user"] ):
+			self.err.emit("Нет прав на удаление новости!")
+			mdb.close()
+			return
+		else:
+			mdb.delete_news( self.news )
+		mdb.close()
+
+		con = sqlite3.connect('news.db')
+		cur = con.cursor()
+		cur.execute("DELETE FROM news WHERE title='" + self.news["header"] + "' and date='" + self.news["date"] + "'")
+		con.commit()
+		con.close()
+
+		self.deleteComplete.emit()
 
 class Checker():
 	"""
@@ -137,6 +170,7 @@ class Checker():
 
 		self.th_c = CheckerThread()
 		self.th_n = CheckerThread()
+		self.del_news = DeleteNewsThread()
 
 		self.th_n.err.connect(self.on_error)
 		self.th_n.showNewsBaloon.connect(self.on_show_baloon)
@@ -153,6 +187,9 @@ class Checker():
 		self.th_c.msgAvailable.connect(self.on_msg_available)
 		self.th_c.nothingAvailable.connect(self.on_nothing_available)
 
+		self.del_news.deleteComplete.connect(self.on_delete_news_complete)
+		self.del_news.err.connect(self.on_delnews_error)
+
 	"""
 	Checker thread signals
 	"""
@@ -164,7 +201,6 @@ class Checker():
 		self.mainWnd.newsBaloon.show()
 
 	def on_add_innews(self, date, title):
-		print("EMITED!!!")
 		item = QtWidgets.QListWidgetItem()
 		item.setIcon(QtGui.QIcon("images/news.ico"))
 		item.setText("[" + date + "]" + title)
@@ -205,7 +241,29 @@ class Checker():
 		self.mainWnd.ui.lwNews.clear()
 
 	def on_check_news_complete(self):
-		print("CHECK COMPLETE")
+		self.newsTmr.start(10000)
+
+	"""
+	Delete news in other thread
+	"""
+	def on_delete_news(self):
+		news = {}
+		news["header"] = self.mainWnd.newsCurWnd.ui.leTitle.text()
+		news["date"] = self.mainWnd.newsCurWnd.ui.lbTime.text().split(">")[5].split("<")[0]
+		news["user"] = self.mainWnd.user
+
+		self.newsTmr.stop()
+		self.del_news.set_news( news )
+		self.del_news.start()
+
+	def on_delete_news_complete(self):
+		self.newsTmr.start(1)
+		self.mainWnd.newsCurWnd.hide()
+		QtWidgets.QMessageBox.information(self.mainWnd, 'Complete', 'Новость успешно удалена!', QtWidgets.QMessageBox.Yes)
+
+	def on_delnews_error(self, text):
+		Log().local("News delete:" + text)
+		QtWidgets.QMessageBox.critical(self, 'Ошибка', text, QtWidgets.QMessageBox.Yes)
 		self.newsTmr.start(10000)
 
 	"""
@@ -234,6 +292,7 @@ class Checker():
 	def set_configs(self, configs, user):
 		self.th_c.set_configs( configs, user )
 		self.th_n.set_configs( configs, user )
+		self.del_news.set_configs( configs )
 
 	def start_timers(self):
 		"""

@@ -111,7 +111,8 @@ class MainWindow(QtWidgets.QWidget):
 		self.newsBaloon.ui.pbRead.clicked.connect(self.on_read_news)
 		self.newsBaloon.ui.pbClose.clicked.connect(self.on_baloon_close)
 
-		self.checker = Checker(self)
+		self.checker = Checker(self)		
+		self.newsCurWnd.ui.pbDeleteNews.clicked.connect(self.checker.on_delete_news)
 
 	"""
 	Properties for configs

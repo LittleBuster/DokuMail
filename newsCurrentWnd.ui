@@ -94,9 +94,9 @@
   <widget class="QPushButton" name="pbClose">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>340</x>
      <y>400</y>
-     <width>251</width>
+     <width>241</width>
      <height>41</height>
     </rect>
    </property>
@@ -335,6 +335,55 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00fffa;&quot;&gt;Подробное описание:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbDeleteNews">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>400</y>
+     <width>201</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
+	color:rgb(255, 255, 255);
+	border-width: 1px;
+     border-style: solid;
+     border-radius: 7px;
+	min-width: 80px;
+}
+
+QPushButton:hover {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
+}
+
+QPushButton:pressed {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
+}</string>
+   </property>
+   <property name="text">
+    <string>Удалить Новость</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>images/cancel.png</normaloff>images/cancel.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
    </property>
   </widget>
  </widget>

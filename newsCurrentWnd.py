@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'newsCurrentWnd.ui'
 #
-# Created: Tue Aug 12 14:44:54 2014
+# Created: Wed Aug 13 16:18:00 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -41,7 +41,7 @@ class Ui_CurNewsWnd(object):
         self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label_3.setObjectName("label_3")
         self.pbClose = QtWidgets.QPushButton(CurNewsWnd)
-        self.pbClose.setGeometry(QtCore.QRect(230, 400, 251, 41))
+        self.pbClose.setGeometry(QtCore.QRect(340, 400, 241, 41))
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(12)
@@ -157,6 +157,35 @@ class Ui_CurNewsWnd(object):
         font.setPointSize(12)
         self.label_22.setFont(font)
         self.label_22.setObjectName("label_22")
+        self.pbDeleteNews = QtWidgets.QPushButton(CurNewsWnd)
+        self.pbDeleteNews.setGeometry(QtCore.QRect(130, 400, 201, 41))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pbDeleteNews.setFont(font)
+        self.pbDeleteNews.setStyleSheet("QPushButton {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"    color:rgb(255, 255, 255);\n"
+"    border-width: 1px;\n"
+"     border-style: solid;\n"
+"     border-radius: 7px;\n"
+"    min-width: 80px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
+"}")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("images/cancel.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbDeleteNews.setIcon(icon2)
+        self.pbDeleteNews.setIconSize(QtCore.QSize(24, 24))
+        self.pbDeleteNews.setObjectName("pbDeleteNews")
 
         self.retranslateUi(CurNewsWnd)
         QtCore.QMetaObject.connectSlotsByName(CurNewsWnd)
@@ -177,4 +206,5 @@ class Ui_CurNewsWnd(object):
         self.lbTime.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#ffffff;\">22:23:23</span></p></body></html>"))
         self.label_21.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#00fffa;\">Заголовок:</span></p></body></html>"))
         self.label_22.setText(_translate("CurNewsWnd", "<html><head/><body><p><span style=\" color:#00fffa;\">Подробное описание:</span></p></body></html>"))
+        self.pbDeleteNews.setText(_translate("CurNewsWnd", "Удалить Новость"))
 

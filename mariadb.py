@@ -229,6 +229,14 @@ class MariaDB():
 		cur.execute("UPDATE actions SET " + state + "='"+ str(param) +"' WHERE name='" + user + "'")
 		self.conn.commit()
 
+	def delete_news(self, news):
+		"""
+		Delete news from table
+		"""
+		cur = self.conn.cursor()
+		cur.execute("DELETE FROM news WHERE title='" + news["header"] + "' and date='" + news["date"] + "'")
+		self.conn.commit()
+
 	def close(self):
 		"""
 		Disconnect from database
