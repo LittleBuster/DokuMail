@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Fri Aug  8 17:02:44 2014
+# Created: Tue Aug 12 22:33:09 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -804,16 +804,6 @@ class Ui_Form(object):
         self.stackedWidget.addWidget(self.page_6)
         self.page_7 = QtWidgets.QWidget()
         self.page_7.setObjectName("page_7")
-        self.label_9 = QtWidgets.QLabel(self.page_7)
-        self.label_9.setGeometry(QtCore.QRect(640, 10, 651, 31))
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(14)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_9.setFont(font)
-        self.label_9.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_9.setObjectName("label_9")
         self.label_10 = QtWidgets.QLabel(self.page_7)
         self.label_10.setGeometry(QtCore.QRect(0, 0, 651, 31))
         font = QtGui.QFont()
@@ -1282,7 +1272,6 @@ class Ui_Form(object):
         self.pbAddFile.setText(_translate("Form", "Добавить файл"))
         self.pbClearFiles.setText(_translate("Form", "Очистить"))
         self.pbSendFiles.setText(_translate("Form", "Отправить"))
-        self.label_9.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Заявка на починку/обслуживание ПК системному администратору:</span></p></body></html>"))
         self.label_10.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Заявка на починку/обслуживание ПК системному администратору:</span></p></body></html>"))
         self.label_11.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00f8ff;\">Тип проблемы:</span></p></body></html>"))
         self.label_12.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00f8ff;\">Срочность:</span></p></body></html>"))

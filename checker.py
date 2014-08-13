@@ -22,7 +22,7 @@ class CheckerThread(QtCore.QThread):
 	msgAvailable = QtCore.pyqtSignal()
 	filesAvailable = QtCore.pyqtSignal()
 	showNewsBaloon = QtCore.pyqtSignal([str, str])
-	addNews = QtCore.pyqtSignal([str, str])
+	addInNews = QtCore.pyqtSignal([str, str])
 	setNewsCount = QtCore.pyqtSignal(int)
 	clearNews = QtCore.pyqtSignal()
 	checkNewsComplete = QtCore.pyqtSignal()
@@ -57,6 +57,8 @@ class CheckerThread(QtCore.QThread):
 				self.setNewsCount.emit(l)
 				self.clearNews.emit()
 
+				print(str(l) + " news")
+
 				for news in news_list:
 					cur.execute("SELECT * FROM news WHERE title='" + news["title"] + "' and date='" + news["date"] + "'")
 					n_list = cur.fetchall()
@@ -70,10 +72,13 @@ class CheckerThread(QtCore.QThread):
 						if not mdb.is_admin(self.user):
 							self.showNewsBaloon.emit(news["date"], news["title"])
 
-					self.addNews.emit(news["date"], news["title"])
+					self.addInNews.emit(news["date"], news["title"])
+
 			mdb.close()
 			con.close()
+			print("check complete from Thread")
 			self.checkNewsComplete.emit()
+			self.exit(0)
 
 		elif self.task == "msg_and_files":
 			"""
@@ -116,6 +121,7 @@ class CheckerThread(QtCore.QThread):
 			print("nothing")
 			mdb.close()
 			self.nothingAvailable.emit()
+			return
 
 
 class Checker():
@@ -132,6 +138,21 @@ class Checker():
 		self.th_c = CheckerThread()
 		self.th_n = CheckerThread()
 
+		self.th_n.err.connect(self.on_error)
+		self.th_n.showNewsBaloon.connect(self.on_show_baloon)
+		self.th_n.addInNews.connect(self.on_add_innews)
+		self.th_n.setNewsCount.connect(self.on_set_newscount)
+		self.th_n.clearNews.connect(self.on_clear_news)
+		self.th_n.checkNewsComplete.connect(self.on_check_news_complete)
+
+		self.th_c.err.connect(self.on_error)
+		self.th_c.serverOnline.connect(self.on_online_server)
+		self.th_c.serverOffline.connect(self.on_offline_server)
+		self.th_c.updateAvailable.connect(self.on_update_available)
+		self.th_c.filesAvailable.connect(self.on_files_available)
+		self.th_c.msgAvailable.connect(self.on_msg_available)
+		self.th_c.nothingAvailable.connect(self.on_nothing_available)
+
 	"""
 	Checker thread signals
 	"""
@@ -142,7 +163,8 @@ class Checker():
 		self.mainWnd.newsBaloon.ui.leTitle.setText("[" + date + "]" + title)
 		self.mainWnd.newsBaloon.show()
 
-	def on_add_news(self, date, title):
+	def on_add_innews(self, date, title):
+		print("EMITED!!!")
 		item = QtWidgets.QListWidgetItem()
 		item.setIcon(QtGui.QIcon("images/news.ico"))
 		item.setText("[" + date + "]" + title)
@@ -183,6 +205,7 @@ class Checker():
 		self.mainWnd.ui.lwNews.clear()
 
 	def on_check_news_complete(self):
+		print("CHECK COMPLETE")
 		self.newsTmr.start(10000)
 
 	"""
@@ -195,13 +218,7 @@ class Checker():
 		"""
 		self.newsTmr.stop()
 		self.th_n.task = "news"
-		self.th_n.news_count = self.mainWnd.news_count
-		self.th_n.err.connect(self.on_error)
-		self.th_n.showNewsBaloon.connect(self.on_show_baloon)
-		self.th_n.addNews.connect(self.on_add_news)
-		self.th_n.setNewsCount.connect(self.on_set_newscount)
-		self.th_n.clearNews.connect(self.on_clear_news)
-		self.th_n.checkNewsComplete.connect(self.on_check_news_complete)
+		self.th_n.news_count = self.mainWnd.news_count		
 		self.th_n.start()
 
 	def check_msg_and_files(self):
@@ -211,15 +228,7 @@ class Checker():
 		self.getTmr.stop()
 		
 		self.th_c.task = "msg_and_files"
-		self.th_c.msg_status = self.mainWnd.recieveMsg.get_msg_status()
-
-		self.th_c.err.connect(self.on_error)
-		self.th_c.serverOnline.connect(self.on_online_server)
-		self.th_c.serverOffline.connect(self.on_offline_server)
-		self.th_c.updateAvailable.connect(self.on_update_available)
-		self.th_c.filesAvailable.connect(self.on_files_available)
-		self.th_c.msgAvailable.connect(self.on_msg_available)
-		self.th_c.nothingAvailable.connect(self.on_nothing_available)
+		self.th_c.msg_status = self.mainWnd.recieveMsg.get_msg_status()		
 		self.th_c.start()
 
 	def set_configs(self, configs, user):
