@@ -150,12 +150,7 @@ class TcpClient(QtCore.QObject):
 		exts = []
 		try:
 			f = open("unzip_formats.cfg", "r")
-			while True:
-				line = f.readline().split("\n")[0]
-				if line == "":
-					break
-				else:
-					exts.append(line)
+			exts = f.readline().split(",")
 			f.close()
 		except:
 			Log().local("Error reading unzip formats file")
@@ -163,12 +158,7 @@ class TcpClient(QtCore.QObject):
 		c_exts = []
 		try:
 			f = open("uncrypt_formats.cfg", "r")
-			while True:
-				line = f.readline().split("\n")[0]
-				if line == "":
-					break
-				else:
-					c_exts.append(line)
+			c_exts = f.readline().split(",")
 			f.close()
 		except:
 			Log().local("Error reading uncrypt formats file")

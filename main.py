@@ -301,6 +301,10 @@ class MainWindow(QtWidgets.QWidget):
 			self.save_config()
 
 	def on_downloads(self):
+		if not os.path.exists("downloads"):
+			QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Нет загруженных файлов!', QtWidgets.QMessageBox.Yes)
+			return
+
 		if platform.system() == "Linux":
 			subprocess.call("nautilus downloads/", shell=True)
 		else:
@@ -445,25 +449,19 @@ class MainWindow(QtWidgets.QWidget):
 	def on_add_file(self):
 		newfn = str("")
 		filenames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open file', 'C:/')
-		fl = str(filenames[0]).split("[")[1].split("]")[0].split(",")
 
 		items = self.ui.lwFiles.count()
-		for f in fl:
-			try:
-				newfn = f.split("'")[1].split("'")[0]
-			except:
-				break
-
+		for f in filenames[0]:
 			flag = False
 			for i in range(items):
 					fname = self.ui.lwFiles.item(i).text()
-					if fname == newfn:
-						QtWidgets.QMessageBox.warning(self, 'Error', 'Файл "' + newfn + '" уже добавлен в очередь передачи', QtWidgets.QMessageBox.Yes)
+					if fname == f:
+						QtWidgets.QMessageBox.warning(self, 'Error', 'Файл "' + f + '" уже добавлен в очередь передачи', QtWidgets.QMessageBox.Yes)
 						flag = True
 						break
 
 			if not flag:
 				item = QtWidgets.QListWidgetItem()
 				item.setIcon(QtGui.QIcon("images/document_5907.png"))
-				item.setText(newfn)
+				item.setText(f)
 				self.ui.lwFiles.insertItem(0, item)

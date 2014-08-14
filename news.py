@@ -31,7 +31,7 @@ class NewsWnd(QtWidgets.QDialog):
 		self.close()
 
 	def on_clear_click(self):
-		if (self.ui.teNews.document().toPlainText() == "Напишите новость..."):
+		if (self.ui.teNews.document().toPlainText() == "Haпишите новость..."):
 			self.ui.teNews.clear()
 
 

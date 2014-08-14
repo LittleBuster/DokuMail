@@ -44,4 +44,4 @@ class DownloadWnd(QtWidgets.QWidget):
 		else:
 			import win32api
 			win32api.ShellExecute(0, 'open', 'downloads', '', '', 1)
-		self.close()
+		self.hide()
