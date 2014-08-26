@@ -11,10 +11,10 @@ class ServerThread():
 		self.conn = _sock
 		self.addr = _addr
 		#threading.Thread.__init__(self)a
-#		try:
+		#try:
 		self.run()
-#		except:
-#			print("Client: " + str(_addr[0]) + " check status")
+		#except:
+		#print("Client: " + str(_addr[0]) + " has crashed.")
 
 	def run(self):
 		cmd = self.conn.recv(1024)
@@ -57,6 +57,7 @@ class ServerThread():
 			now_date = datetime.date.today()
 			now_time = datetime.datetime.now()
 			msg_name = str(now_date.year) + str(now_date.month) + str(now_date.day) + str(now_time.hour) + str(now_time.minute) + str(now_time.second)
+		
 			now_time_str = str(now_time).split(" ")[1].split(".")[0]
 
 			data = self.conn.recv(1024).decode('utf-8')
@@ -110,7 +111,7 @@ class ServerThread():
 				self.conn.send( str(len(files)).encode("utf-8") )
 				self.conn.recv(1024)
 
-				dest = str("")
+				dest = str
 
 				if not isUpdate:
 					print("Sending files... " + str(len(files)))
@@ -138,8 +139,9 @@ class ServerThread():
 					f.close()
 					self.conn.send(b"[end]")					
 					if not isUpdate:
+						path = str
 						mdb.delete_file(self.usr, sfile)
-						os.remove("data/" + self.usr + "/files/" + sfile + ".bin")
+						os.remove( "data/" + self.usr + "/files/" + sfile + ".bin" )
 					print(self.conn.recv(1024).decode('utf-8'))
 
 				print("All files sended.")
@@ -173,7 +175,8 @@ class ServerThread():
 					if not os.path.exists("data/" + toUsr):
 						os.makedirs("data/" + toUsr)
 
-					msgFile = open("data/" + toUsr + "/" + msg_name + ".bin", 'wb')
+					fname = str
+					msgFile = open( "data/" + toUsr + "/" + msg_name + ".bin", 'wb')
 					msgFile.write(msg)
 					msgFile.close()
 					mdb.add_file(msg_name, 'msg', self.usr, toUsr, str(now_date), now_time_str)
@@ -200,9 +203,10 @@ class ServerThread():
 						print("All files recieved")
 						break
 
-					if not os.path.exists("data/" + toUsr + "/files/"):
+					if not os.path.exists( "data/" + toUsr + "/files/" ):
 						print("create subdir")
-						os.makedirs("data/" + toUsr + "/files/")
+						path = ""
+						os.makedirs( "data/" + toUsr + "/files/" )
 
 					print("Start downloading...")
 					self.conn.send(b'recieveing...')
@@ -213,7 +217,7 @@ class ServerThread():
 					index = 0
 					newfn = fname
 					while True:
-						if not os.path.exists("data/" + toUsr + "/files/" + newfn + ".bin"):
+						if not os.path.exists( "data/" + toUsr + "/files/" + newfn + ".bin" ):
 							fname = newfn
 							break
 						else:
@@ -225,7 +229,7 @@ class ServerThread():
 
 							newfn = nm + "." + fe
 
-					f = open("data/" + toUsr + "/files/" + fname + ".bin", "wb")
+					f = open( "data/" + toUsr + "/files/" + fname + ".bin", "wb")
 					while True:
 						data = self.conn.recv(4096)
 						l = len(data) - 5
@@ -249,7 +253,7 @@ class ServerThread():
 
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind(("172.20.0.10", 5000))
+	s.bind(("172.20.0.12", 5000))
 	s.listen(999)
 
 	while True:
