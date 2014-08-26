@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'updateWnd.ui'
 #
-# Created: Mon Aug 11 15:24:23 2014
+# Created: Wed Aug 20 13:20:49 2014
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,14 +12,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_UpdateWnd(object):
     def setupUi(self, UpdateWnd):
         UpdateWnd.setObjectName("UpdateWnd")
-        UpdateWnd.resize(719, 451)
-        UpdateWnd.setMinimumSize(QtCore.QSize(719, 451))
+        UpdateWnd.resize(719, 319)
+        UpdateWnd.setMinimumSize(QtCore.QSize(719, 319))
         UpdateWnd.setMaximumSize(QtCore.QSize(719, 451))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("images/downloads.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         UpdateWnd.setWindowIcon(icon)
         self.label = QtWidgets.QLabel(UpdateWnd)
-        self.label.setGeometry(QtCore.QRect(-220, -150, 941, 801))
+        self.label.setGeometry(QtCore.QRect(-280, -270, 1101, 801))
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap("images/fon.jpg"))
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
@@ -35,7 +35,7 @@ class Ui_UpdateWnd(object):
         self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label_3.setObjectName("label_3")
         self.lbFile = QtWidgets.QLabel(UpdateWnd)
-        self.lbFile.setGeometry(QtCore.QRect(0, 393, 711, 41))
+        self.lbFile.setGeometry(QtCore.QRect(0, 250, 711, 51))
         font = QtGui.QFont()
         font.setFamily("Times New Roman")
         font.setPointSize(28)
@@ -45,9 +45,10 @@ class Ui_UpdateWnd(object):
         self.lbFile.setAlignment(QtCore.Qt.AlignCenter)
         self.lbFile.setObjectName("lbFile")
         self.label_4 = QtWidgets.QLabel(UpdateWnd)
-        self.label_4.setGeometry(QtCore.QRect(160, 40, 401, 351))
+        self.label_4.setGeometry(QtCore.QRect(250, 50, 231, 231))
         self.label_4.setText("")
         self.label_4.setPixmap(QtGui.QPixmap("images/database-icon-219.png"))
+        self.label_4.setScaledContents(True)
         self.label_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label_4.setObjectName("label_4")
 

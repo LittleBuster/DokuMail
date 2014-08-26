@@ -48,4 +48,4 @@ class SystemTrayIcon(QtWidgets.QSystemTrayIcon):
 		w.setWindowIcon(QtGui.QIcon("images/exit.png"))
 		result = QtWidgets.QMessageBox.question(w, 'Закрытие', 'Вы действительно хотите выйти из программы?', QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 		if result == QtWidgets.QMessageBox.Yes:
-			sys.exit()
+			QtWidgets.QApplication.quit()
