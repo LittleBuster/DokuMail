@@ -4,8 +4,8 @@
 from compress import *
 from crypt import *
 import shutil
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 from upload import UploadWindow
 from mariadb import MariaDB
 from tcpclient import TcpClient
@@ -22,19 +22,19 @@ def send_msg(wnd, msg, all, lUsrPwd, usr):
     toUsers = list
 
     if msg == "":
-        QtWidgets.QMessageBox.warning(wnd, 'Complete', 'Введите сообщение!', QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.warning(wnd, 'Complete', 'Введите сообщение!', QtGui.QMessageBox.Yes)
         return
 
     if (usr == "") and (not all):
         """
 		If message sending to single user and user not selected then fail
 		"""
-        QtWidgets.QMessageBox.warning(wnd, 'Complete', 'Выберите пользователя!', QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.warning(wnd, 'Complete', 'Выберите пользователя!', QtGui.QMessageBox.Yes)
         return
 
     mdb = MariaDB()
     if not mdb.connect(wnd.MDBServer, wnd.MDBUser, wnd.MDBPasswd, "DokuMail"):
-        QtWidgets.QMessageBox.critical(wnd, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.critical(wnd, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtGui.QMessageBox.Yes)
         return
 
     if not all:
@@ -45,7 +45,7 @@ def send_msg(wnd, msg, all, lUsrPwd, usr):
 
     client = TcpClient()
     if not client.connect(wnd.TCPServer, wnd.TCPPort, wnd.user, lUsrPwd):
-        QtWidgets.QMessageBox.critical(wnd, "Ошибка", "Ошибка соединения с сервером!", QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.critical(wnd, "Ошибка", "Ошибка соединения с сервером!", QtGui.QMessageBox.Yes)
         return
 
     if not all:
@@ -57,22 +57,22 @@ def send_msg(wnd, msg, all, lUsrPwd, usr):
     client.close()
 
     if answ == b"[FAIL]":
-        QtWidgets.QMessageBox.critical(wnd, 'Ошибка', 'Ошибка передачи сообщения!', QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.critical(wnd, 'Ошибка', 'Ошибка передачи сообщения!', QtGui.QMessageBox.Yes)
         client.close()
         return
 
     if answ == b"[FAIL-ACCESS]":
-        QtWidgets.QMessageBox.critical(wnd, 'Ошибка', 'У Вас нет прав на отправку всем пользователям!',
-                                       QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.critical(wnd, 'Ошибка', 'У Вас нет прав на отправку всем пользователям!',
+                                       QtGui.QMessageBox.Yes)
         client.close()
         return
 
     if answ == b"[SEND-MSG-OK]":
         if not all:
-            QtWidgets.QMessageBox.information(wnd, 'Complete', 'Сообщение отправлено!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.information(wnd, 'Complete', 'Сообщение отправлено!', QtGui.QMessageBox.Yes)
         else:
-            QtWidgets.QMessageBox.information(wnd, 'Complete', 'Сообщение отправлено всем пользователям!',
-                                              QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.information(wnd, 'Complete', 'Сообщение отправлено всем пользователям!',
+                                              QtGui.QMessageBox.Yes)
 
 
 class SendFilesThread(QtCore.QThread):
@@ -220,13 +220,14 @@ class SendFiles(QtCore.QObject):
 
     def __init__(self):
         super(SendFiles, self).__init__()
-        self.sth.connectionStart.connect(self.on_connection_start)
-        self.sth.compressStart.connect(self.on_compress_start)
-        self.sth.cryptStart.connect(self.on_crypt_start)
-        self.sth.sendStart.connect(self.on_send_start)
-        self.sth.sendComplete.connect(self.on_send_complete)
-        self.sth.sendFileComplete.connect(self.on_send_file_complete)
-        self.sth.err.connect(self.on_error)
+
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("connectionStart()"), self.on_connection_start)
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("compressStart(QString)"), self.on_compress_start)
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("cryptStart(QString)"), self.on_crypt_start)
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("sendStart(QString)"), self.on_send_start)
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("sendComplete()"), self.on_send_complete)
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("sendFileComplete()"), self.on_send_file_complete)
+        QtCore.QObject.connect(self.sth, QtCore.SIGNAL("err"), self.on_error)
 
         self.uploadWnd = UploadWindow()
 
@@ -265,16 +266,16 @@ class SendFiles(QtCore.QObject):
             "<html><head/><body><p><span style=' color:#00d4ff;'>Готово.</span></p></body></html>")
         self.uploadWnd.ui.lbFile.setText("")
         self.uploadWnd.ui.pB.setValue(100)
-        QtWidgets.QMessageBox.information(self.uploadWnd, "Complete", "Файлы отправлены!", QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.information(self.uploadWnd, "Complete", "Файлы отправлены!", QtGui.QMessageBox.Yes)
         self.uploadWnd.hide()
 
     def on_error(self, txt):
-        QtWidgets.QMessageBox.critical(self.uploadWnd, "Ошибка", txt, QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.critical(self.uploadWnd, "Ошибка", txt, QtGui.QMessageBox.Yes)
         self.uploadWnd.hide()
 
     def send(self, wnd, flist, toUsr):
         if toUsr == "":
-            QtWidgets.QMessageBox.warning(wnd, 'Complete', 'Выберите пользователя!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(wnd, 'Complete', 'Выберите пользователя!', QtGui.QMessageBox.Yes)
             return
         self._wnd = wnd
         self.sth.send(wnd, wnd.TCPServer, wnd.TCPPort, flist, toUsr)

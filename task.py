@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import taskWnd
-from PyQt5 import QtWidgets
+from PyQt4 import QtGui
 
 
-class TaskWnd(QtWidgets.QDialog):
+class TaskWnd(QtGui.QDialog):
     def __init__(self, parent=None):
         super(TaskWnd, self).__init__()
         self.ui = taskWnd.Ui_TaskWnd()
@@ -16,7 +16,7 @@ class TaskWnd(QtWidgets.QDialog):
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 

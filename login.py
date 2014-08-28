@@ -5,17 +5,18 @@ import os
 import json
 import loginWnd
 from mariadb import MariaDB
-from PyQt5 import QtCore, QtWidgets
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 
 
 class pObj(object):
     """
-	JSON temp class
-	"""
+    JSON temp class
+    """
     pass
 
 
-class LoginWindow(QtWidgets.QWidget):
+class LoginWindow(QtGui.QWidget):
     """
     Class which connect Login Window interface
     in python app
@@ -29,14 +30,14 @@ class LoginWindow(QtWidgets.QWidget):
         self.ui.setupUi(self)
 
         self.loginTmr = QtCore.QTimer()
-        self.loginTmr.timeout.connect(self.on_autologin)
-        self.ui.pbLogin.clicked.connect(self.on_login)
-        self.ui.pbCancel.clicked.connect(self.on_cancel)
+        QtCore.QObject.connect(self.loginTmr, QtCore.SIGNAL("timeout()"), self.on_autologin)
+        QtCore.QObject.connect(self.ui.pbLogin, QtCore.SIGNAL("clicked()"), self.on_login)
+        QtCore.QObject.connect(self.ui.pbCancel, QtCore.SIGNAL("clicked()"), self.on_cancel)
 
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 
@@ -65,7 +66,7 @@ class LoginWindow(QtWidgets.QWidget):
         state = False
 
         if (self.ui.edLogin.text() == "") or (self.ui.edPasswd.text() == ""):
-            QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Введите логин или пароль!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self, 'Ошибка', 'Введите логин или пароль!', QtGui.QMessageBox.Yes)
             return
 
         if (self.ui.cbSave.checkState() == QtCore.Qt.Checked):
@@ -73,8 +74,8 @@ class LoginWindow(QtWidgets.QWidget):
 
         mdb = MariaDB()
         if not mdb.connect(self._mw.MDBServer, self._mw.MDBUser, self._mw.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                           QtGui.QMessageBox.Yes)
             return
         state = mdb.check_login(self.ui.edLogin.text(), self.ui.edPasswd.text())
         username = mdb.get_alias_by_user(self.ui.edLogin.text())
@@ -90,7 +91,7 @@ class LoginWindow(QtWidgets.QWidget):
             width = self._mw.frameGeometry().width()
             height = self._mw.frameGeometry().height()
 
-            wid = QtWidgets.QDesktopWidget()
+            wid = QtGui.QDesktopWidget()
             screenWidth = wid.screen().width()
             screenHeight = wid.screen().height()
 
@@ -108,7 +109,7 @@ class LoginWindow(QtWidgets.QWidget):
             self._mw.loginWnd = self
             self._mw.init_app()
         else:
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный логин или пароль!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Неверный логин или пароль!', QtGui.QMessageBox.Yes)
 
 
     def save_passwd(self):

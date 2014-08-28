@@ -4,7 +4,7 @@
 __author__ = 'Denisov Sergey 2014'
 
 import sys
-from PyQt5 import QtWidgets
+from PyQt4 import QtGui
 from login import LoginWindow
 from main import MainWindow
 
@@ -13,7 +13,7 @@ def main():
     """
     Main function for start app
     """
-    app = QtWidgets.QApplication(sys.argv)
+    app = QtGui.QApplication(sys.argv)
 
     mw = MainWindow()
     mw.load_config()

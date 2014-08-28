@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import downloadWnd
-from PyQt5 import QtWidgets
+from PyQt4 import QtGui
+from PyQt4 import QtCore
 import subprocess
 import platform
 
 
-class DownloadWnd(QtWidgets.QWidget):
+class DownloadWnd(QtGui.QWidget):
     """
 	Class which connect Download Window interface
 	in python app
@@ -17,13 +18,13 @@ class DownloadWnd(QtWidgets.QWidget):
         super(DownloadWnd, self).__init__()
         self.ui = downloadWnd.Ui_DownloadWnd()
         self.ui.setupUi(self)
-        self.ui.pbClose.clicked.connect(self.on_close)
-        self.ui.pbOpen.clicked.connect(self.on_open_dir)
+        QtCore.QObject.connect(self.ui.pbClose, QtCore.SIGNAL("clicked()"), self.on_close)
+        QtCore.QObject.connect(self.ui.pbOpen, QtCore.SIGNAL("clicked()"), self.on_open_dir)
 
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 

@@ -4,10 +4,11 @@
 import newsWnd
 import newsCurrentWnd
 import newsBaloon
-from PyQt5 import QtWidgets, QtCore
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 
 
-class NewsWnd(QtWidgets.QDialog):
+class NewsWnd(QtGui.QDialog):
     """
     Write news
     """
@@ -16,13 +17,14 @@ class NewsWnd(QtWidgets.QDialog):
         super(NewsWnd, self).__init__()
         self.ui = newsWnd.Ui_NewsWnd()
         self.ui.setupUi(self)
-        self.ui.pbClose.clicked.connect(self.on_close)
-        self.ui.teNews.selectionChanged.connect(self.on_clear_click)
+
+        QtCore.QObject.connect(self.ui.pbClose, QtCore.SIGNAL("clicked()"), self.on_close)
+        QtCore.QObject.connect(self.ui.teNews, QtCore.SIGNAL("selectionChanged()"), self.on_clear_click)
 
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 
@@ -39,7 +41,7 @@ class NewsWnd(QtWidgets.QDialog):
             self.ui.teNews.clear()
 
 
-class NewsCurWnd(QtWidgets.QWidget):
+class NewsCurWnd(QtGui.QWidget):
     """
     Show current news window
     """
@@ -48,12 +50,13 @@ class NewsCurWnd(QtWidgets.QWidget):
         super(NewsCurWnd, self).__init__()
         self.ui = newsCurrentWnd.Ui_CurNewsWnd()
         self.ui.setupUi(self)
-        self.ui.pbClose.clicked.connect(self.on_close)
+
+        QtCore.QObject.connect(self.ui.pbClose, QtCore.SIGNAL("clicked()"), self.on_close)
 
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 
@@ -63,7 +66,7 @@ class NewsCurWnd(QtWidgets.QWidget):
         self.close()
 
 
-class NewsBaloonWnd(QtWidgets.QWidget):
+class NewsBaloonWnd(QtGui.QWidget):
     """
     If news not exists in local databse
     Then show tooltip with news header
@@ -78,7 +81,7 @@ class NewsBaloonWnd(QtWidgets.QWidget):
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 

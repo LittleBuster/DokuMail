@@ -2,6 +2,12 @@ import sys
 from cx_Freeze import setup, Executable
 
 base = None
+if sys.platform == 'linux':
+    base = 'Console'
+
+if sys.platform == 'linux':
+    base = 'Console'
+
 if sys.platform == 'win32':
     base = 'Win32GUI'
 

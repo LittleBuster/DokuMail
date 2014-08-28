@@ -1,9 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 from tcpclient import TcpClient
 from download import DownloadWnd
 from msg import MsgWnd
@@ -61,12 +60,12 @@ class RecieveThread(QtCore.QThread, TcpConfig):
     def __init__(self):
         super(RecieveThread, self).__init__()
         self.client = TcpClient()
-        self.client.downloadStart.connect(self.on_download_start)
-        self.client.decryptStart.connect(self.on_decrypt_start)
-        self.client.decompressStart.connect(self.on_decompress_start)
-        self.client.downloadComplete.connect(self.on_download_complete)
-        self.client.fileDownloaded.connect(self.on_file_downloaded)
-        self.client.fileCount.connect(self.on_file_count)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("downloadStart(QString)"), self.on_download_start)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("decryptStart()"), self.on_decrypt_start)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("decompressStart()"), self.on_decompress_start)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("downloadComplete()"), self.on_download_complete)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("fileDownloaded()"), self.on_file_downloaded)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("fileCount(int)"), self.on_file_count)
 
     def set_configs(self, tcpserver, tcpport, usr, pwd, update, path):
         self.TCPServer = tcpserver
@@ -108,13 +107,15 @@ class Recieve(QtCore.QObject):
         self.dldWnd = DownloadWnd()
         self.updWnd = UpdateWnd()
         self.recieveTh = RecieveThread()
-        self.recieveTh.downloadStart.connect(self.on_download_start)
-        self.recieveTh.decryptStart.connect(self.on_decrypt_start)
-        self.recieveTh.decompressStart.connect(self.on_decompress_start)
-        self.recieveTh.err.connect(self.on_err)
-        self.recieveTh.downloadComplete.connect(self.on_download_complete)
-        self.recieveTh.fileDownloaded.connect(self.on_file_downloaded)
-        self.recieveTh.fileCount.connect(self.on_file_count)
+
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("downloadStart(QString)"), self.on_download_start)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("decryptStart()"), self.on_decrypt_start)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("decompressStart()"), self.on_decompress_start)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("downloadComplete()"), self.on_download_complete)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("fileDownloaded()"), self.on_file_downloaded)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("fileCount(int)"), self.on_file_count)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("err(QString)"), self.on_err)
+
         self.step = 0
         self.update = False
         self.fname = str("")
@@ -152,7 +153,7 @@ class Recieve(QtCore.QObject):
             self.dldWnd.ui.lbFile.setText(
                 "<html><head/><body><p><span style='color:#00ffd5;'>Готово.</span></p></body></html>")
 
-            item = QtWidgets.QListWidgetItem()
+            item = QtGui.QListWidgetItem()
             item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
             item.setText(self.fname)
 
@@ -164,13 +165,12 @@ class Recieve(QtCore.QObject):
         self.step = round(100 / cnt)
 
     def on_err(self, text):
-        QtWidgets.QMessageBox.critical(self.dldWnd, 'Complete', text, QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.critical(self.dldWnd, 'Complete', text, QtGui.QMessageBox.Yes)
 
     def on_download_complete(self):
         if not self.update:
             self.dldWnd.ui.pb2.setValue(100)
-            QtWidgets.QMessageBox.information(self.dldWnd, 'Complete', 'Приняты новые файлы!',
-                                              QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.information(self.dldWnd, 'Complete', 'Приняты новые файлы!', QtGui.QMessageBox.Yes)
         self.downloadComplete.emit(self.update)
 
     def start(self):
@@ -213,8 +213,9 @@ class RecieveMsg(QtCore.QObject):
         super(RecieveMsg, self).__init__()
         self.msgWnd = MsgWnd()
         self.rt = RecieveMsgThread()
-        self.rt.msgRecieved.connect(self.show_msg)
-        self.rt.msgNone.connect(self.msg_empty)
+
+        QtCore.QObject.connect(self.rt, QtCore.SIGNAL("msgRecieved(QString, QString, QString)"), self.show_msg)
+        QtCore.QObject.connect(self.rt, QtCore.SIGNAL("msgNone()"), self.msg_empty)
 
     def show_msg(self, fromUser, timeMsg, Data):
         self.msgWnd.ui.lbFrom.setText(

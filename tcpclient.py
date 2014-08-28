@@ -6,14 +6,14 @@ from crypt import *
 from compress import *
 import hashlib
 import shutil
-from PyQt5 import QtCore
+from PyQt4 import QtCore
 from logger import Log
 
 
 class TcpClient(QtCore.QObject):
     """
-	Class for low-level communication with a socket
-	"""
+    Class for low-level communication with a socket
+    """
     downloadStart = QtCore.pyqtSignal(str)
     decryptStart = QtCore.pyqtSignal()
     decompressStart = QtCore.pyqtSignal()
@@ -131,7 +131,9 @@ class TcpClient(QtCore.QObject):
         self.sock.send(b"ok")
         data = self.sock.recv(4096)
 
-        msg = {'FromUser': msgInfo.split("$")[0], 'Time': msgInfo.split("$")[1]}
+        msg = {}
+        msg["FromUser"] = msgInfo.split("$")[0]
+        msg["Time"] = msgInfo.split("$")[1]
         try:
             msg["Data"] = AES256_decode_msg(data, "transf.crt")
         except:

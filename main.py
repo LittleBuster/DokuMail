@@ -6,8 +6,7 @@ import subprocess
 import datetime
 import sqlite3
 
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
+from PyQt4 import QtGui
 
 from checker import Checker
 from send import *
@@ -28,7 +27,7 @@ class pObj(object):
     pass
 
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(QtGui.QWidget):
     __MDBServer = str
     __MDBUser = str
     __MDBPasswd = str
@@ -46,26 +45,26 @@ class MainWindow(QtWidgets.QWidget):
         self.passwd = str
         self.news_count = 0
 
-        self.ui.pbMinimize.clicked.connect(self.minimize_app)
+        QtCore.QObject.connect(self.ui.pbMinimize, QtCore.SIGNAL("clicked()"), self.minimize_app)
         self.tr = SystemTrayIcon(self, QtGui.QIcon("images/cmp.ico"))
         self.tr.show()
 
-        self.ui.pbSendMsg.clicked.connect(self.on_send_msg)
-        self.ui.pbSendAllMsg.clicked.connect(self.on_sendall_msg)
-        self.ui.lwUsers.itemClicked.connect(self.lwusers_item_clicked)
-        self.ui.pbClearMsg.clicked.connect(self.on_clear_msg_clicked)
-        self.ui.pbSendFiles.clicked.connect(self.on_sendfiles_clicked)
-        self.ui.pbAddFile.clicked.connect(self.on_add_file)
-        self.ui.pbClearFiles.clicked.connect(self.on_clear_files)
-        self.ui.pbDeleteFile.clicked.connect(self.on_delete_file)
+        QtCore.QObject.connect(self.ui.pbSendMsg, QtCore.SIGNAL("clicked()"), self.on_send_msg)
+        QtCore.QObject.connect(self.ui.pbSendAllMsg, QtCore.SIGNAL("clicked()"),self.on_sendall_msg)
+        QtCore.QObject.connect(self.ui.lwUsers, QtCore.SIGNAL("itemClicked(QListWidgetItem*)"),self.lwusers_item_clicked)
+        QtCore.QObject.connect(self.ui.pbClearMsg, QtCore.SIGNAL("clicked()"), self.on_clear_msg_clicked)
+        QtCore.QObject.connect(self.ui.pbSendFiles, QtCore.SIGNAL("clicked()"), self.on_sendfiles_clicked)
+        QtCore.QObject.connect(self.ui.pbAddFile, QtCore.SIGNAL("clicked()"), self.on_add_file)
+        QtCore.QObject.connect(self.ui.pbClearFiles, QtCore.SIGNAL("clicked()"), self.on_clear_files)
+        QtCore.QObject.connect(self.ui.pbDeleteFile, QtCore.SIGNAL("clicked()"), self.on_delete_file)
 
-        self.ui.pbNews.clicked.connect(self.on_news_clicked)
-        self.ui.pbMessages.clicked.connect(self.on_messages_clicked)
-        self.ui.pbFiles.clicked.connect(self.on_files_clicked)
-        self.ui.pbTasks.clicked.connect(self.on_tasks_clicked)
-        self.ui.pbSettings.clicked.connect(self.on_settings_clicked)
-        self.ui.pbAbout.clicked.connect(self.on_about_clicked)
-        self.ui.pbCreateTask.clicked.connect(self.on_create_task)
+        QtCore.QObject.connect(self.ui.pbNews, QtCore.SIGNAL("clicked()"),self.on_news_clicked)
+        QtCore.QObject.connect(self.ui.pbMessages, QtCore.SIGNAL("clicked()"), self.on_messages_clicked)
+        QtCore.QObject.connect(self.ui.pbFiles, QtCore.SIGNAL("clicked()"), self.on_files_clicked)
+        QtCore.QObject.connect(self.ui.pbTasks, QtCore.SIGNAL("clicked()"), self.on_tasks_clicked)
+        QtCore.QObject.connect(self.ui.pbSettings, QtCore.SIGNAL("clicked()"), self.on_settings_clicked)
+        QtCore.QObject.connect(self.ui.pbAbout, QtCore.SIGNAL("clicked()"), self.on_about_clicked)
+        QtCore.QObject.connect(self.ui.pbCreateTask, QtCore.SIGNAL("clicked()"), self.on_create_task)
 
         """
         Task List
@@ -99,21 +98,23 @@ class MainWindow(QtWidgets.QWidget):
         self.newsCurWnd = NewsCurWnd()
         self.recieveMsg = RecieveMsg()
         self.newsBaloon = NewsBaloonWnd()
-        self.newsBaloon.hideBaloon.connect(self.on_baloon_close)
-        self.recieveMsg.msgComplete.connect(self.on_msg_complete)
-        self.recieve.downloadComplete.connect(self.on_download_complete)
-        self.taskWnd.ui.pbSendTask.clicked.connect(self.on_send_task)
-        self.ui.pbSetConfig.clicked.connect(self.on_set_config)
-        self.ui.pbCreateNews.clicked.connect(self.on_create_news)
-        self.newsWnd.ui.pbSendNews.clicked.connect(self.on_send_news)
-        self.ui.lwNews.itemClicked.connect(self.on_lwnews_clicked)
-        self.newsBaloon.ui.pbRead.clicked.connect(self.on_read_news)
+
+        QtCore.QObject.connect(self.newsBaloon, QtCore.SIGNAL("hideBaloon()"), self.on_baloon_close)
+        QtCore.QObject.connect(self.recieveMsg, QtCore.SIGNAL("msgComplete()"), self.on_msg_complete)
+        QtCore.QObject.connect(self.recieve, QtCore.SIGNAL("downloadComplete(bool)"), self.on_download_complete)
+        QtCore.QObject.connect(self.taskWnd.ui.pbSendTask, QtCore.SIGNAL("clicked()"), self.on_send_task)
+        QtCore.QObject.connect(self.ui.pbSetConfig, QtCore.SIGNAL("clicked()"), self.on_set_config)
+        QtCore.QObject.connect(self.ui.pbCreateNews, QtCore.SIGNAL("clicked()"), self.on_create_news)
+        QtCore.QObject.connect(self.newsWnd.ui.pbSendNews, QtCore.SIGNAL("clicked()"), self.on_send_news)
+        QtCore.QObject.connect(self.ui.lwNews, QtCore.SIGNAL("itemClicked(QListWidgetItem*)"), self.on_lwnews_clicked)
+        QtCore.QObject.connect(self.newsBaloon.ui.pbRead, QtCore.SIGNAL("clicked()"), self.on_read_news)
+        QtCore.QObject.connect(self.newsBaloon.ui.pbClose, QtCore.SIGNAL("clicked()"), self.on_baloon_close)
         self.newsBaloon.ui.pbClose.clicked.connect(self.on_baloon_close)
 
         self.checker = Checker(self)
-        self.newsCurWnd.ui.pbDeleteNews.clicked.connect(self.checker.on_delete_news)
-        self.ui.pbRelogin.clicked.connect(self.on_relogin)
-        self.ui.pbDownloads.clicked.connect(self.on_downloads)
+        QtCore.QObject.connect(self.newsCurWnd.ui.pbDeleteNews, QtCore.SIGNAL("clicked()"), self.checker.on_delete_news)
+        QtCore.QObject.connect(self.ui.pbRelogin, QtCore.SIGNAL("clicked()"), self.on_relogin)
+        QtCore.QObject.connect(self.ui.pbDownloads, QtCore.SIGNAL("clicked()"), self.on_downloads)
 
         self.cur_path = os.getcwd() + "/"
 
@@ -168,6 +169,7 @@ class MainWindow(QtWidgets.QWidget):
         self.checker.getTmr.start(5000)
 
     def on_download_complete(self, update):
+        print("EMIT COMPLETE:", update)
         if not update:
             self.checker.getTmr.start(5000)
         else:
@@ -178,48 +180,48 @@ class MainWindow(QtWidgets.QWidget):
 
                 os.chdir("update")
                 win32api.ShellExecute(0, 'open', 'update.exe', '', '', 1)
-            QtWidgets.QApplication.quit()
+            QtGui.QApplication.quit()
 
     def on_create_news(self):
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                           QtGui.QMessageBox.Yes)
             return
         if mdb.is_admin(self.user):
             self.newsWnd.show()
         else:
-            QtWidgets.QMessageBox.warning(self, 'Error', 'У вас нет прав на создание новостей!',
-                                          QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self, 'Error', 'У вас нет прав на создание новостей!',
+                                          QtGui.QMessageBox.Yes)
         mdb.close()
 
     def on_send_news(self):
         if self.newsWnd.ui.leTitle.text() == "":
-            QtWidgets.QMessageBox.warning(self.newsWnd, 'Error', 'Введите заголовок новости!',
-                                          QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self.newsWnd, 'Error', 'Введите заголовок новости!',
+                                          QtGui.QMessageBox.Yes)
             return
 
         if self.newsWnd.ui.teNews.document().toPlainText() == "" or \
                         self.newsWnd.ui.teNews.document().toPlainText() == "Напишите новость...":
-            QtWidgets.QMessageBox.warning(self.newsWnd, 'Error', 'Введите текст новости!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self.newsWnd, 'Error', 'Введите текст новости!', QtGui.QMessageBox.Yes)
             return
 
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                           QtGui.QMessageBox.Yes)
             return
         date = datetime.date.today()
         if mdb.send_news(mdb.get_alias_by_user(self.user), self.newsWnd.ui.teNews.document().toPlainText(),
                          self.newsWnd.ui.leTitle.text(), str(date)):
             self.newsWnd.close()
-            QtWidgets.QMessageBox.information(self, 'Complete', 'Новость успешно добавлена!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.information(self, 'Complete', 'Новость успешно добавлена!', QtGui.QMessageBox.Yes)
         else:
-            QtWidgets.QMessageBox.critical(self, 'Error', 'Ошибка добавления новости', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Error', 'Ошибка добавления новости', QtGui.QMessageBox.Yes)
         mdb.close()
 
     def on_read_news(self):
-        item = QtWidgets.QListWidgetItem()
+        item = QtGui.QListWidgetItem()
         item.setText(self.newsBaloon.ui.leTitle.text())
         self.newsBaloon.hide()
         self.on_lwnews_clicked(item)
@@ -245,8 +247,8 @@ class MainWindow(QtWidgets.QWidget):
     def on_send_task(self):
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                           QtGui.QMessageBox.Yes)
             return
 
         date = datetime.date.today()
@@ -255,49 +257,49 @@ class MainWindow(QtWidgets.QWidget):
             self.taskWnd.ui.teMsg.clear()
             self.taskWnd.close()
             self.check_tasks()
-            QtWidgets.QMessageBox.information(self, 'Complete', 'Заявка зарегистрирована', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.information(self, 'Complete', 'Заявка зарегистрирована', QtWidgets.QMessageBox.Yes)
         else:
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка при регистрации заявки', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка при регистрации заявки', QtWidgets.QMessageBox.Yes)
         mdb.close()
 
     def on_create_task(self):
         if self.ui.cbTaskType.currentText() != "":
             self.taskWnd.show()
         else:
-            QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Выберите тип проблемы!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self, 'Ошибка', 'Выберите тип проблемы!', QtWidgets.QMessageBox.Yes)
 
     def check_tasks(self):
         self.ui.tw1.setRowCount(0)
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
                                            QtWidgets.QMessageBox.Yes)
             return
         taskList = mdb.get_task_list(self.user)
 
         for task in taskList:
             self.ui.tw1.setRowCount(self.ui.tw1.rowCount() + 1)
-            item = QtWidgets.QTableWidgetItem(task["id"])
+            item = QtGui.QTableWidgetItem(task["id"])
             self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 0, item)
-            item = QtWidgets.QTableWidgetItem(task["type"])
+            item = QtGui.QTableWidgetItem(task["type"])
             self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 1, item)
-            item = QtWidgets.QTableWidgetItem(task["date"])
+            item = QtGui.QTableWidgetItem(task["date"])
             self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 2, item)
-            item = QtWidgets.QTableWidgetItem(task["status"])
+            item = QtGui.QTableWidgetItem(task["status"])
             self.ui.tw1.setItem(self.ui.tw1.rowCount() - 1, 3, item)
         mdb.close()
 
     def on_set_config(self):
-        result = QtWidgets.QMessageBox.question(self, 'Configs', 'Применить изменения?',
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                                                QtWidgets.QMessageBox.No)
-        if result == QtWidgets.QMessageBox.Yes:
+        result = QtGui.QMessageBox.question(self, 'Configs', 'Применить изменения?',
+                                                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+                                                QtGui.QMessageBox.No)
+        if result == QtGui.QMessageBox.Yes:
             self.TCPServer = self.ui.leTcpServer.text()
             try:
                 self.TCPPort = int(self.ui.leTcpPort.text())
             except:
                 Log().local("Settings: set not port correct")
-                QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Неверный номер порта!', QtWidgets.QMessageBox.Yes)
+                QtGui.QMessageBox.critical(self, 'Ошибка', 'Неверный номер порта!', QtGui.QMessageBox.Yes)
             self.MDBServer = self.ui.leMDBServer.text()
             self.MDBUser = self.ui.leMDBUser.text()
             self.MDBPasswd = self.ui.leMDBPasswd.text()
@@ -314,7 +316,7 @@ class MainWindow(QtWidgets.QWidget):
 
     def on_downloads(self):
         if not os.path.exists("downloads"):
-            QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Нет загруженных файлов!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self, 'Ошибка', 'Нет загруженных файлов!', QtGui.QMessageBox.Yes)
             return
 
         if platform.system() == "Linux":
@@ -328,7 +330,7 @@ class MainWindow(QtWidgets.QWidget):
             self.ui.lwFiles.removeItemWidget(
                 self.ui.lwFiles.takeItem(self.ui.lwFiles.row(self.ui.lwFiles.selectedItems()[0])))
         except:
-            QtWidgets.QMessageBox.warning(self, 'Ошибка', 'Выделите файл!', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self, 'Ошибка', 'Выделите файл!', QtGui.QMessageBox.Yes)
 
     def on_news_clicked(self):
         self.ui.stackedWidget.setCurrentIndex(0)
@@ -355,8 +357,8 @@ class MainWindow(QtWidgets.QWidget):
         title = str(item.text()).split("]")[1]
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                           QtGui.QMessageBox.Yes)
             return
         news = mdb.get_news(title)
         self.newsCurWnd.ui.lbFrom.setText("<html><head/><body><p><span style='color:#ffffff;'>" + news["user"]
@@ -372,26 +374,26 @@ class MainWindow(QtWidgets.QWidget):
         self.ui.lbAlias.setText(str(item.text()))
 
     def closeEvent(self, e):
-        result = QtWidgets.QMessageBox.question(self, 'Закрытие', 'Вы действительно хотите выйти из программы?',
-                                                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
-                                                QtWidgets.QMessageBox.No)
-        if result == QtWidgets.QMessageBox.Yes:
-            QtWidgets.QApplication.quit()
+        result = QtGui.QMessageBox.question(self, 'Закрытие', 'Вы действительно хотите выйти из программы?',
+                                                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
+                                                QtGui.QMessageBox.No)
+        if result == QtGui.QMessageBox.Yes:
+            QtGui.QApplication.quit()
         else:
             e.ignore()
 
     def init_app(self):
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                           QtGui.QMessageBox.Yes)
             return
         aliases = mdb.get_alias_list()
         mdb.close()
 
         i = 0
         for alias in aliases:
-            item = QtWidgets.QListWidgetItem()
+            item = QtGui.QListWidgetItem()
             item.setIcon(QtGui.QIcon("images/cmp.ico"))
             item.setText(alias)
             self.ui.lwUsers.insertItem(i, item)
@@ -399,8 +401,8 @@ class MainWindow(QtWidgets.QWidget):
 
         self.check_tasks()
 
-        config = {"TcpServer": self.TCPServer, "TcpPort": self.TCPPort, "MDBServer": self.MDBServer,
-                  "MDBUser": self.MDBUser, "MDBPasswd": self.MDBPasswd}
+        config = dict(TcpServer=self.TCPServer, TcpPort=self.TCPPort, MDBServer=self.MDBServer, MDBUser=self.MDBUser,
+                      MDBPasswd=self.MDBPasswd)
         self.checker.set_configs(config, self.user)
         self.checker.start_timers()
 
@@ -415,8 +417,8 @@ class MainWindow(QtWidgets.QWidget):
     def load_config(self):
         if not os.path.isfile("config.dat"):
             Log().local("Config file not exists")
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Отсутствует файл конфигураций!', QtWidgets.QMessageBox.Yes)
-            QtWidgets.QApplication.quit()
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Отсутствует файл конфигураций!', QtGui.QMessageBox.Yes)
+            QtGui.QApplication.quit()
             return
         try:
             f = open("config.dat", "r")
@@ -430,8 +432,8 @@ class MainWindow(QtWidgets.QWidget):
             f.close()
         except:
             Log().local("Error reading config file")
-            QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!',
-                                           QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!',
+                                           QtGui.QMessageBox.Yes)
 
     def on_send_msg(self):
         send_msg(self, self.ui.teMsg.document().toPlainText(), False, self.passwd, self.ui.lbAlias.text())
@@ -444,7 +446,7 @@ class MainWindow(QtWidgets.QWidget):
         items = self.ui.lwFiles.count()
 
         if items == 0:
-            QtWidgets.QMessageBox.warning(self, 'Error', 'Добавьте файлы для передачи', QtWidgets.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self, 'Error', 'Добавьте файлы для передачи', QtGui.QMessageBox.Yes)
             return
 
         for i in range(items):
@@ -459,21 +461,21 @@ class MainWindow(QtWidgets.QWidget):
         self.ui.lwFiles.clear()
 
     def on_add_file(self):
-        filenames = QtWidgets.QFileDialog.getOpenFileNames(self, 'Open file', 'C:/')
+        filenames = QtGui.QFileDialog.getOpenFileNames(self, 'Open file', 'C:/')
 
         items = self.ui.lwFiles.count()
-        for f in filenames[0]:
+        for f in filenames:
             flag = False
             for i in range(items):
                 fname = self.ui.lwFiles.item(i).text()
                 if fname == f:
-                    QtWidgets.QMessageBox.warning(self, 'Error', 'Файл "' + f + '" уже добавлен в очередь передачи',
-                                                  QtWidgets.QMessageBox.Yes)
+                    QtGui.QMessageBox.warning(self, 'Error', 'Файл "' + f + '" уже добавлен в очередь передачи',
+                                                  QtGui.QMessageBox.Yes)
                     flag = True
                     break
 
             if not flag:
-                item = QtWidgets.QListWidgetItem()
+                item = QtGui.QListWidgetItem()
                 item.setIcon(QtGui.QIcon("images/document_5907.png"))
                 item.setText(f)
                 self.ui.lwFiles.insertItem(0, item)

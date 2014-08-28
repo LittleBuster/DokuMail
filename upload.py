@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import uploadWnd
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 
 
-class UploadWindow(QtWidgets.QDialog):
+class UploadWindow(QtGui.QDialog):
     def __init__(self, parent=None):
         super(UploadWindow, self).__init__()
         self.ui = uploadWnd.Ui_Form()
@@ -16,7 +16,7 @@ class UploadWindow(QtWidgets.QDialog):
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
 
-        wid = QtWidgets.QDesktopWidget()
+        wid = QtGui.QDesktopWidget()
         screenWidth = wid.screen().width()
         screenHeight = wid.screen().height()
 

@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtCore, QtWidgets, QtGui
-from tcpclient import TcpClient
-from mariadb import MariaDB
 import sqlite3
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 from logger import Log
+from mariadb import MariaDB
+from tcpclient import TcpClient
 
 
 class CheckerThread(QtCore.QThread):
@@ -52,8 +53,8 @@ class CheckerThread(QtCore.QThread):
             mdb = MariaDB()
             if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"],
                                "DokuMail"):
-                QtWidgets.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
-                                               QtWidgets.QMessageBox.Yes)
+                QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
+                                               QtGui.QMessageBox.Yes)
                 return
             news_list = mdb.check_news()
 
@@ -67,6 +68,7 @@ class CheckerThread(QtCore.QThread):
                     cur.execute(
                         "SELECT * FROM news WHERE title='" + news["title"] + "' and date='" + news["date"] + "'")
                     n_list = cur.fetchall()
+
                     if len(n_list) == 0:
                         cur.execute(
                             "INSERT INTO news(title, date) VALUES('" + news["title"] + "', '" + news["date"] + "')")
@@ -100,6 +102,7 @@ class CheckerThread(QtCore.QThread):
             """
             Checking update, messages, files
             """
+
             mdb = MariaDB()
             if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"],
                                "DokuMail"):
@@ -173,35 +176,35 @@ class Checker():
     """
     Class for checking update, messages, files and checking server status
     """
+    th_c = CheckerThread()
+    th_n = CheckerThread()
 
     def __init__(self, wnd):
         self.mainWnd = wnd
         self.getTmr = QtCore.QTimer()
-        self.getTmr.timeout.connect(self.check_msg_and_files)
         self.newsTmr = QtCore.QTimer()
-        self.newsTmr.timeout.connect(self.check_news)
+        QtCore.QObject.connect(self.getTmr, QtCore.SIGNAL("timeout()"), self.check_msg_and_files)
+        QtCore.QObject.connect(self.newsTmr, QtCore.SIGNAL("timeout()"), self.check_news)
 
-        self.th_c = CheckerThread()
-        self.th_n = CheckerThread()
         self.del_news = DeleteNewsThread()
 
-        self.th_n.err.connect(self.on_error)
-        self.th_n.showNewsBaloon.connect(self.on_show_baloon)
-        self.th_n.addInNews.connect(self.on_add_innews)
-        self.th_n.setNewsCount.connect(self.on_set_newscount)
-        self.th_n.clearNews.connect(self.on_clear_news)
-        self.th_n.checkNewsComplete.connect(self.on_check_news_complete)
+        QtCore.QObject.connect(self.th_n, QtCore.SIGNAL("err(QString)"), self.on_error)
+        QtCore.QObject.connect(self.th_n, QtCore.SIGNAL("showNewsBaloon(QString, QString)"), self.on_show_baloon)
+        QtCore.QObject.connect(self.th_n, QtCore.SIGNAL("addInNews(QString, QString)"), self.on_add_innews)
+        QtCore.QObject.connect(self.th_n, QtCore.SIGNAL("setNewsCount(int)"), self.on_set_newscount)
+        QtCore.QObject.connect(self.th_n, QtCore.SIGNAL("clearNews()"), self.on_clear_news)
+        QtCore.QObject.connect(self.th_n, QtCore.SIGNAL("checkNewsComplete()"), self.on_check_news_complete)
 
-        self.th_c.err.connect(self.on_error)
-        self.th_c.serverOnline.connect(self.on_online_server)
-        self.th_c.serverOffline.connect(self.on_offline_server)
-        self.th_c.updateAvailable.connect(self.on_update_available)
-        self.th_c.filesAvailable.connect(self.on_files_available)
-        self.th_c.msgAvailable.connect(self.on_msg_available)
-        self.th_c.nothingAvailable.connect(self.on_nothing_available)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("err(QString)"), self.on_error)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("serverOnline()"), self.on_online_server)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("serverOffline()"), self.on_offline_server)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("updateAvailable()"), self.on_update_available)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("filesAvailable()"), self.on_files_available)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("msgAvailable()"), self.on_msg_available)
+        QtCore.QObject.connect(self.th_c, QtCore.SIGNAL("nothingAvailable()"), self.on_nothing_available)
 
-        self.del_news.deleteComplete.connect(self.on_delete_news_complete)
-        self.del_news.err.connect(self.on_delnews_error)
+        QtCore.QObject.connect(self.del_news, QtCore.SIGNAL("deleteComplete()"), self.on_delete_news_complete)
+        QtCore.QObject.connect(self.del_news, QtCore.SIGNAL("err(QString)"), self.on_delnews_error)
 
     """
     Checker thread signals
@@ -215,7 +218,7 @@ class Checker():
         self.mainWnd.newsBaloon.show()
 
     def on_add_innews(self, date, title):
-        item = QtWidgets.QListWidgetItem()
+        item = QtGui.QListWidgetItem()
         item.setIcon(QtGui.QIcon("images/news.ico"))
         item.setText("[" + date + "]" + title)
         self.mainWnd.ui.lwNews.insertItem(0, item)
@@ -229,7 +232,8 @@ class Checker():
             "<html><head/><body><p><span style='color:#ff0000;'>Оффлайн</span></p></body></html>")
 
     def on_error(string, task):
-        QtWidgets.QMessageBox.critical(QtWidgets.QWidget(), 'Ошибка', 'Ошибка соединения с Базой Данных!', QtWidgets.QMessageBox.Yes)
+        print("ERROR: " + task)
+        QtGui.QMessageBox.critical(QtGui.QWidget(), 'Ошибка', 'Ошибка соединения с Базой Данных!', QtGui.QMessageBox.Yes)
         if task == "news":
             self.newsTmr.start(10000)
         elif task == "msg_and_files":
@@ -279,12 +283,12 @@ class Checker():
     def on_delete_news_complete(self):
         self.newsTmr.start(1)
         self.mainWnd.newsCurWnd.hide()
-        QtWidgets.QMessageBox.information(self.mainWnd, 'Complete', 'Новость успешно удалена!',
-                                          QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.information(self.mainWnd, 'Complete', 'Новость успешно удалена!',
+                                          QtGui.QMessageBox.Yes)
 
     def on_delnews_error(self, text):
         Log().local("News delete:" + text)
-        QtWidgets.QMessageBox.warning(self.mainWnd.newsCurWnd, 'Ошибка', text, QtWidgets.QMessageBox.Yes)
+        QtGui.QMessageBox.warning(self.mainWnd.newsCurWnd, 'Ошибка', text, QtGui.QMessageBox.Yes)
         self.newsTmr.start(10000)
 
     """
