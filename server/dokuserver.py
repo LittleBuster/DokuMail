@@ -1,4 +1,6 @@
 import os
+import sys
+import json
 import socket
 import threading
 import datetime
@@ -6,15 +8,23 @@ from mariadb import MariaDB
 import multiprocessing as mp
 
 
+class pObj(object):
+	"""
+	JSON class for configs
+	"""
+	pass
+
 class ServerThread():
 	def __init__(self, _sock, _addr):
+		super(ServerThread, self).__init__()
 		self.conn = _sock
 		self.addr = _addr
-		#threading.Thread.__init__(self)a
-		#try:
-		self.run()
-		#except:
-		#print("Client: " + str(_addr[0]) + " has crashed.")
+		
+		try:
+			self.run()
+		except:
+			print("Client: " + str(_addr[0]) + " has crashed.")
+			return
 
 	def run(self):
 		cmd = self.conn.recv(1024)
@@ -251,16 +261,70 @@ class ServerThread():
 			mdb.close()
 		self.conn.close()
 
+
+class MainThread(threading.Thread):
+	cfg = {}
+	def __init__(self):
+		super(MainThread, self).__init__()
+
+	def set_configs(self, config):
+		self.cfg = config
+
+	def run(self):
+		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		
+		try:
+			s.bind((self.cfg["ip"], int(self.cfg["port"])))
+			s.listen(int(self.cfg["clients"]))	
+		except:
+			print("Error of binding ip address")
+			return
+
+		print(
+		"""
+		#############################################################################
+		#									    #
+		#			 Doku Mail Server Started			    #
+		#									    #
+		#############################################################################
+		
+		""")
+
+		while True:
+			conn, addr = s.accept()
+			proc = mp.Process(target=ServerThread, args=(conn, addr))
+			proc.start()
+
+
 def main():
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind(("172.20.0.12", 5000))
-	s.listen(999)
+	config = {}
+	try:
+		f = open("config.dat", "r")
+		config = json.load(f)
+		f.close()
+	except:
+		print("Error of reading config file")
+		return
+
+	"""
+	Start server listener
+	"""
+	main_thread = MainThread()
+	main_thread.set_configs( config )
+	main_thread.setDaemon( True )
 
 	while True:
-		conn, addr = s.accept()
-		proc = mp.Process(target=ServerThread, args=(conn, addr))
-		proc.start()
-		#ServerThread(conn, addr).start()
+		cmd = input("DokuServer> ")
+
+		if cmd == "start":
+			print("starting server...")
+			main_thread.start()
+
+		if cmd == "exit" or cmd == "quit" or cmd == "q":
+			break
+
+	print("Goodbye!")
+	sys.exit()
 
 if __name__ == '__main__':
 	main()
