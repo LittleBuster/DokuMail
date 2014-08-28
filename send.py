@@ -213,7 +213,6 @@ class SendFilesThread(QtCore.QThread):
         self.sendComplete.emit()
         print("send complete")
         self.client.close()
-        os.remove("sendfiles")
 
 
 class SendFiles(QtCore.QObject):

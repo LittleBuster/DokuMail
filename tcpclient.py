@@ -23,10 +23,9 @@ class TcpClient(QtCore.QObject):
 
     def __init__(self):
         super(TcpClient, self).__init__()
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect(self, ip, port, user, pwd):
-
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.sock.connect((ip, port))
         except:
