@@ -3,6 +3,7 @@
 
 import hashlib
 import pymysql
+import datetime
 from logger import Log
 
 
@@ -241,6 +242,16 @@ class MariaDB():
 		"""
         cur = self.conn.cursor()
         cur.execute("DELETE FROM news WHERE title='" + news["header"] + "' and date='" + news["date"] + "'")
+        self.conn.commit()
+
+    def log(self, name, message):
+        now_date_str = str(datetime.date.today())
+        now_time = datetime.datetime.now()
+        now_time_str = str(now_time).split(" ")[1].split(".")[0]
+
+        cur = self.conn.cursor()
+        cur.execute("INSERT INTO log(name, message, date, time) VALUES ('" + name + "','" + message + "','"
+                    + now_date_str + "','" + now_time_str + "')")
         self.conn.commit()
 
     def close(self):

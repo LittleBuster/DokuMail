@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Wed Aug 27 13:33:29 2014
+# Created: Wed Oct  1 13:10:51 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -466,11 +466,11 @@ class Ui_Form(object):
         font.setWeight(75)
         self.label_7.setFont(font)
         self.label_7.setObjectName(_fromUtf8("label_7"))
-        self.label_3 = QtGui.QLabel(self.widget_3)
-        self.label_3.setGeometry(QtCore.QRect(20, 246, 31, 31))
-        self.label_3.setText(_fromUtf8(""))
-        self.label_3.setPixmap(QtGui.QPixmap(_fromUtf8("images/user.ico")))
-        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.lbCurUser = QtGui.QLabel(self.widget_3)
+        self.lbCurUser.setGeometry(QtCore.QRect(20, 246, 31, 31))
+        self.lbCurUser.setText(_fromUtf8(""))
+        self.lbCurUser.setPixmap(QtGui.QPixmap(_fromUtf8("images/user.ico")))
+        self.lbCurUser.setObjectName(_fromUtf8("lbCurUser"))
         self.widget_2 = QtGui.QWidget(Form)
         self.widget_2.setGeometry(QtCore.QRect(10, 160, 651, 341))
         palette = QtGui.QPalette()
@@ -585,6 +585,7 @@ class Ui_Form(object):
         self.label_16.setGeometry(QtCore.QRect(0, 0, 651, 31))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial Black"))
+        font.setPointSize(14)
         self.label_16.setFont(font)
         self.label_16.setAlignment(QtCore.Qt.AlignCenter)
         self.label_16.setObjectName(_fromUtf8("label_16"))
@@ -651,6 +652,7 @@ class Ui_Form(object):
         self.label_4.setGeometry(QtCore.QRect(0, 0, 651, 31))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial Black"))
+        font.setPointSize(14)
         self.label_4.setFont(font)
         self.label_4.setAlignment(QtCore.Qt.AlignCenter)
         self.label_4.setObjectName(_fromUtf8("label_4"))
@@ -1159,11 +1161,11 @@ class Ui_Form(object):
         font.setWeight(75)
         self.label_18.setFont(font)
         self.label_18.setObjectName(_fromUtf8("label_18"))
-        self.label_19 = QtGui.QLabel(self.page_3)
-        self.label_19.setGeometry(QtCore.QRect(10, 60, 171, 251))
-        self.label_19.setText(_fromUtf8(""))
-        self.label_19.setPixmap(QtGui.QPixmap(_fromUtf8("images/about.png")))
-        self.label_19.setObjectName(_fromUtf8("label_19"))
+        self.lbAbout = QtGui.QLabel(self.page_3)
+        self.lbAbout.setGeometry(QtCore.QRect(10, 60, 171, 251))
+        self.lbAbout.setText(_fromUtf8(""))
+        self.lbAbout.setPixmap(QtGui.QPixmap(_fromUtf8("images/about.png")))
+        self.lbAbout.setObjectName(_fromUtf8("lbAbout"))
         self.textEdit = QtGui.QTextEdit(self.page_3)
         self.textEdit.setGeometry(QtCore.QRect(190, 50, 451, 281))
         font = QtGui.QFont()
@@ -1334,10 +1336,10 @@ class Ui_Form(object):
         self.pbRelogin.setText(_translate("Form", "Выйти", None))
         self.pbDownloads.setText(_translate("Form", "Загрузки", None))
         self.label_7.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00e9ff;\">Список пользователей</span></p></body></html>", None))
-        self.label_16.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Новости учреждения</span></p></body></html>", None))
+        self.label_16.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Новости учреждения</span></p></body></html>", None))
         self.pbCreateNews.setText(_translate("Form", "Написать новость", None))
         self.pbSendMsg.setText(_translate("Form", "Отправить", None))
-        self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Отправить сообщение</span></p></body></html>", None))
+        self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">Отправить сообщение</span></p></body></html>", None))
         self.pbClearMsg.setText(_translate("Form", "Очистить", None))
         self.pbSendAllMsg.setText(_translate("Form", "Отправить всем", None))
         self.pbDeleteFile.setText(_translate("Form", "Удалить файл", None))

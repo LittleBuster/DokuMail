@@ -1,60 +1,261 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MsgWnd</class>
+ <widget class="QWidget" name="MsgWnd">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>719</width>
+    <height>451</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>719</width>
+    <height>451</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>719</width>
+    <height>451</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Сообщение</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/convert.ico</normaloff>images/convert.ico</iconset>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>-210</x>
+     <y>-120</y>
+     <width>941</width>
+     <height>671</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>images/fon.jpg</pixmap>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>-4</y>
+     <width>71</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>images/conv.ico</pixmap>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>5</y>
+     <width>291</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>28</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00ffd5;&quot;&gt;Новое сообщение&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbClose">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>400</y>
+     <width>251</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
+	color:rgb(255, 255, 255);
+	border-width: 1px;
+     border-style: solid;
+     border-radius: 7px;
+	min-width: 80px;
+}
 
-import os
-import platform
-from ctypes import cdll
+QPushButton:hover {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
+}
 
-
-def zlib_compress_file(filename, outfile):
-    """
-    Compress files by zlib alorithm.
-
-    Call C-language dlls from python app
-
-    If system linux - call .so libs, if Windows call .dll libs and change
-
-    encoding to cp1251 for russian language.
-    """
-    lib = None
-
-    if platform.system() == "Linux":
-        lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcompress.so")]))
-    else:
-        lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcompress.dll")]))
-
-    try:
-        if platform.system() == "Linux":
-            lib.file_compress(filename.encode("utf-8"), outfile.encode("utf-8"))
-        else:
-            lib.file_compress(filename.encode("cp1251"), outfile.encode("cp1251"))
-        return True
-    except:
-        return False
-
-
-def zlib_decompress_file(filename, outfile):
-    """
-    Decompress files by zlib alorithm.
-
-    Call C-language dlls from python app
-
-    If system linux - call .so libs, if Windows call .dll libs and change
-
-    encoding to cp1251 for russian language.
-    """
-    lib = None
-
-    if platform.system() == "Linux":
-        lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcompress.so")]))
-    else:
-        lib = cdll.LoadLibrary("".join([(os.getcwd()), ("/libcompress.dll")]))
-
-    try:
-        if platform.system() == "Linux":
-            lib.file_decompress(filename.encode("utf-8"), outfile.encode("utf-8"))
-        else:
-            lib.file_decompress(filename.encode("cp1251"), outfile.encode("cp1251"))
-        return True
-    except:
-        return False
+QPushButton:pressed {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
+}</string>
+   </property>
+   <property name="text">
+    <string>Закрыть сообщение</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>images/exit.png</normaloff>images/exit.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbFile">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>22</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00dbff;&quot;&gt;От кого:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="teMsg">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>100</y>
+     <width>681</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>22</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget {
+	background-color: rgba(23, 115, 255, 137);
+	color:rgb(255, 255, 255);
+	border-width: 1px;
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
+   </property>
+   <property name="textInteractionFlags">
+    <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbFile_2">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>50</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>22</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00dbff;&quot;&gt;Время:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbFrom">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>50</y>
+     <width>241</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>22</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;От кого:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbTime">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>50</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>22</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;22:23:23&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

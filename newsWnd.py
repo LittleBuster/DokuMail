@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'newsWnd.ui'
 #
-# Created: Wed Aug 27 13:33:29 2014
+# Created: Wed Oct  1 13:10:51 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,7 +27,7 @@ class Ui_NewsWnd(object):
     def setupUi(self, NewsWnd):
         NewsWnd.setObjectName(_fromUtf8("NewsWnd"))
         NewsWnd.resize(719, 451)
-        NewsWnd.setMinimumSize(QtCore.QSize(719, 451))
+        NewsWnd.setMinimumSize(QtCore.QSize(718, 451))
         NewsWnd.setMaximumSize(QtCore.QSize(719, 451))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8("images/filenew_8842.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -166,7 +166,7 @@ class Ui_NewsWnd(object):
         QtCore.QMetaObject.connectSlotsByName(NewsWnd)
 
     def retranslateUi(self, NewsWnd):
-        NewsWnd.setWindowTitle(_translate("NewsWnd", "Новая заявка", None))
+        NewsWnd.setWindowTitle(_translate("NewsWnd", "Написать новость", None))
         self.label_3.setText(_translate("NewsWnd", "<html><head/><body><p><span style=\" color:#00ffd5;\">Написать новость</span></p></body></html>", None))
         self.pbClose.setText(_translate("NewsWnd", "Закрыть", None))
         self.teNews.setHtml(_translate("NewsWnd", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"

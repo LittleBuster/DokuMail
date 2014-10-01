@@ -1,24 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import datetime
+import updateWnd
+from PyQt4 import QtGui
 
 
-class Log():
+class UpdateWnd(QtGui.QDialog):
     """
-	Singleton class for loging app
-	"""
+    Class which connect Update Window interface
+    in python app
+    """
 
-    def new(cls):
-        if not hasattr(cls, 'instance'):
-            cls.instance = super(Singleton, cls).__new__(cls)
-            return cls.instance
-
-    def local(self, text):
-        """
-        Create local log file or append info in exists
-        """
-        logf = open("log.txt", "a")
-        date = datetime.datetime.now()
-        logf.writelines("[" + str(date) + "] " + text + "\n")
-        logf.close()
+    def __init__(self, parent=None):
+        super(UpdateWnd, self).__init__()
+        self.ui = updateWnd.Ui_UpdateWnd()
+        self.ui.setupUi(self)
