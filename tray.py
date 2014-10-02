@@ -14,15 +14,15 @@ class SystemTrayIcon(QtGui.QSystemTrayIcon):
         menu = QtGui.QMenu(parent)
 
         shAction = menu.addAction("Показать")
-        shAction.setIcon(QtGui.QIcon("images/cmp.ico"))
+        shAction.setIcon(QtGui.QIcon("".join((self._mw.app_path, "images/cmp.ico"))))
         QtCore.QObject.connect(shAction, QtCore.SIGNAL("triggered()"), self.show_main)
 
         shAction2 = menu.addAction("О программе")
-        shAction2.setIcon(QtGui.QIcon("images/elena8d89.png"))
+        shAction2.setIcon(QtGui.QIcon("".join((self._mw.app_path,"images/elena8d89.png"))))
         QtCore.QObject.connect(shAction2, QtCore.SIGNAL("triggered()"), self.show_about)
 
         shAction3 = menu.addAction("Выход")
-        shAction3.setIcon(QtGui.QIcon("images/exit.png"))
+        shAction3.setIcon(QtGui.QIcon("".join((self._mw.app_path, "images/exit.png"))))
         QtCore.QObject.connect(shAction3, QtCore.SIGNAL("triggered()"), self.close_app)
 
         self.setContextMenu(menu)
@@ -43,10 +43,11 @@ class SystemTrayIcon(QtGui.QSystemTrayIcon):
         self._mw.ui.stackedWidget.setCurrentIndex(5)
 
     def close_app(self):
-        w = QtGui.QWidget()
-        w.setWindowIcon(QtGui.QIcon("images/exit.png"))
-        result = QtGui.QMessageBox.question(w, 'Закрытие', 'Вы действительно хотите выйти из программы?',
+        self._mw.show()
+        result = QtGui.QMessageBox.question(self._mw, 'Закрытие', 'Вы действительно хотите выйти из программы?',
                                                 QtGui.QMessageBox.Yes | QtGui.QMessageBox.No,
                                                 QtGui.QMessageBox.No)
         if result == QtGui.QMessageBox.Yes:
             QtGui.QApplication.quit()
+        else:
+            self._mw.hide()

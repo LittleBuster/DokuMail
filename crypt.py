@@ -5,6 +5,7 @@ import os
 import random
 import platform
 from ctypes import cdll
+from paths import AppPath
 from Crypto.Cipher import AES
 from Crypto.Cipher import DES3
 
@@ -48,18 +49,18 @@ def AES256_cert_create(fname):
     """
     This function create key file on disk, which
     include 256 bit aes random key and 128 bit
-    aes IV4 random key
+    aes IV4 random key and proect by 3DES
     """
-    dicttionary = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
+    dictionary = "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
 
     key = ""
     key4 = ""
 
     for j in range(0, 32):
-        key += dicttionary[random.randrange(0, 62)]
+        key += dictionary[random.randrange(0, 62)]
 
     for j in range(0, 16):
-        key += dicttionary[random.randrange(0, 62)]
+        key += dictionary[random.randrange(0, 62)]
 
     f = open("".join((fname, ".tmp")), "w")
     f.write("-----BEGIN CERTIFICATE-----")
@@ -68,7 +69,7 @@ def AES256_cert_create(fname):
     f.write("-----END CERTIFICATE-----")
     f.close()
 
-    DES3_encrypt_file("".join((fname, ".tmp")), fname, 16, b'yI2lqMPxe0EpoV1o', b'IPeRgElV')
+    DES3_encrypt_file("".join((fname, ".tmp")), fname, 16, b'*', b'*')
     os.remove("".join((fname, ".tmp")))
 
 
@@ -77,7 +78,7 @@ def AES256_cert_read(fname):
     This function read from disk file, which
     include 256 bit aes random key and 128 bit
     """
-    DES3_decrypt_file(fname, "".join((fname, ".tmp")), 16, b'yI2lqMPxe0EpoV1o', b'IPeRgElV')
+    DES3_decrypt_file(fname, "".join((fname, ".tmp")), 16, b'*', b'*')
 
     a_key = AES_KEY()
 
@@ -104,7 +105,7 @@ def AES256_encode_file(filename, outfile, certFile):
     a_key = AES256_cert_read(certFile)
 
     if platform.system() == "Linux":
-        lib = cdll.LoadLibrary("/usr/lib/libcrypt.so")
+        lib = cdll.LoadLibrary("".join((AppPath().libs(), "libcrypt.so")))
     elif platform.system() == "Windows":
         lib = cdll.LoadLibrary("".join([(os.getcwd()), ("\libcrypt.dll")]))
 
@@ -132,7 +133,7 @@ def AES256_decode_file(filename, outfile, certFile):
     a_key = AES256_cert_read(certFile)
 
     if platform.system() == "Linux":
-        lib = cdll.LoadLibrary("/usr/lib/libcrypt.so")
+        lib = cdll.LoadLibrary("".join((AppPath().libs(), "libcrypt.so")))
     elif platform.system() == "Windows":
         lib = cdll.LoadLibrary("".join([(os.getcwd()), ("\libcrypt.dll")]))
 

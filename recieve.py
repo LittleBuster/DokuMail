@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from PyQt4 import QtCore
+from msg import MsgWnd
 from PyQt4 import QtGui
+from PyQt4 import QtCore
 from tcpclient import TcpClient
 from download import DownloadWnd
-from msg import MsgWnd
 from update import UpdateWnd
 
 
@@ -154,7 +154,7 @@ class Recieve(QtCore.QObject):
                 "<html><head/><body><p><span style='color:#00ffd5;'>Готово.</span></p></body></html>")
 
             item = QtGui.QListWidgetItem()
-            item.setIcon(QtGui.QIcon("images/filenew_8842.ico"))
+            item.setIcon(QtGui.QIcon( "".join((self.dldWnd.app_path, "images/filenew_8842.ico"))))
             item.setText(self.fname)
 
             self.dldWnd.ui.lwFiles.insertItem(0, item)
