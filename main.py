@@ -446,7 +446,7 @@ class MainWindow(QtGui.QWidget):
         f.close()
 
         DES3_encrypt_file("".join((self.app_path,"config.tmp")), "".join((self.app_path,"config.dat")), 16,
-                          b'1w1RTH2yaFIxk47D', b'4srgJfVo')
+                          b'*', b'*')
         os.remove("".join((self.app_path,"config.tmp")))
 
     def load_config(self):
@@ -457,7 +457,7 @@ class MainWindow(QtGui.QWidget):
             return
         try:
             DES3_decrypt_file("".join((self.app_path,"config.dat")), "".join((self.app_path,"config.tmp")), 16,
-                              b'1w1RTH2yaFIxk47D', b'4srgJfVo')
+                              b'*', b'*')
 
             f = open( "".join((self.app_path, "config.tmp")), "r")
             cfg = json.load(f)

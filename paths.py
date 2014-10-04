@@ -2,9 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
+import json
 import getpass
 import platform
 
+
+class pObj(object):
+    """
+    JSON temp class
+    """
+    pass
 
 class AppPath():
     """
@@ -24,7 +31,8 @@ class AppPath():
 
     def home(self):
         if  platform.system() == "Linux":
-            return os.path.join("/home", getpass.getuser(), "/")
+            pth = "".join(("/home/", getpass.getuser(), "/"))
+            return pth
         elif platform.system() == "Windows":
            return "./"
 

@@ -105,8 +105,12 @@ def AES256_encode_file(filename, outfile, certFile):
     a_key = AES256_cert_read(certFile)
 
     if platform.system() == "Linux":
+        if not os.path.exists("".join((AppPath().libs(), "libcrypt.so"))):
+            return False
         lib = cdll.LoadLibrary("".join((AppPath().libs(), "libcrypt.so")))
     elif platform.system() == "Windows":
+        if not os.path.exists("".join([(os.getcwd()), ("\libcrypt.dll")])):
+            return False
         lib = cdll.LoadLibrary("".join([(os.getcwd()), ("\libcrypt.dll")]))
 
     try:
