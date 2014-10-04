@@ -6,25 +6,20 @@ import sqlite3
 import mainWnd
 import datetime
 import platform
+from keys import AppKeys
 import subprocess
 from send import *
 from crypt import *
 from PyQt4 import QtGui
 from task import TaskWnd
 from paths import AppPath
+from configs import Configs
 from mariadb import MariaDB
 from checker import Checker
 from login import LoginWindow
 from tray import SystemTrayIcon
 from recieve import Recieve, RecieveMsg
 from news import NewsWnd, NewsCurWnd, NewsBaloonWnd
-
-
-class pObj(object):
-    """
-    JSON temp class
-    """
-    pass
 
 
 class MainWindow(QtGui.QWidget):
@@ -69,7 +64,6 @@ class MainWindow(QtGui.QWidget):
             self.ui.pbAddFile.setIcon(QtGui.QIcon( "".join((self.app_path, "images/add.png")) ))
             self.ui.pbCreateTask.setIcon(QtGui.QIcon( "".join((self.app_path, "images/filenew_8842.ico")) ))
             self.ui.pbSetConfig.setIcon(QtGui.QIcon( "".join((self.app_path, "images/settings.ico")) ))
-
 
         QtCore.QObject.connect(self.ui.pbMinimize, QtCore.SIGNAL("clicked()"), self.minimize_app)
         self.tr = SystemTrayIcon(self, QtGui.QIcon( os.path.join(self.app_path, "images/cmp.ico")) )
@@ -339,22 +333,19 @@ class MainWindow(QtGui.QWidget):
             self.save_config()
 
     def on_downloads(self):
-        if not os.path.exists("downloads"):
+        cfg = Configs()
+        if not os.path.exists(cfg.downloads_path()):
             QtGui.QMessageBox.warning(self, 'Ошибка', 'Нет загруженных файлов!', QtGui.QMessageBox.Yes)
             return
 
         if platform.system() == "Linux":
-            f = open("".join((self.app_path, "wmanagers.cfg")), "r")
-            managers = f.readline().split(',')
-            f.close()
-
-            for mngr in managers:
+            for mngr in cfg.file_managers():
                 if os.path.exists("".join(("/usr/bin/", mngr))):
-                    subprocess.call("".join((mngr, " ", AppPath().home(), "downloads/")), shell=True)
+                    subprocess.call("".join((mngr, " ", cfg.downloads_path())), shell=True)
                     break
         else:
             import win32api
-            win32api.ShellExecute(0, 'open', 'downloads', '', '', 1)
+            win32api.ShellExecute(0, 'open', cfg.downloads_path(), '', '', 1)
 
     def on_delete_file(self):
         try:
@@ -414,6 +405,7 @@ class MainWindow(QtGui.QWidget):
             e.ignore()
 
     def init_app(self):
+        cfg = Configs()
         mdb = MariaDB()
         if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
@@ -425,7 +417,7 @@ class MainWindow(QtGui.QWidget):
         i = 0
         for alias in aliases:
             item = QtGui.QListWidgetItem()
-            item.setIcon(QtGui.QIcon( os.path.join(self.app_path, "images", "cmp.ico")) )
+            item.setIcon(QtGui.QIcon( os.path.join(self.app_path, "images", cfg.get_icons()["UsersIcon"])) )
             item.setText(alias)
             self.ui.lwUsers.insertItem(i, item)
             i += 1
@@ -438,41 +430,39 @@ class MainWindow(QtGui.QWidget):
         self.checker.start_timers()
 
     def save_config(self):
-        f = open( "".join((self.app_path, "config.tmp")), "w")
-        cfg = pObj()
-        cfg.config = {"mdbserver": self.MDBServer, "mdbuser": self.MDBUser, "mdbpasswd": self.MDBPasswd,
-                      "tcpserver": self.TCPServer, "tcpport": self.TCPPort}
-        json.dump(cfg.config, f)
-        f.close()
-
-        DES3_encrypt_file("".join((self.app_path,"config.tmp")), "".join((self.app_path,"config.dat")), 16,
-                          b'*', b'*')
-        os.remove("".join((self.app_path,"config.tmp")))
+        pass
+        #TODO save json
 
     def load_config(self):
-        if not os.path.isfile( "".join((self.app_path, "config.dat")) ):
-            Log().local("Config file not exists")
-            QtGui.QMessageBox.critical(self, 'Ошибка', 'Отсутствует файл конфигураций!', QtGui.QMessageBox.Yes)
-            QtGui.QApplication.quit()
-            return
+        cfg = Configs()
         try:
-            DES3_decrypt_file("".join((self.app_path,"config.dat")), "".join((self.app_path,"config.tmp")), 16,
-                              b'*', b'*')
-
-            f = open( "".join((self.app_path, "config.tmp")), "r")
-            cfg = json.load(f)
-
-            self.MDBServer = cfg["mdbserver"]
-            self.MDBUser = cfg["mdbuser"]
-            self.MDBPasswd = cfg["mdbpasswd"]
-            self.TCPServer = cfg["tcpserver"]
-            self.TCPPort = cfg["tcpport"]
-            f.close()
-            os.remove("".join((self.app_path,"config.tmp")))
+            self.MDBServer = cfg.db_config()["ip"]
+            self.TCPServer = cfg.tcp_config()["ip"]
+            self.TCPPort = cfg.tcp_config()["port"]
         except:
             Log().local("Error reading config file")
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!',
                                            QtGui.QMessageBox.Yes)
+
+        if not os.path.isfile( "".join((self.app_path, "servercred.dat")) ):
+            Log().local("Auth file not exists")
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Отсутствует файл аутинтификации!', QtGui.QMessageBox.Yes)
+            QtGui.QApplication.quit()
+            return
+
+        try:
+            DES3_decrypt_file("".join((self.app_path,"servercred.dat")), "".join((self.app_path,"servercred.tmp")), 16,
+                                  AppKeys().get_config_key()["key"], AppKeys().get_config_key()["IV"])
+
+            f = open( "".join((self.app_path, "servercred.tmp")), "r")
+            cfg = json.load(f)
+            self.MDBUser = cfg["MariaDB"]["login"]
+            self.MDBPasswd = cfg["MariaDB"]["password"]
+            f.close()
+            os.remove("".join((self.app_path,"servercred.tmp")))
+        except:
+            Log().local("Error reading auth file")
+            QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения файла аутинтификации!', QtGui.QMessageBox.Yes)
 
     def on_send_msg(self):
         try:
@@ -504,6 +494,7 @@ class MainWindow(QtGui.QWidget):
         self.ui.lwFiles.clear()
 
     def on_add_file(self):
+        cfg = Configs()
         op_path = ""
         if platform.system() == "Linux":
             op_path = AppPath().home()
@@ -524,7 +515,15 @@ class MainWindow(QtGui.QWidget):
                     break
 
             if not flag:
+                parts = f.split('.')
+                ext = parts[len(parts) - 1].lower()
+                ico = ""
+                try:
+                    ico = cfg.get_icons()["FileIcons"][ext]
+                except:
+                    ico = cfg.get_icons()["FileIcons"]["default"]
+
                 item = QtGui.QListWidgetItem()
-                item.setIcon(QtGui.QIcon( "".join((self.app_path, "images/document_5907.png")) ))
+                item.setIcon(QtGui.QIcon( "".join((self.app_path, "images/ext/", ico)) ))
                 item.setText(f)
                 self.ui.lwFiles.insertItem(0, item)

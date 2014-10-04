@@ -4,6 +4,7 @@
 import os
 import random
 import platform
+from keys import AppKeys
 from ctypes import cdll
 from paths import AppPath
 from Crypto.Cipher import AES
@@ -69,7 +70,8 @@ def AES256_cert_create(fname):
     f.write("-----END CERTIFICATE-----")
     f.close()
 
-    DES3_encrypt_file("".join((fname, ".tmp")), fname, 16, b'*', b'*')
+    DES3_encrypt_file("".join((fname, ".tmp")), fname, 16, AppKeys().get_cert_key()["key"],
+                      AppKeys().get_cert_key()["IV"])
     os.remove("".join((fname, ".tmp")))
 
 
@@ -78,7 +80,8 @@ def AES256_cert_read(fname):
     This function read from disk file, which
     include 256 bit aes random key and 128 bit
     """
-    DES3_decrypt_file(fname, "".join((fname, ".tmp")), 16, b'*', b'*')
+    DES3_decrypt_file(fname, "".join((fname, ".tmp")), 16, AppKeys().get_cert_key()["key"],
+                      AppKeys().get_cert_key()["IV"])
 
     a_key = AES_KEY()
 
