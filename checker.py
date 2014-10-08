@@ -52,7 +52,7 @@ class CheckerThread(QtCore.QThread):
 
             mdb = MariaDB()
             if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"],
-                               "DokuMail"):
+                               self.configs["MDBBase"]):
                 self.err.emit("Ошибка соединения с Базой Данной", self.task)
                 return
             news_list = mdb.check_news()
@@ -104,7 +104,7 @@ class CheckerThread(QtCore.QThread):
 
             mdb = MariaDB()
             if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"],
-                               "DokuMail"):
+                               self.configs["MDBBase"]):
                 self.err.emit("Ошибка соединения с Базой Данных!", self.task)
                 return
 
@@ -150,7 +150,8 @@ class DeleteNewsThread(QtCore.QThread):
 
     def run(self):
         mdb = MariaDB()
-        if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"], "DokuMail"):
+        if not mdb.connect(self.configs["MDBServer"], self.configs["MDBUser"], self.configs["MDBPasswd"],
+                           self.configs["MDBBase"]):
             self.err.emit("Ошибка соединения с Базой Данных!", self.task)
             return
         if not mdb.is_admin(self.news["user"]):

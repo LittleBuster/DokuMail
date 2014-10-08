@@ -4,327 +4,368 @@ import json
 import socket
 import threading
 import datetime
+from logger import Log
 from mariadb import MariaDB
 import multiprocessing as mp
 
 
 class pObj(object):
-	"""
-	JSON class for configs
-	"""
-	pass
+    """
+    JSON class for configs
+    """
+    pass
+
 
 class ServerThread():
-	def __init__(self, _sock, _addr):
-		super(ServerThread, self).__init__()
-		self.conn = _sock
-		self.addr = _addr
-		
-		try:
-			self.run()
-		except:
-			print("Client: " + str(_addr[0]) + " has crashed.")
-			return
+    cfg = {}
 
-	def run(self):
-		cmd = self.conn.recv(1024)
+    def __init__(self, _sock, _addr, cfg):
+        super(ServerThread, self).__init__()
+        self.conn = _sock
+        self.addr = _addr
+        self.cfg = cfg
+        self.header = "DokuMail 2.0 Header - p1.0.0"
 
-		if cmd == b"[LOGIN]":
-			self.conn.send(b'ok')
-			data = self.conn.recv(1024).decode('utf-8')
+        #try:
+        self.run()
+        #except:
+        #    Log().local("Client: " + str(_addr[0]) + " has crashed.")
+        #    return
 
-			self.usr = data.split("$")[1]
-			h_pwd = data.split("$")[2]
+    def run(self):
+        cmd = b''
+        try:
+            cmd = self.conn.recv(1024).decode("utf-8")
+            cmd = json.loads(cmd)
+        except:
+            return
 
-			"""
-			Check user's login and password
-			"""
-	
-			mdb = MariaDB()
-			if not mdb.connect("172.20.0.11", "doku", "School184", "DokuMail"):
-				print("Error connection to Database")
-				return
+        if cmd["header"] == self.header and cmd["type"] == "login":
+            self.conn.send(b'ok')
+            data = self.conn.recv(1024).decode('utf-8')
+            data = json.loads(data)
 
-			if not mdb.check_login(self.usr, h_pwd):
-				print("Access denided")
-				print("Client " + self.usr + " disconnected.")
-				mdb.close()
-				self.conn.close()
-				return
-		
-			"""
-			User authorized
-			"""
-			self.conn.send(b'[LOGIN-OK]')
-			print("Client " + self.usr + " authorized.")
-			
+            if not data["header"] == self.header and not data["type"] == "login":
+                return
 
-			"""
-			Reciveing files
-			"""
-			lfiles = str("")
+            self.usr = data["user"]
+            h_pwd = data["passwd"]
 
-			now_date = datetime.date.today()
-			now_time = datetime.datetime.now()
-			msg_name = str(now_date.year) + str(now_date.month) + str(now_date.day) + str(now_time.hour) + str(now_time.minute) + str(now_time.second)
-		
-			now_time_str = str(now_time).split(" ")[1].split(".")[0]
+            """
+            Check user's login and password
+            """
 
-			data = self.conn.recv(1024).decode('utf-8')
+            mdb = MariaDB()
+            if not mdb.connect(self.cfg["MariaDB"]["ip"], self.cfg["MariaDB"]["login"],
+                               self.cfg["MariaDB"]["password"], self.cfg["MariaDB"]["base"]):
+                Log().local("Error connection to Database")
+                return
 
-			if data == '[GET-MSG]':
-				print("Getting message")
-				msgInfo = mdb.get_msg_info(self.usr)
-				if msgInfo == None:
-					mdb.change_state(self.usr, "isMsg", 0)
-					print("No new messages")
-					self.conn.send(b"[EMPTY-MSG]")
-					self.conn.close()
-					print("Client " + self.usr + " disconnected.")
-					return
+            if not mdb.check_login(self.usr, h_pwd):
+                Log().local("Access denided. Client " + self.usr + " disconnected.")
+                mdb.close()
+                self.conn.close()
+                return
 
-				idMsg = msgInfo.split("$")[0]
-				fromMsg = msgInfo.split("$")[1]
-				timeMsg = msgInfo.split("$")[2]
-			
-				self.conn.send( ( mdb.get_alias_by_user(fromMsg) + "$" + timeMsg).encode("utf-8") )
-				self.conn.recv(1024)
-				
-				f = open("data/" + self.usr + "/" + idMsg + ".bin", "rb")
-				self.conn.send( f.read() )
-				f.close()
-				mdb.delete_message(self.usr, fromMsg, idMsg)
-			 
-			"""
-			Reciveing files
-			"""
+            """
+            User authorized
+            """
+            self.conn.send(json.dumps({"header": self.header, "answ": "login-ok"}).encode("utf-8"))
+            Log().local("Client " + self.usr + " authorized.")
 
-			if data.split("$")[0] == '[GET-FILES]':
-				isUpdate = False
+            """
+            Reciveing files
+            """
+            lfiles = str("")
 
-				if data.split("$")[1] == '[UPDATE]':
-					isUpdate = True
-				elif data.split("$")[1] == '[DOWNLOAD]':
-					isUpdate = False
+            now_date = datetime.date.today()
+            now_time = datetime.datetime.now()
+            msg_name = str(now_date.year) + str(now_date.month) + str(now_date.day) + str(now_time.hour) + str(
+                now_time.minute) + str(now_time.second)
 
-				files = []
+            now_time_str = str(now_time).split(" ")[1].split(".")[0]
 
-				if not isUpdate:
-					files = mdb.get_file_list(self.usr)
-				else:
-					files = mdb.get_update_list()
+            data = self.conn.recv(1024).decode('utf-8')
+            data = json.loads(data)
 
-				if files == '':
-					self.sock.send("[NOT-FILES]")
-					return
+            if data["type"] == 'get-message':
+                answ = {"header": self.header, "answ": ""}
+                msgInfo = mdb.get_msg_info(self.usr)
 
-				self.conn.send( str(len(files)).encode("utf-8") )
-				self.conn.recv(1024)
+                if msgInfo["type"] == "empty":
+                    mdb.change_state(self.usr, "isMsg", 0)
+                    print("No new messages")
+                    answ["answ"] = "empty-msg"
+                    self.conn.send(json.dumps(answ).encode("utf-8"))
+                    self.conn.close()
+                    Log().local("Client " + self.usr + " disconnected.")
+                    return
 
-				dest = str
+                idMsg = msgInfo["name"]
+                fromMsg = msgInfo["from"]
+                timeMsg = msgInfo["time"]
 
-				if not isUpdate:
-					print("Sending files... " + str(len(files)))
-				else:
-					print("Start Update...")
+                answ = {"header": self.header, "answ": "msg", "From": mdb.get_alias_by_user(fromMsg), "Time": timeMsg}
 
-				for sfile in files:
-					self.conn.send(("sf$" + sfile).encode("utf-8"))
-					print(self.conn.recv(1024))
-					print("Sending " + sfile)
+                self.conn.send(json.dumps(answ).encode("utf-8"))
+                self.conn.recv(1024)
 
-					if not isUpdate:
-						dest = "data/" + self.usr + "/files/" + sfile + ".bin"							
-					else:
-						dest = "data/update/" + sfile
+                f = open("".join(("data/", self.usr, "/", idMsg, ".bin")), "rb")
+                self.conn.send(f.read())
+                f.close()
+                mdb.delete_message(self.usr, fromMsg, idMsg)
 
-					f = open(dest, "rb")
+            """
+            Reciveing files
+            """
 
-					while True:
-						data = f.read(4096)
-						if len(data) != 0:
-							self.conn.send(data)
-						else:
-							break;
-					f.close()
-					self.conn.send(b"[end]")					
-					if not isUpdate:
-						path = str
-						mdb.delete_file(self.usr, sfile)
-						os.remove( "data/" + self.usr + "/files/" + sfile + ".bin" )
-					print(self.conn.recv(1024).decode('utf-8'))
+            if data["type"] == 'get-files':
+                isUpdate = False
 
-				print("All files sended.")
-				self.conn.send(b"[END-RETRIEVE]")
-				if not isUpdate:
-					mdb.change_state(self.usr, "isFiles", 0)
-				else:
-					mdb.change_state(self.usr, "isUpdate", 0)
-				return
+                if data["operation"] == "update":
+                    isUpdate = True
+                elif data["operation"] == 'download':
+                    isUpdate = False
 
-			"""
-			Send messages
-			"""
+                files = []
 
-			if data.split("$")[0] == '[MSG-SEND]':
-				toUsers = data.split("$")[1].split("*")
-				if (len(toUsers) > 2) and (not mdb.check_user_admin(self.usr)):
-					self.conn.send(b"[FAIL-ACCESS]")
-					print("User does not have privileges! Disconnected.")
-					self.conn.close()
-					return
+                if not isUpdate:
+                    files = mdb.get_file_list(self.usr)
+                else:
+                    files = mdb.get_update_list()
 
-				self.conn.send(b"ok")
-				msg = self.conn.recv(4096)	
+                if files == '':
+                    answ = {"header": self.header, "type": "not-files"}
+                    self.sock.send(json.dumps(answ).encode("utf-8"))
+                    return
 
-				msg_name = str(now_date.year) + str(now_date.month) + str(now_date.day) + str(now_time.hour) + str(now_time.minute) + str(now_time.second)
-				for toUsr in toUsers:
-					if toUsr == "":
-						break
+                answ = {"header": self.header, "count": len(files)}
+                self.conn.send(json.dumps(answ).encode("utf-8"))
+                self.conn.recv(1024)
 
-					if not os.path.exists("data/" + toUsr):
-						os.makedirs("data/" + toUsr)
+                dest = str
 
-					fname = str
-					msgFile = open( "data/" + toUsr + "/" + msg_name + ".bin", 'wb')
-					msgFile.write(msg)
-					msgFile.close()
-					mdb.add_file(msg_name, 'msg', self.usr, toUsr, str(now_date), now_time_str)
-					mdb.log(self.usr, "Отправил сообщение " + toUsr, str(now_date), now_time_str)
-					print("message from " + self.usr + " to " + toUsr + " saved.")
-					mdb.change_state(toUsr, "isMsg", 1)
-				self.conn.send(b"[SEND-MSG-OK]")
+                if not isUpdate:
+                    print("Sending files... " + str(len(files)))
+                else:
+                    print("Start Update...")
 
+                for sfile in files:
+                    answ = {"header": self.header, "type": "sf", "filename": sfile}
+                    self.conn.send(json.dumps(answ).encode("utf-8"))
+                    print(self.conn.recv(1024))
+                    Log().local("User " + self.usr + " get file " + sfile)
 
-			"""
-			Send files
-			"""
+                    if not isUpdate:
+                        dest = "".join(("data/", self.usr, "/files/", sfile, ".bin"))
+                    else:
+                        dest = "data/update/" + sfile
 
-			if (data.split("$")[0] == "[SEND-FILES]"):
-				self.conn.send(b'ok')
-				toUsr = data.split("$")[1]
+                    f = open(dest, "rb")
 
-				while True:
-					data = self.conn.recv(1024)				
+                    while True:
+                        data = f.read(4096)
+                        if len(data) != 0:
+                            self.conn.send(data)
+                        else:
+                            break;
+                    f.close()
+                    self.conn.send(b"[end]")
+                    if not isUpdate:
+                        path = str
+                        mdb.delete_file(self.usr, sfile)
+                        os.remove("data/" + self.usr + "/files/" + sfile + ".bin")
+                    print(self.conn.recv(1024).decode('utf-8'))
 
-					if data == b"[END-RETRIEVE]":
-						mdb.log(self.usr, "Отправил файлы (" + lfiles + ") - "  + toUsr, str(now_date), now_time_str)
-						mdb.change_state(toUsr, "isFiles", 1)
-						print("All files recieved")
-						break
+                Log().local(self.usr + ": All files geted.")
+                answ = {"header": self.header, "type": "end-retrieve"}
+                self.conn.send(json.dumps(answ).encode("utf-8"))
+                if not isUpdate:
+                    mdb.change_state(self.usr, "isFiles", 0)
+                else:
+                    mdb.change_state(self.usr, "isUpdate", 0)
+                return
 
-					if not os.path.exists( "data/" + toUsr + "/files/" ):
-						print("create subdir")
-						path = ""
-						os.makedirs( "data/" + toUsr + "/files/" )
+            """
+            Send messages
+            """
 
-					print("Start downloading...")
-					self.conn.send(b'recieveing...')
+            if data["type"] == "send-message":
+                toUsers = []
+                answ = {"header": self.header, "answ": ""}
 
-					fname = data.decode('utf-8').split("$")[1]
-					print("New file: " + fname)
+                if (data["ToUsers"] == "$ALL_USERS$") and (not mdb.check_user_admin(self.usr)):
+                    answ["answ"] = "fail-access"
+                    self.conn.send(json.dumps(answ).encode("utf-8"))
+                    Log().local(self.usr + ": does not have privileges! Disconnected.")
+                    self.conn.close()
+                    return
 
-					index = 0
-					newfn = fname
-					while True:
-						if not os.path.exists( "data/" + toUsr + "/files/" + newfn + ".bin" ):
-							fname = newfn
-							break
-						else:
-							newfn = fname
-							index += 1
-							fn = fname.split(".")
-							nm = fn[0] + "(" + str(index) + ")"
-							fe = fn[1]
+                answ["answ"] = "ok"
+                self.conn.send(json.dumps(answ).encode("utf-8"))
+                msg = self.conn.recv(4096)
 
-							newfn = nm + "." + fe
+                msg_name = "".join((str(now_date.year), str(now_date.month), str(now_date.day), str(now_time.hour),
+                                    str(now_time.minute), str(now_time.second)))
 
-					f = open( "data/" + toUsr + "/files/" + fname + ".bin", "wb")
-					while True:
-						data = self.conn.recv(4096)
-						l = len(data) - 5
+                if not data["ToUsers"] == "$ALL_USERS$":
+                    toUsers.append( data["ToUsers"] )
+                else:
+                    toUsers = mdb.get_user_list(self.usr)
 
-						try:
-							if data[l:] == b'[end]':
-								print("Download complete")
-								f.write( data[:l] )
-								f.close()
-								lfiles = lfiles + fname + ","
-								mdb.add_file(fname, "file", self.usr, toUsr, str(now_date), now_time_str)
-								self.conn.send("complete".encode('utf-8'))
-								break
-						except:
-							print('except')			
-	
-						f.write(data)
-			print("Client " + self.usr + " disconnected")
-			mdb.close()
-		self.conn.close()
+                for toUsr in toUsers:
+                    if not os.path.exists("data/" + toUsr):
+                        os.makedirs("data/" + toUsr)
+
+                    msgFile = open("".join(("data/", toUsr, "/", msg_name, ".bin")), 'wb')
+                    msgFile.write(msg)
+                    msgFile.close()
+                    mdb.add_file(msg_name, 'msg', self.usr, toUsr, str(now_date), now_time_str)
+                    mdb.log(self.usr, "Отправил сообщение " + toUsr, str(now_date), now_time_str)
+                    Log().local("Message from " + self.usr + " to " + toUsr + " saved.")
+                    mdb.change_state(toUsr, "isMsg", 1)
+
+                answ["answ"] = "send-msg-ok"
+                self.conn.send(json.dumps(answ).encode("utf-8"))
+
+            """
+            Send files
+            """
+
+            if data["type"] == "send-files":
+                self.conn.send(b'ok')
+                toUsr = data["ToUser"]
+
+                while True:
+                    answ = self.conn.recv(1024).decode("utf-8")
+                    answ = json.loads(answ)
+
+                    if not answ["header"] == self.header:
+                        return
+
+                    if answ["type"] == "end-retrieve":
+                        mdb.log(self.usr, "Отправил файлы (" + lfiles + ") - " + toUsr, str(now_date), now_time_str)
+                        Log().local(self.usr + " отправил файлы (" + lfiles + ") - " + toUsr)
+                        mdb.change_state(toUsr, "isFiles", 1)
+                        print("All files recieved")
+                        break
+
+                    if not os.path.exists("".join(("data/" + toUsr + "/files/"))):
+                        print("create subdir")
+                        os.makedirs("".join(("data/", toUsr, "/files/")))
+
+                    print("Start downloading...")
+                    self.conn.send(b'recieveing...')
+
+                    fname = ""
+
+                    if answ["type"] == "sf":
+                        fname = answ["filename"]
+                        print("New file: " + fname)
+
+                    index = 0
+                    newfn = fname
+                    while True:
+                        if not os.path.exists("".join(("data/", toUsr, "/files/", newfn, ".bin"))):
+                            fname = newfn
+                            break
+                        else:
+                            newfn = fname
+                            index += 1
+                            fn = fname.split(".")
+                            nm = fn[0] + "(" + str(index) + ")"
+                            fe = fn[1]
+
+                            newfn = nm + "." + fe
+
+                    f = open("".join(("data/", toUsr, "/files/", fname, ".bin")), "wb")
+                    while True:
+                        data = self.conn.recv(4096)
+                        l = len(data) - 5
+
+                        try:
+                            if data[l:] == b'[end]':
+                                print("Download complete")
+                                f.write(data[:l])
+                                f.close()
+                                lfiles = lfiles + fname + ","
+                                mdb.add_file(fname, "file", self.usr, toUsr, str(now_date), now_time_str)
+                                self.conn.send("complete".encode('utf-8'))
+                                break
+                        except:
+                            Log().local(self.usr + "Error while getting files")
+
+                        f.write(data)
+            Log().local("Client " + self.usr + " disconnected")
+            mdb.close()
+        self.conn.close()
 
 
 class MainThread(threading.Thread):
-	cfg = {}
-	def __init__(self):
-		super(MainThread, self).__init__()
+    cfg = {}
 
-	def set_configs(self, config):
-		self.cfg = config
+    def __init__(self):
+        super(MainThread, self).__init__()
 
-	def run(self):
-		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		
-		try:
-			s.bind((self.cfg["ip"], int(self.cfg["port"])))
-			s.listen(int(self.cfg["clients"]))	
-		except:
-			print("Error of binding ip address")
-			return
+    def set_configs(self, config):
+        self.cfg = config
 
-		print(
-		"""
+    def run(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        try:
+            s.bind((self.cfg["TcpServer"]["ip"], self.cfg["TcpServer"]["port"]))
+            s.listen(int(self.cfg["TcpServer"]["clients"]))
+        except:
+            Log().local("Error of binding ip address")
+            return
+
+        print(
+            """
 		#############################################################################
-		#									    #
-		#			 Doku Mail Server Started			    #
-		#									    #
+		#									                                        #
+		#			 Doku Mail Server Started			                            #
+		#									                                        #
 		#############################################################################
 		
 		""")
 
-		while True:
-			conn, addr = s.accept()
-			proc = mp.Process(target=ServerThread, args=(conn, addr))
-			proc.start()
+        while True:
+            conn, addr = s.accept()
+            proc = mp.Process(target=ServerThread, args=(conn, addr, self.cfg))
+            proc.start()
 
 
 def main():
-	config = {}
-	try:
-		f = open("config.dat", "r")
-		config = json.load(f)
-		f.close()
-	except:
-		print("Error of reading config file")
-		return
+    config = {}
+    try:
+        f = open("config.cfg", "r")
+        config = json.load(f)
+        f.close()
+    except:
+        Log().local("Error of reading config file")
+        return
 
-	"""
+    """
 	Start server listener
 	"""
-	main_thread = MainThread()
-	main_thread.set_configs( config )
-	main_thread.setDaemon( True )
+    main_thread = MainThread()
+    main_thread.set_configs(config)
+    main_thread.setDaemon(True)
 
-	while True:
-		cmd = input("DokuServer> ")
+    while True:
+        cmd = input("DokuServer> ")
 
-		if cmd == "start":
-			print("starting server...")
-			main_thread.start()
+        if cmd == "start":
+            print("starting server...")
+            main_thread.start()
 
-		if cmd == "exit" or cmd == "quit" or cmd == "q":
-			break
+        if cmd == "exit" or cmd == "quit" or cmd == "q":
+            break
 
-	print("Goodbye!")
-	sys.exit()
+    print("Goodbye!")
+    sys.exit()
+
 
 if __name__ == '__main__':
-	main()
+    main()
