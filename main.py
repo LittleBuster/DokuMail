@@ -10,6 +10,7 @@ from keys import AppKeys
 import subprocess
 from send import *
 from crypt import *
+from  msgbase import MessageBase
 from PyQt4 import QtGui
 from task import TaskWnd
 from paths import AppPath
@@ -26,6 +27,7 @@ class MainWindow(QtGui.QWidget):
     __MDBServer = str
     __MDBUser = str
     __MDBPasswd = str
+    __MDBBase = str
     __TCPServer = str
     __TCPPort = int
     loginWnd = LoginWindow
@@ -41,6 +43,8 @@ class MainWindow(QtGui.QWidget):
         self.user = str
         self.passwd = str
         self.news_count = 0
+
+        self.history_in = True
 
         if platform.system() == "Linux":
             self.ui.label.setPixmap(QtGui.QPixmap( "".join((self.app_path, "images/fon2.png")) ))
@@ -85,6 +89,10 @@ class MainWindow(QtGui.QWidget):
         QtCore.QObject.connect(self.ui.pbSettings, QtCore.SIGNAL("clicked()"), self.on_settings_clicked)
         QtCore.QObject.connect(self.ui.pbAbout, QtCore.SIGNAL("clicked()"), self.on_about_clicked)
         QtCore.QObject.connect(self.ui.pbCreateTask, QtCore.SIGNAL("clicked()"), self.on_create_task)
+
+        QtCore.QObject.connect(self.ui.pbIncoming, QtCore.SIGNAL("clicked()"), self.on_incoming_clicked)
+        QtCore.QObject.connect(self.ui.pbOutgoing, QtCore.SIGNAL("clicked()"), self.on_outgoing_clicked)
+        QtCore.QObject.connect(self.ui.lwHistory, QtCore.SIGNAL("itemClicked(QListWidgetItem*)"),self.lwhist_item_clicked)
 
         """
         Task List
@@ -135,6 +143,8 @@ class MainWindow(QtGui.QWidget):
         QtCore.QObject.connect(self.newsCurWnd.ui.pbDeleteNews, QtCore.SIGNAL("clicked()"), self.checker.on_delete_news)
         QtCore.QObject.connect(self.ui.pbRelogin, QtCore.SIGNAL("clicked()"), self.on_relogin)
         QtCore.QObject.connect(self.ui.pbDownloads, QtCore.SIGNAL("clicked()"), self.on_downloads)
+        QtCore.QObject.connect(self.ui.pbCloseHistory, QtCore.SIGNAL("clicked()"), self.on_messages_clicked)
+        QtCore.QObject.connect(self.ui.pbClearHistory, QtCore.SIGNAL("clicked()"), self.on_clearhistory_clicked)
 
         self.cur_path = os.getcwd() + "/"
 
@@ -177,11 +187,18 @@ class MainWindow(QtGui.QWidget):
     def getMDBPasswd(self):
         return self.__MDBPasswd
 
+    def setMDBBase(self, passwd):
+        self.__MDBBase = passwd
+
+    def getMDBBase(self):
+        return self.__MDBBase
+
     TCPServer = property(getTcpServer, setTcpServer)
     TCPPort = property(getTcpPort, setTcpPort)
     MDBServer = property(getMDBServer, setMDBServer)
     MDBUser = property(getMDBUser, setMDBUser)
     MDBPasswd = property(getMDBPasswd, setMDBPasswd)
+    MDBBase = property(getMDBBase, setMDBBase)
 
     """"""
 
@@ -203,7 +220,7 @@ class MainWindow(QtGui.QWidget):
 
     def on_create_news(self):
         mdb = MariaDB()
-        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, self.MDBBase):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
                                            QtGui.QMessageBox.Yes)
             return
@@ -226,7 +243,7 @@ class MainWindow(QtGui.QWidget):
             return
 
         mdb = MariaDB()
-        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, self.MDBBase):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
                                            QtGui.QMessageBox.Yes)
             return
@@ -266,7 +283,7 @@ class MainWindow(QtGui.QWidget):
 
     def on_send_task(self):
         mdb = MariaDB()
-        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, self.MDBBase):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtGui.QMessageBox.Yes)
             return
 
@@ -290,7 +307,7 @@ class MainWindow(QtGui.QWidget):
     def check_tasks(self):
         self.ui.tw1.setRowCount(0)
         mdb = MariaDB()
-        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, self.MDBBase):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!', QtGui.QMessageBox.Yes)
             return
         taskList = mdb.get_task_list(self.user)
@@ -375,10 +392,96 @@ class MainWindow(QtGui.QWidget):
     def on_clear_msg_clicked(self):
         self.ui.teMsg.clear()
 
+    def on_incoming_clicked(self):
+        lst = []
+        self.history_in = True
+        self.ui.label_19.setText("<html><head/><body><p><span style=' color:#ffffff;'>История (Входящие сообщения)\
+                                    </span></p></body></html>")
+        self.ui.lwHistory.clear()
+        self.ui.stackedWidget.setCurrentIndex(6)
+        mb = MessageBase()
+        try:
+            lst = mb.load_message_list(True)
+        except:
+            QtGui.QMessageBox.warning(self, 'Warning', 'У Вас нет входящих сообщений', QtGui.QMessageBox.Yes)
+            return
+
+        if len(lst) == 0:
+            return
+        else:
+            for msg in lst:
+                item = QtGui.QListWidgetItem()
+                item.setIcon(QtGui.QIcon( "".join((self.app_path, "images/conv.ico")) ))
+                item.setText(msg)
+                self.ui.lwHistory.insertItem(0, item)
+
+    def on_outgoing_clicked(self):
+        lst = []
+        self.ui.label_19.setText("<html><head/><body><p><span style=' color:#ffffff;'>История (Исходящие сообщения)\
+                                    </span></p></body></html>")
+        self.history_in = False
+        self.ui.lwHistory.clear()
+        self.ui.stackedWidget.setCurrentIndex(6)
+        mb = MessageBase()
+        try:
+            lst = mb.load_message_list(False)
+        except:
+            QtGui.QMessageBox.warning(self, 'Warning', 'У Вас нет исходящих сообщений', QtGui.QMessageBox.Yes)
+            return
+
+        if len(lst) == 0:
+            return
+        else:
+            for msg in lst:
+                item = QtGui.QListWidgetItem()
+                item.setIcon(QtGui.QIcon( "".join((self.app_path, "images/conv.ico")) ))
+                item.setText(msg)
+                self.ui.lwHistory.insertItem(0, item)
+
+    def lwhist_item_clicked(self, item):
+        mb = MessageBase()
+        msg = mb.get_message(item.text(), self.history_in)
+
+        if self.history_in:
+            self.recieveMsg.msgWnd.ui.lbFrom.setText(
+                "<html><head/><body><p><span style='color:#ffffff;'>" + msg["from"] + "</span></p></body></html>")
+            self.recieveMsg.msgWnd.ui.lbTime.setText(
+                "<html><head/><body><p><span style='color:#ffffff;'>" + msg["time"] + "</span></p></body></html>")
+            self.recieveMsg.msgWnd.ui.teMsg.setPlainText(msg["text"])
+            self.recieveMsg.msgWnd.ui.lbFormTitle.setText('<html><head/><body><p><span style=" color:#00dbff;">От кого:\
+                                                            </span></p></body></html>')
+            self.recieveMsg.msgWnd.show()
+        else:
+            self.recieveMsg.msgWnd.ui.lbFormTitle.setText('<html><head/><body><p><span style=" color:#00dbff;">Кому:\
+                                                            </span></p></body></html>')
+            self.recieveMsg.msgWnd.ui.lbFrom.setText(
+                "<html><head/><body><p><span style='color:#ffffff;'>" + msg["to"] + "</span></p></body></html>")
+            self.recieveMsg.msgWnd.ui.lbTime.setText(
+                "<html><head/><body><p><span style='color:#ffffff;'>" + msg["time"] + "</span></p></body></html>")
+            self.recieveMsg.msgWnd.ui.teMsg.setPlainText(msg["text"])
+            self.recieveMsg.msgWnd.show()
+
+    def on_clearhistory_clicked(self):
+        """
+        Delete all in or out messages
+        """
+        result = QtGui.QMessageBox.question(self, 'Очистка', 'Вы действительно хотите удалить все сообщения?',
+                                                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No, QtGui.QMessageBox.No)
+        if result == QtGui.QMessageBox.Yes:
+            mb = MessageBase()
+            try:
+                mb.clear_messages(self.history_in)
+                self.ui.lwHistory.clear()
+            except:
+                QtGui.QMessageBox.warning(self, 'Очистка', 'У Вас нет сообщений', QtGui.QMessageBox.Yes)
+
     def on_lwnews_clicked(self, item):
+        """
+        Show current clicked news
+        """
         title = str(item.text()).split("]")[1]
         mdb = MariaDB()
-        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, self.MDBBase):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
                                            QtGui.QMessageBox.Yes)
             return
@@ -407,7 +510,7 @@ class MainWindow(QtGui.QWidget):
     def init_app(self):
         cfg = Configs()
         mdb = MariaDB()
-        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, "DokuMail"):
+        if not mdb.connect(self.MDBServer, self.MDBUser, self.MDBPasswd, self.MDBBase):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка соединения с Базой Данных!',
                                            QtGui.QMessageBox.Yes)
             return
@@ -425,7 +528,7 @@ class MainWindow(QtGui.QWidget):
         self.check_tasks()
 
         config = dict(TcpServer=self.TCPServer, TcpPort=self.TCPPort, MDBServer=self.MDBServer, MDBUser=self.MDBUser,
-                      MDBPasswd=self.MDBPasswd)
+                      MDBPasswd=self.MDBPasswd, MDBBase=self.MDBBase)
         self.checker.set_configs(config, self.user)
         self.checker.start_timers()
 
@@ -439,6 +542,7 @@ class MainWindow(QtGui.QWidget):
             self.MDBServer = cfg.db_config()["ip"]
             self.TCPServer = cfg.tcp_config()["ip"]
             self.TCPPort = cfg.tcp_config()["port"]
+            self.MDBBase = cfg.db_config()["base"]
         except:
             Log().local("Error reading config file")
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!',
@@ -465,11 +569,7 @@ class MainWindow(QtGui.QWidget):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения файла аутинтификации!', QtGui.QMessageBox.Yes)
 
     def on_send_msg(self):
-        try:
-            send_msg(self, self.ui.teMsg.document().toPlainText(), False, self.passwd, self.ui.lbAlias.text())
-        except:
-            Log().local("Ошибка отправки сообщения")
-            QtGui.QMessageBox.critical(self, 'Error', 'Ошибка отправки сообщения!', QtGui.QMessageBox.Yes)
+        send_msg(self, self.ui.teMsg.document().toPlainText(), False, self.passwd, self.ui.lbAlias.text())
 
     def on_sendall_msg(self):
         send_msg(self, self.ui.teMsg.document().toPlainText(), True, self.passwd, None)

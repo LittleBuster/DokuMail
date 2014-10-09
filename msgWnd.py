@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'msgWnd.ui'
 #
-# Created: Wed Oct  1 13:10:51 2014
+# Created: Fri Oct 10 02:30:32 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -83,15 +83,15 @@ class Ui_MsgWnd(object):
         self.pbClose.setIcon(icon1)
         self.pbClose.setIconSize(QtCore.QSize(24, 24))
         self.pbClose.setObjectName(_fromUtf8("pbClose"))
-        self.lbFile = QtGui.QLabel(MsgWnd)
-        self.lbFile.setGeometry(QtCore.QRect(20, 50, 121, 41))
+        self.lbFormTitle = QtGui.QLabel(MsgWnd)
+        self.lbFormTitle.setGeometry(QtCore.QRect(20, 50, 121, 41))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Times New Roman"))
         font.setPointSize(22)
         font.setBold(True)
         font.setWeight(75)
-        self.lbFile.setFont(font)
-        self.lbFile.setObjectName(_fromUtf8("lbFile"))
+        self.lbFormTitle.setFont(font)
+        self.lbFormTitle.setObjectName(_fromUtf8("lbFormTitle"))
         self.teMsg = QtGui.QTextEdit(MsgWnd)
         self.teMsg.setGeometry(QtCore.QRect(20, 100, 681, 291))
         font = QtGui.QFont()
@@ -145,7 +145,7 @@ class Ui_MsgWnd(object):
         MsgWnd.setWindowTitle(_translate("MsgWnd", "Сообщение", None))
         self.label_3.setText(_translate("MsgWnd", "<html><head/><body><p><span style=\" color:#00ffd5;\">Новое сообщение</span></p></body></html>", None))
         self.pbClose.setText(_translate("MsgWnd", "Закрыть сообщение", None))
-        self.lbFile.setText(_translate("MsgWnd", "<html><head/><body><p><span style=\" color:#00dbff;\">От кого:</span></p></body></html>", None))
+        self.lbFormTitle.setText(_translate("MsgWnd", "<html><head/><body><p><span style=\" color:#00dbff;\">От кого:</span></p></body></html>", None))
         self.lbFile_2.setText(_translate("MsgWnd", "<html><head/><body><p><span style=\" color:#00dbff;\">Время:</span></p></body></html>", None))
         self.lbFrom.setText(_translate("MsgWnd", "<html><head/><body><p><span style=\" color:#ffffff;\">От кого:</span></p></body></html>", None))
         self.lbTime.setText(_translate("MsgWnd", "<html><head/><body><p><span style=\" color:#ffffff;\">22:23:23</span></p></body></html>", None))

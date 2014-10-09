@@ -1,261 +1,76 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
- <class>MsgWnd</class>
- <widget class="QWidget" name="MsgWnd">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>719</width>
-    <height>451</height>
-   </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>719</width>
-    <height>451</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>719</width>
-    <height>451</height>
-   </size>
-  </property>
-  <property name="windowTitle">
-   <string>Сообщение</string>
-  </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>images/convert.ico</normaloff>images/convert.ico</iconset>
-  </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>-210</x>
-     <y>-120</y>
-     <width>941</width>
-     <height>671</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>images/fon.jpg</pixmap>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>-4</y>
-     <width>71</width>
-     <height>48</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>images/conv.ico</pixmap>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>5</y>
-     <width>291</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>28</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00ffd5;&quot;&gt;Новое сообщение&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pbClose">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>400</y>
-     <width>251</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>12</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
-	color:rgb(255, 255, 255);
-	border-width: 1px;
-     border-style: solid;
-     border-radius: 7px;
-	min-width: 80px;
-}
+# -*- coding: utf-8 -*-
 
-QPushButton:hover {
-    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
-}
+# Form implementation generated from reading ui file 'newsCurrentWnd.ui'
+#
+# Created: Fri Oct 10 02:30:32 2014
+#      by: PyQt4 UI code generator 4.10.4
+#
+# WARNING! All changes made in this file will be lost!
 
-QPushButton:pressed {
-    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
-}</string>
-   </property>
-   <property name="text">
-    <string>Закрыть сообщение</string>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>images/exit.png</normaloff>images/exit.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>24</width>
-     <height>24</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbFile">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>121</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>22</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00dbff;&quot;&gt;От кого:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="teMsg">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>100</y>
-     <width>681</width>
-     <height>291</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>22</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QWidget {
-	background-color: rgba(23, 115, 255, 137);
-	color:rgb(255, 255, 255);
-	border-width: 1px;
-	border-color: rgb(255, 255, 255);
-     border-style: solid;
-     border-radius: 5px;
-}</string>
-   </property>
-   <property name="textInteractionFlags">
-    <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbFile_2">
-   <property name="geometry">
-    <rect>
-     <x>490</x>
-     <y>50</y>
-     <width>91</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>22</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00dbff;&quot;&gt;Время:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbFrom">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>50</y>
-     <width>241</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>22</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;От кого:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbTime">
-   <property name="geometry">
-    <rect>
-     <x>590</x>
-     <y>50</y>
-     <width>111</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>22</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;22:23:23&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
- </widget>
- <resources/>
- <connections/>
-</ui>
+from PyQt4 import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+class Ui_UpdateWnd(object):
+    def setupUi(self, UpdateWnd):
+        UpdateWnd.setObjectName(_fromUtf8("UpdateWnd"))
+        UpdateWnd.resize(719, 319)
+        UpdateWnd.setMinimumSize(QtCore.QSize(719, 319))
+        UpdateWnd.setMaximumSize(QtCore.QSize(719, 451))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("images/downloads.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        UpdateWnd.setWindowIcon(icon)
+        self.label = QtGui.QLabel(UpdateWnd)
+        self.label.setGeometry(QtCore.QRect(-280, -270, 1101, 801))
+        self.label.setText(_fromUtf8(""))
+        self.label.setPixmap(QtGui.QPixmap(_fromUtf8("images/fon.jpg")))
+        self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label.setObjectName(_fromUtf8("label"))
+        self.label_3 = QtGui.QLabel(UpdateWnd)
+        self.label_3.setGeometry(QtCore.QRect(110, 5, 531, 41))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Times New Roman"))
+        font.setPointSize(28)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label_3.setObjectName(_fromUtf8("label_3"))
+        self.lbFile = QtGui.QLabel(UpdateWnd)
+        self.lbFile.setGeometry(QtCore.QRect(0, 250, 711, 51))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Times New Roman"))
+        font.setPointSize(28)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lbFile.setFont(font)
+        self.lbFile.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbFile.setObjectName(_fromUtf8("lbFile"))
+        self.label_4 = QtGui.QLabel(UpdateWnd)
+        self.label_4.setGeometry(QtCore.QRect(250, 50, 231, 231))
+        self.label_4.setText(_fromUtf8(""))
+        self.label_4.setPixmap(QtGui.QPixmap(_fromUtf8("images/database-icon-219.png")))
+        self.label_4.setScaledContents(True)
+        self.label_4.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+
+        self.retranslateUi(UpdateWnd)
+        QtCore.QMetaObject.connectSlotsByName(UpdateWnd)
+
+    def retranslateUi(self, UpdateWnd):
+        UpdateWnd.setWindowTitle(_translate("UpdateWnd", "Загрузка", None))
+        self.label_3.setText(_translate("UpdateWnd", "<html><head/><body><p><span style=\" color:#00ffd5;\">Обновление файлов DokuMail</span></p></body></html>", None))
+        self.lbFile.setText(_translate("UpdateWnd", "<html><head/><body><p><span style=\" color:#00d2ff;\">Обновление файлов</span></p></body></html>", None))
+

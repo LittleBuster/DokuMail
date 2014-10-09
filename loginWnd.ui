@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TaskWnd</class>
- <widget class="QWidget" name="TaskWnd">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>719</width>
-    <height>451</height>
+    <width>613</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>719</width>
-    <height>451</height>
+    <width>613</width>
+    <height>340</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>719</width>
-    <height>451</height>
+    <width>613</width>
+    <height>340</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Новая заявка</string>
+   <string>Система Обмена Данными</string>
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>images/filenew_8842.ico</normaloff>images/filenew_8842.ico</iconset>
+    <normaloff>images/network-receive.png</normaloff>images/network-receive.png</iconset>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="lbBack">
    <property name="geometry">
     <rect>
-     <x>-210</x>
-     <y>-120</y>
-     <width>941</width>
-     <height>671</height>
+     <x>-20</x>
+     <y>-40</y>
+     <width>661</width>
+     <height>391</height>
     </rect>
    </property>
    <property name="text">
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap>images/fon.jpg</pixmap>
+    <pixmap>images/fon3.png</pixmap>
    </property>
    <property name="alignment">
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -51,52 +51,51 @@
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>150</y>
-     <width>121</width>
+     <x>0</x>
+     <y>20</y>
+     <width>601</width>
      <height>121</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>images/filenew_8842.ico</pixmap>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>250</x>
-     <y>0</y>
-     <width>231</width>
-     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Times New Roman</family>
-     <pointsize>28</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>Arial Black</family>
     </font>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00ffd5;&quot;&gt;Новая заявка&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:48pt; color:#00ffc8;&quot;&gt;DokuMail&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="pbClose">
+  <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>400</y>
-     <width>141</width>
+     <x>248</x>
+     <y>120</y>
+     <width>111</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial Black</family>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; color:#ffffff;&quot;&gt;Логин:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbLogin">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>280</y>
+     <width>211</width>
      <height>41</height>
     </rect>
    </property>
@@ -114,7 +113,7 @@
 	color:rgb(255, 255, 255);
 	border-width: 1px;
      border-style: solid;
-     border-radius: 7px;
+     border-radius: 10px;
 	min-width: 80px;
 }
 
@@ -127,7 +126,168 @@ QPushButton:pressed {
 }</string>
    </property>
    <property name="text">
-    <string>Закрыть</string>
+    <string>Вход</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>images/login.png</normaloff>images/login.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="edLogin">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>165</y>
+     <width>321</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>15</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+	background-color: rgba(23, 115, 255, 137);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>245</y>
+     <width>191</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Times New Roman</family>
+     <pointsize>14</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Запомнить пароль&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="edPasswd">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>205</y>
+     <width>321</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>15</pointsize>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+	background-color: rgba(23, 115, 255, 137);
+	border-width: 1px;
+color:rgb(255, 255, 255);
+	border-color: rgb(255, 255, 255);
+     border-style: solid;
+     border-radius: 5px;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="cbSave">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>245</y>
+     <width>21</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial Black</family>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pbCancel">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>280</y>
+     <width>211</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
+	color:rgb(255, 255, 255);
+	border-width: 1px;
+     border-style: solid;
+     border-radius: 10px;
+	min-width: 80px;
+}
+
+QPushButton:hover {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
+}
+
+QPushButton:pressed {
+    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
+}</string>
+   </property>
+   <property name="text">
+    <string>Отмена</string>
    </property>
    <property name="icon">
     <iconset>
@@ -140,88 +300,23 @@ QPushButton:pressed {
     </size>
    </property>
   </widget>
-  <widget class="QTextEdit" name="teMsg">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>681</width>
-     <height>341</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Times New Roman</family>
-     <pointsize>22</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QWidget {
-	background-color: rgba(23, 115, 255, 137);
-	color:rgb(255, 255, 255);
-	border-width: 1px;
-	border-color: rgb(255, 255, 255);
-     border-style: solid;
-     border-radius: 5px;
-}</string>
-   </property>
-   <property name="html">
-    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Times New Roman'; font-size:22pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Опишите проблему...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pbSendTask">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>400</y>
+     <x>210</x>
+     <y>10</y>
      <width>241</width>
-     <height>41</height>
+     <height>47</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>12</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-	background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(0, 29, 203, 255), stop:1 rgba(190, 255, 255, 255));
-	color:rgb(255, 255, 255);
-	border-width: 1px;
-     border-style: solid;
-     border-radius: 7px;
-	min-width: 80px;
-}
-
-QPushButton:hover {
-    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.655502 rgba(82, 100, 203, 255), stop:1 rgba(190, 255, 255, 255));
-}
-
-QPushButton:pressed {
-    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));
-}</string>
    </property>
    <property name="text">
-    <string>Отправить заявку</string>
+    <string/>
    </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>images/cloud.png</normaloff>images/cloud.png</iconset>
+   <property name="pixmap">
+    <pixmap>images/logo.png</pixmap>
    </property>
-   <property name="iconSize">
-    <size>
-     <width>24</width>
-     <height>24</height>
-    </size>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
   </widget>
  </widget>

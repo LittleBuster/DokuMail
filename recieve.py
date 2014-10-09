@@ -4,6 +4,8 @@
 from msg import MsgWnd
 from PyQt4 import QtGui
 from PyQt4 import QtCore
+from configs import Configs
+from msgbase import MessageBase
 from tcpclient import TcpClient
 from download import DownloadWnd
 from update import UpdateWnd
@@ -51,7 +53,7 @@ class RecieveThread(QtCore.QThread, TcpConfig):
     decryptStart = QtCore.pyqtSignal()
     decompressStart = QtCore.pyqtSignal()
     downloadComplete = QtCore.pyqtSignal()
-    fileDownloaded = QtCore.pyqtSignal()
+    fileDownloaded = QtCore.pyqtSignal(str)
     fileCount = QtCore.pyqtSignal(int)
 
     update = False
@@ -64,7 +66,7 @@ class RecieveThread(QtCore.QThread, TcpConfig):
         QtCore.QObject.connect(self.client, QtCore.SIGNAL("decryptStart()"), self.on_decrypt_start)
         QtCore.QObject.connect(self.client, QtCore.SIGNAL("decompressStart()"), self.on_decompress_start)
         QtCore.QObject.connect(self.client, QtCore.SIGNAL("downloadComplete()"), self.on_download_complete)
-        QtCore.QObject.connect(self.client, QtCore.SIGNAL("fileDownloaded()"), self.on_file_downloaded)
+        QtCore.QObject.connect(self.client, QtCore.SIGNAL("fileDownloaded(QString)"), self.on_file_downloaded)
         QtCore.QObject.connect(self.client, QtCore.SIGNAL("fileCount(int)"), self.on_file_count)
 
     def set_configs(self, tcpserver, tcpport, usr, pwd, update, path):
@@ -75,8 +77,8 @@ class RecieveThread(QtCore.QThread, TcpConfig):
         self.update = update
         self.cur_path = path
 
-    def on_file_downloaded(self):
-        self.fileDownloaded.emit()
+    def on_file_downloaded(self, fname):
+        self.fileDownloaded.emit(fname)
 
     def on_download_start(self, fname):
         self.downloadStart.emit(fname)
@@ -108,11 +110,13 @@ class Recieve(QtCore.QObject):
         self.updWnd = UpdateWnd()
         self.recieveTh = RecieveThread()
 
+        self.cfg = Configs()
+
         QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("downloadStart(QString)"), self.on_download_start)
         QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("decryptStart()"), self.on_decrypt_start)
         QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("decompressStart()"), self.on_decompress_start)
         QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("downloadComplete()"), self.on_download_complete)
-        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("fileDownloaded()"), self.on_file_downloaded)
+        QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("fileDownloaded(QString)"), self.on_file_downloaded)
         QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("fileCount(int)"), self.on_file_count)
         QtCore.QObject.connect(self.recieveTh, QtCore.SIGNAL("err(QString)"), self.on_err)
 
@@ -148,13 +152,21 @@ class Recieve(QtCore.QObject):
                                           + self.fname + "</span></p></body></html>")
             self.dldWnd.ui.pb1.setValue(66)
 
-    def on_file_downloaded(self):
+    def on_file_downloaded(self, fname):
         if not self.update:
             self.dldWnd.ui.lbFile.setText(
                 "<html><head/><body><p><span style='color:#00ffd5;'>Готово.</span></p></body></html>")
 
+            parts = fname.split('.')
+            ext = parts[len(parts) - 1].lower()
+            ico = ""
+            try:
+                ico = self.cfg.get_icons()["FileIcons"][ext]
+            except:
+                ico = self.cfg.get_icons()["FileIcons"]["default"]
+
             item = QtGui.QListWidgetItem()
-            item.setIcon(QtGui.QIcon( "".join((self.dldWnd.app_path, "images/filenew_8842.ico"))))
+            item.setIcon(QtGui.QIcon( "".join((self.dldWnd.app_path, "images/ext/", ico))))
             item.setText(self.fname)
 
             self.dldWnd.ui.lwFiles.insertItem(0, item)
@@ -223,7 +235,13 @@ class RecieveMsg(QtCore.QObject):
         self.msgWnd.ui.lbTime.setText(
             "<html><head/><body><p><span style='color:#ffffff;'>" + timeMsg + "</span></p></body></html>")
         self.msgWnd.ui.teMsg.setPlainText(Data)
+        self.msgWnd.ui.lbFormTitle.setText('<html><head/><body><p><span style=" color:#00dbff;">От кого:\
+                                                            </span></p></body></html>')
         self.msgWnd.show()
+
+        mb = MessageBase()
+        mb.save_message(fromUser, Data, True)
+
         self.msgComplete.emit()
 
     def msg_empty(self):

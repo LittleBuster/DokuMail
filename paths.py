@@ -25,7 +25,7 @@ class AppPath():
 
     def main(self):
         if  platform.system() == "Linux":
-            return os.path.join("/home", getpass.getuser(), ".doku/")
+            return os.path.join("./")
         elif platform.system() == "Windows":
            return "./"
 

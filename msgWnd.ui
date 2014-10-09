@@ -140,7 +140,7 @@ QPushButton:pressed {
     </size>
    </property>
   </widget>
-  <widget class="QLabel" name="lbFile">
+  <widget class="QLabel" name="lbFormTitle">
    <property name="geometry">
     <rect>
      <x>20</x>

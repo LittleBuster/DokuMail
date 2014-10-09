@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from configs import Configs
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 
@@ -12,9 +13,10 @@ class SystemTrayIcon(QtGui.QSystemTrayIcon):
         self._mw = mw
 
         menu = QtGui.QMenu(parent)
+        cfg = Configs()
 
         shAction = menu.addAction("Показать")
-        shAction.setIcon(QtGui.QIcon("".join((self._mw.app_path, "images/cmp.ico"))))
+        shAction.setIcon(QtGui.QIcon("".join((self._mw.app_path, "images/", cfg.get_icons()["Tray"]))))
         QtCore.QObject.connect(shAction, QtCore.SIGNAL("triggered()"), self.show_main)
 
         shAction2 = menu.addAction("О программе")
