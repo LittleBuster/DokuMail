@@ -7,10 +7,16 @@ from datetime import datetime
 
 
 class MessageBase():
+    """
+    Class for managing in/out messages history
+    """
     def __init__(self):
         self.app_path = AppPath().main()
 
     def save_message(self, user, message, incoming):
+        """
+        Save incoming or outgoing message in local database file
+        """
         con = sqlite3.connect("".join((self.app_path, 'msgbase.db')))
         cur = con.cursor()
 
@@ -42,6 +48,9 @@ class MessageBase():
         con.close()
 
     def load_message_list(self, incoming):
+        """
+        Load incomming/outgoing  messages list from local database file
+        """
         msg_list = []
         if not os.path.exists("".join((self.app_path, "msgbase.db"))):
             return msg_list
@@ -64,6 +73,9 @@ class MessageBase():
             return msg_list
 
     def get_message(self, msg_string, incoming):
+        """
+        Load old in/out message from local database file
+        """
         con = sqlite3.connect("".join((self.app_path, 'msgbase.db')))
         cur = con.cursor()
 
@@ -95,6 +107,9 @@ class MessageBase():
                 return msg
 
     def clear_messages(self, incoming):
+        """
+        Clear in/out messages table
+        """
         con = sqlite3.connect("".join((self.app_path, 'msgbase.db')))
         cur = con.cursor()
 

@@ -9,7 +9,7 @@
         "port": 5001
     },
 
-    "DownloadsPath": ["/home/", "$USER_PATH$", "/.doku/"],
+    "DownloadsPath": ["./downloads/"],
 
     "FileManagers": ["nautilus", "caja"],
 

@@ -4,6 +4,7 @@
 import os
 import random
 import platform
+import zlib
 from keys import AppKeys
 from ctypes import cdll
 from paths import AppPath
@@ -95,7 +96,7 @@ def AES256_cert_read(fname):
     return a_key
 
 
-def AES256_encode_file(filename, outfile, certFile):
+def AES256_encode_file(filename, outfile, a_key):
     """
     This function encrypt files by aes256 alorithm.
 
@@ -104,8 +105,6 @@ def AES256_encode_file(filename, outfile, certFile):
     If system linux - call .so libs, if Windows call .dll libs and change
     """
     lib = None
-
-    a_key = AES256_cert_read(certFile)
 
     if platform.system() == "Linux":
         if not os.path.exists("".join((AppPath().libs(), "libcrypt.so"))):
@@ -126,7 +125,7 @@ def AES256_encode_file(filename, outfile, certFile):
         return False
 
 
-def AES256_decode_file(filename, outfile, certFile):
+def AES256_decode_file(filename, outfile, a_key):
     """
     This function decrypt files by aes256 alorithm.
 
@@ -136,8 +135,6 @@ def AES256_decode_file(filename, outfile, certFile):
     encoding to cp1251 for russian language.
     """
     lib = None
-
-    a_key = AES256_cert_read(certFile)
 
     if platform.system() == "Linux":
         lib = cdll.LoadLibrary("".join((AppPath().libs(), "libcrypt.so")))
@@ -154,12 +151,11 @@ def AES256_decode_file(filename, outfile, certFile):
         return False
 
 
-def AES256_encode_msg(message, certFile):
+def AES256_encode_msg(message, a_key):
     """
     This function is used for encrypting messages,
     which send on server
     """
-    a_key = AES256_cert_read(certFile)
 
     obj = AES.new(a_key.key, AES.MODE_CBC, a_key.key4)
     l = len(message.encode("utf-8"))
@@ -170,13 +166,14 @@ def AES256_encode_msg(message, certFile):
         pl = pl - 1
 
     ciphertext = obj.encrypt(message.encode("utf-8"))
-    return ciphertext
+    cdata = zlib.compress(ciphertext, 9)
+    return cdata
 
 
-def AES256_decode_msg(binarr, certFile):
+def AES256_decode_msg(binarr, a_key):
     """
     This function is used for encrypting messages,
     """
-    a_key = AES256_cert_read(certFile)
     obj = AES.new(a_key.key, AES.MODE_CBC, a_key.key4)
-    return obj.decrypt(binarr).decode("utf-8").split("|")[0]
+    data = zlib.decompress(binarr)
+    return obj.decrypt(data).decode("utf-8").split("|")[0]

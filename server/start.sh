@@ -1,1 +1,1 @@
-python3 dokuserver.py
+./dokuserver.py

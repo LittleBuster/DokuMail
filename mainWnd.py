@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWnd.ui'
 #
-# Created: Fri Oct 10 02:10:28 2014
+# Created: Mon Oct 13 04:25:43 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -756,7 +756,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}"))
-        self.pbOutgoing.setIcon(icon1)
+        icon12 = QtGui.QIcon()
+        icon12.addPixmap(QtGui.QPixmap(_fromUtf8("images/up.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbOutgoing.setIcon(icon12)
         self.pbOutgoing.setIconSize(QtCore.QSize(20, 20))
         self.pbOutgoing.setObjectName(_fromUtf8("pbOutgoing"))
         self.pbIncoming = QtGui.QPushButton(self.page_2)
@@ -783,7 +785,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}"))
-        self.pbIncoming.setIcon(icon1)
+        icon13 = QtGui.QIcon()
+        icon13.addPixmap(QtGui.QPixmap(_fromUtf8("images/down.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbIncoming.setIcon(icon13)
         self.pbIncoming.setIconSize(QtCore.QSize(20, 20))
         self.pbIncoming.setObjectName(_fromUtf8("pbIncoming"))
         self.stackedWidget.addWidget(self.page_2)
@@ -813,9 +817,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}"))
-        icon12 = QtGui.QIcon()
-        icon12.addPixmap(QtGui.QPixmap(_fromUtf8("images/cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbDeleteFile.setIcon(icon12)
+        icon14 = QtGui.QIcon()
+        icon14.addPixmap(QtGui.QPixmap(_fromUtf8("images/cancel.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbDeleteFile.setIcon(icon14)
         self.pbDeleteFile.setIconSize(QtCore.QSize(24, 24))
         self.pbDeleteFile.setObjectName(_fromUtf8("pbDeleteFile"))
         self.label_8 = QtGui.QLabel(self.page_6)
@@ -852,9 +856,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}"))
-        icon13 = QtGui.QIcon()
-        icon13.addPixmap(QtGui.QPixmap(_fromUtf8("images/add.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbAddFile.setIcon(icon13)
+        icon15 = QtGui.QIcon()
+        icon15.addPixmap(QtGui.QPixmap(_fromUtf8("images/add.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbAddFile.setIcon(icon15)
         self.pbAddFile.setIconSize(QtCore.QSize(24, 24))
         self.pbAddFile.setObjectName(_fromUtf8("pbAddFile"))
         self.pbClearFiles = QtGui.QPushButton(self.page_6)
@@ -1177,7 +1181,7 @@ class Ui_Form(object):
         self.label_24.setAlignment(QtCore.Qt.AlignCenter)
         self.label_24.setObjectName(_fromUtf8("label_24"))
         self.pbSetConfig = QtGui.QPushButton(self.page_8)
-        self.pbSetConfig.setGeometry(QtCore.QRect(220, 250, 200, 41))
+        self.pbSetConfig.setGeometry(QtCore.QRect(70, 257, 200, 41))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Arial"))
         font.setPointSize(12)
@@ -1203,6 +1207,54 @@ class Ui_Form(object):
         self.pbSetConfig.setIcon(icon6)
         self.pbSetConfig.setIconSize(QtCore.QSize(24, 24))
         self.pbSetConfig.setObjectName(_fromUtf8("pbSetConfig"))
+        self.sfsdf = QtGui.QLabel(self.page_8)
+        self.sfsdf.setGeometry(QtCore.QRect(350, 240, 171, 20))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Arial Black"))
+        font.setPointSize(12)
+        self.sfsdf.setFont(font)
+        self.sfsdf.setObjectName(_fromUtf8("sfsdf"))
+        self.leDownloadsPath = QtGui.QLineEdit(self.page_8)
+        self.leDownloadsPath.setGeometry(QtCore.QRect(20, 204, 301, 31))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Arial"))
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.leDownloadsPath.setFont(font)
+        self.leDownloadsPath.setStyleSheet(_fromUtf8("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}"))
+        self.leDownloadsPath.setObjectName(_fromUtf8("leDownloadsPath"))
+        self.label_25 = QtGui.QLabel(self.page_8)
+        self.label_25.setGeometry(QtCore.QRect(20, 180, 171, 21))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Arial Black"))
+        font.setPointSize(12)
+        self.label_25.setFont(font)
+        self.label_25.setObjectName(_fromUtf8("label_25"))
+        self.leMDBBase = QtGui.QLineEdit(self.page_8)
+        self.leMDBBase.setGeometry(QtCore.QRect(340, 270, 211, 31))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Arial"))
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.leMDBBase.setFont(font)
+        self.leMDBBase.setStyleSheet(_fromUtf8("QLineEdit{\n"
+"    background-color: rgba(255, 255, 255, 71);\n"
+"    border-width: 1px;\n"
+"color:rgb(255, 255, 255);\n"
+"    border-color: rgb(255, 255, 255);\n"
+"     border-style: solid;\n"
+"     border-radius: 5px;\n"
+"}"))
+        self.leMDBBase.setObjectName(_fromUtf8("leMDBBase"))
         self.stackedWidget.addWidget(self.page_8)
         self.page_3 = QtGui.QWidget()
         self.page_3.setObjectName(_fromUtf8("page_3"))
@@ -1291,9 +1343,9 @@ class Ui_Form(object):
 "QPushButton:pressed {\n"
 "    background-color:qlineargradient(spread:reflect, x1:0.515, y1:1, x2:0.528, y2:0, stop:0 rgba(0, 143, 250, 255), stop:0.596154 rgba(85, 250, 255, 255), stop:1 rgba(190, 255, 255, 255));\n"
 "}"))
-        icon14 = QtGui.QIcon()
-        icon14.addPixmap(QtGui.QPixmap(_fromUtf8("images/exit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pbCloseHistory.setIcon(icon14)
+        icon16 = QtGui.QIcon()
+        icon16.addPixmap(QtGui.QPixmap(_fromUtf8("images/exit.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pbCloseHistory.setIcon(icon16)
         self.pbCloseHistory.setIconSize(QtCore.QSize(24, 24))
         self.pbCloseHistory.setObjectName(_fromUtf8("pbCloseHistory"))
         self.label_19 = QtGui.QLabel(self.page_4)
@@ -1464,7 +1516,7 @@ class Ui_Form(object):
         self.lbStatus.setObjectName(_fromUtf8("lbStatus"))
 
         self.retranslateUi(Form)
-        self.stackedWidget.setCurrentIndex(6)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -1504,6 +1556,8 @@ class Ui_Form(object):
         self.label_23.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">TCP Server:</span></p></body></html>", None))
         self.label_24.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ffffff;\">MariaDB Server:</span></p></body></html>", None))
         self.pbSetConfig.setText(_translate("Form", "Применить", None))
+        self.sfsdf.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00fffa;\">Server Basename:</span></p></body></html>", None))
+        self.label_25.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00fffa;\">Downloads Path:</span></p></body></html>", None))
         self.label_18.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#00ffd8;\">DokuMail</span></p></body></html>", None))
         self.textEdit.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

@@ -38,7 +38,7 @@ class WatchWindow(QtGui.QWidget):
         self.ui.tw1.horizontalHeader().resizeSection(3, 100)
 
         self.MDBServer = ""
-        self.MDBUser = ""
+        self.MDBUser = "doku"
         self.MDBPasswd = ""
 
         self.isRead = False

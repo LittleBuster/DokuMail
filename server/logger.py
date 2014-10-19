@@ -1,32 +1,43 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os
 import datetime
-import platform
+
+LOG_WARNING = 100
+LOG_CRITICAL = 101
+LOG_INFO = 102
 
 
 class Log():
     """
-	Singleton class for loging app
-	"""
+    Singleton class for loging app
+    """
 
     def new(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Singleton, cls).__new__(cls)
             return cls.instance
 
-    def local(self, text):
+    def local(self, user, text, type, db=None):
         """
-		Create local log file or append info in exists
-		"""
-        path = ""
-        if platform.system() == "Linux":
-            path = "log.txt"
+        Create local log file or append info in exists
+        """
+        tp = ""
+        float()
+        if type == LOG_WARNING:
+            tp = "warning"
+        elif type == LOG_CRITICAL:
+            tp = "critical"
+        elif type == LOG_INFO:
+            tp = "info"
 
-        logf = open(path, "a")
-        date = datetime.datetime.now()
-        txt = "".join(("[", str(date), "] ", text, "\n"))
+        logf = open("log.txt", "a")
+        date = str(datetime.datetime.now()).split(".")[0]
+        txt = "".join(("[", date, "][", user, "][", tp, "]: ", text, "\n"))
         logf.writelines(txt)
         logf.close()
+
+        if db:
+             db.log(user, text, tp, date.split(" ")[1], date.split(" ")[0])
+
         print(txt.split("\n")[0])

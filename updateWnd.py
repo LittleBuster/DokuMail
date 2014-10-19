@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'updateWnd.ui'
 #
-# Created: Fri Oct 10 02:30:32 2014
+# Created: Mon Oct 13 04:25:43 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!

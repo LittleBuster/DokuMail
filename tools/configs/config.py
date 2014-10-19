@@ -1,30 +1,34 @@
 import json
+from crypt import *
+
 
 class pObj(object):
-	"""
-	JSON temp class
-	"""
-	pass
+    """
+    JSON temp class
+    """
+    pass
 
 def main():
-	MDBServer = input("MariaDB Server: ")
-	MDBUser = input("MariaDB User: ")
-	MDBPasswd = input("MariaDB Password: ")
-	TCPServer = input("TCP Server: ")
-	TCPPort = input("TCP Port:")
+    MDBUser = input("MariaDB User: ")
+    MDBPasswd = input("MariaDB Password: ")
 
-	print("Writing configs...")
-	f = open("config.dat", "w")
-	cfg = pObj()
-	cfg.config = {}
-	cfg.config["mdbserver"] = MDBServer
-	cfg.config["mdbuser"] = MDBUser
-	cfg.config["mdbpasswd"] = MDBPasswd
-	cfg.config["tcpserver"] = TCPServer
-	cfg.config["tcpport"] = TCPPort
-	json.dump(cfg.config, f)
-	f.close()
-	print("Complete.")
+    cred = {}
+    cred["login"] = MDBUser
+    cred["password"] = MDBPasswd
+
+    print("Writing configs...")
+    f = open("servercred.tmp", "w")
+    cfg = pObj()
+    cfg.config = {}
+    cfg.config["MariaDB"] = cred
+
+    print(cfg.config)
+    json.dump(cfg.config, f)
+    f.close()
+
+    DES3_encrypt_file("servercred.tmp", "servercred.dat", 16, b'1w1RTH2yaFIxk47D', b'4srgJfVo')
+    os.remove("servercred.tmp")
+    print("Complete.")
 
 if __name__ == '__main__':
-	main()
+    main()

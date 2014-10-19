@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import getpass
 
 import json
 import sqlite3
@@ -21,6 +22,13 @@ from login import LoginWindow
 from tray import SystemTrayIcon
 from recieve import Recieve, RecieveMsg
 from news import NewsWnd, NewsCurWnd, NewsBaloonWnd
+
+
+class pObj(object):
+    """
+    JSON temp class
+    """
+    pass
 
 
 class MainWindow(QtGui.QWidget):
@@ -68,6 +76,10 @@ class MainWindow(QtGui.QWidget):
             self.ui.pbAddFile.setIcon(QtGui.QIcon( "".join((self.app_path, "images/add.png")) ))
             self.ui.pbCreateTask.setIcon(QtGui.QIcon( "".join((self.app_path, "images/filenew_8842.ico")) ))
             self.ui.pbSetConfig.setIcon(QtGui.QIcon( "".join((self.app_path, "images/settings.ico")) ))
+            self.ui.pbClearHistory.setIcon(QtGui.QIcon( "".join((self.app_path, "images/recycle.png")) ))
+            self.ui.pbCloseHistory.setIcon(QtGui.QIcon( "".join((self.app_path, "images/exit.png")) ))
+            self.ui.pbOutgoing.setIcon(QtGui.QIcon( "".join((self.app_path, "images/up.ico")) ))
+            self.ui.pbIncoming.setIcon(QtGui.QIcon( "".join((self.app_path, "images/down.ico")) ))
 
         QtCore.QObject.connect(self.ui.pbMinimize, QtCore.SIGNAL("clicked()"), self.minimize_app)
         self.tr = SystemTrayIcon(self, QtGui.QIcon( os.path.join(self.app_path, "images/cmp.ico")) )
@@ -145,8 +157,6 @@ class MainWindow(QtGui.QWidget):
         QtCore.QObject.connect(self.ui.pbDownloads, QtCore.SIGNAL("clicked()"), self.on_downloads)
         QtCore.QObject.connect(self.ui.pbCloseHistory, QtCore.SIGNAL("clicked()"), self.on_messages_clicked)
         QtCore.QObject.connect(self.ui.pbClearHistory, QtCore.SIGNAL("clicked()"), self.on_clearhistory_clicked)
-
-        self.cur_path = os.getcwd() + "/"
 
     """
     Properties for configs
@@ -232,9 +242,11 @@ class MainWindow(QtGui.QWidget):
         mdb.close()
 
     def on_send_news(self):
+        """
+        Create news record in database
+        """
         if self.newsWnd.ui.leTitle.text() == "":
-            QtGui.QMessageBox.warning(self.newsWnd, 'Error', 'Введите заголовок новости!',
-                                          QtGui.QMessageBox.Yes)
+            QtGui.QMessageBox.warning(self.newsWnd, 'Error', 'Введите заголовок новости!', QtGui.QMessageBox.Yes)
             return
 
         if self.newsWnd.ui.teNews.document().toPlainText() == "" or \
@@ -252,12 +264,21 @@ class MainWindow(QtGui.QWidget):
                          self.newsWnd.ui.leTitle.text(), str(date)):
             self.newsWnd.close()
             mdb.log(self.user, "".join(("Добавил новость [", self.newsWnd.ui.leTitle.text(), "]")))
+
+            client = TcpClient()
+            client.connect(self.TCPServer, self.TCPPort, self.user, self.passwd)
+            client.create_news(self.newsWnd.ui.leTitle.text())
+            client.close()
+
             QtGui.QMessageBox.information(self, 'Complete', 'Новость успешно добавлена!', QtGui.QMessageBox.Yes)
         else:
             QtGui.QMessageBox.critical(self, 'Error', 'Ошибка добавления новости', QtGui.QMessageBox.Yes)
         mdb.close()
 
     def on_read_news(self):
+        """
+        Click on newslist item
+        """
         item = QtGui.QListWidgetItem()
         item.setText(self.newsBaloon.ui.leTitle.text())
         self.newsBaloon.hide()
@@ -345,6 +366,7 @@ class MainWindow(QtGui.QWidget):
             config["MDBServer"] = self.MDBServer
             config["MDBUser"] = self.MDBUser
             config["MDBPasswd"] = self.MDBPasswd
+            config["MDBBase"] = self.MDBBase
             self.checker.set_configs(config, self.user)
 
             self.save_config()
@@ -533,16 +555,55 @@ class MainWindow(QtGui.QWidget):
         self.checker.start_timers()
 
     def save_config(self):
-        pass
-        #TODO save json
+        cfg = Configs().cfg
+        cfg["MariaDB"]["ip"] = self.ui.leMDBServer.text()
+        cfg["MariaDB"]["base"] = self.ui.leMDBBase.text()
+        cfg["TcpServer"]["ip"] = self.ui.leTcpServer.text()
+        cfg["TcpServer"]["port"] = int(self.ui.leTcpPort.text())
+
+        parts = []
+        try:
+            self.ui.leDownloadsPath.text().split()
+            cfg["DownloadsPath"].clear()
+            cfg["DownloadsPath"].append(parts[0])
+            cfg["DownloadsPath"].append(getpass.getuser())
+            cfg["DownloadsPath"].append(parts[2])
+        except:
+            cfg["DownloadsPath"].clear()
+            cfg["DownloadsPath"].append(self.ui.leDownloadsPath.text())
+
+        Configs().save_to_file(cfg)
+        print(cfg)
+
+        """
+        Save MariaDB login and password
+        """
+
+        f = open( "".join((self.app_path, "servercred.tmp")), "w")
+        cfg = {"MariaDB": {"login": self.MDBUser, "password": self.MDBPasswd}}
+        config = pObj()
+        config.cfg = cfg
+        json.dump(config.cfg, f)
+        f.close()
+
+        DES3_encrypt_file("".join((self.app_path,"servercred.tmp")), "".join((self.app_path,"servercred.dat")), 16,
+                                  AppKeys().get_config_key()["key"], AppKeys().get_config_key()["IV"])
+        os.remove("".join((self.app_path,"servercred.tmp")))
+
 
     def load_config(self):
+        """
+        Load and parse json config file "Config.cgf" and
+        Load database login and password from crypted cfg file "servercred.dat"
+        """
         cfg = Configs()
         try:
             self.MDBServer = cfg.db_config()["ip"]
             self.TCPServer = cfg.tcp_config()["ip"]
             self.TCPPort = cfg.tcp_config()["port"]
             self.MDBBase = cfg.db_config()["base"]
+            self.ui.leMDBBase.setText(cfg.db_config()["base"])
+            self.ui.leDownloadsPath.setText(cfg.downloads_path())
         except:
             Log().local("Error reading config file")
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Ошибка чтения конфигурационного файла!',
@@ -553,6 +614,10 @@ class MainWindow(QtGui.QWidget):
             QtGui.QMessageBox.critical(self, 'Ошибка', 'Отсутствует файл аутинтификации!', QtGui.QMessageBox.Yes)
             QtGui.QApplication.quit()
             return
+
+        """
+        Load database login and password
+        """
 
         try:
             DES3_decrypt_file("".join((self.app_path,"servercred.dat")), "".join((self.app_path,"servercred.tmp")), 16,

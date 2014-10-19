@@ -10,12 +10,12 @@ class AppKeys():
 
     def get_config_key(self):
         key = {}
-        key["key"] = b"*"
-        key["IV"] = b"*"
+        key["key"] = b"1w1RTH2yaFIxk47D"
+        key["IV"] = b"4srgJfVo"
         return key
 
     def get_cert_key(self):
         key = {}
-        key["key"] = b'*'
-        key["IV"] = b'*'
+        key["key"] = b'yI2lqMPxe0EpoV1o'
+        key["IV"] = b'IPeRgElV'
         return key

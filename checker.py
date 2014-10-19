@@ -292,6 +292,11 @@ class Checker():
         self.del_news.set_news(news)
         self.del_news.start()
 
+        client = TcpClient()
+        client.connect(self.mainWnd.TCPServer, self.mainWnd.TCPPort, self.mainWnd.user, self.mainWnd.passwd)
+        client.delete_news(self.mainWnd.newsCurWnd.ui.leTitle.text())
+        client.close()
+
     def on_delete_news_complete(self):
         self.newsTmr.start(1)
         self.mainWnd.newsCurWnd.hide()

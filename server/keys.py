@@ -1,3 +1,4 @@
+__author__ = 'sergey'
 class AppKeys():
     """
     Singleton class for loging app
