@@ -10,5 +10,17 @@
 		"login": "doku",
 		"password": "School184",
 		"base": "DokuMail2"
-	}
+	},
+
+	"NtpServer": {
+		"ip" : "127.0.0.1",
+		"port" : 5005
+	},
+
+	"MediaFire": {
+	    "enable": True,
+		"login": "DenisovS21@gmail.com",
+		"password": "Kanade172191",
+		"app-id": "43115"
+	},
 }

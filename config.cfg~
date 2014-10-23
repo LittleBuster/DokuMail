@@ -1,12 +1,17 @@
 {
     "MariaDB": {
-        "ip": "*",
+        "ip": "94.232.48.110",
         "base": "DokuMail2"
     },
 
     "TcpServer": {
-        "ip": "*",
+        "ip": "127.0.0.1",
         "port": 5001
+    },
+
+    "NtpServer": {
+        "ip": "127.0.0.1",
+        "port": 5005
     },
 
     "DownloadsPath": ["./downloads/"],
